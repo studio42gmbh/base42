@@ -16,7 +16,18 @@ Benjamin Schiller
 
 ## Features
 
-* Log to console (out and err)
+Helpers for:
+* Arrays
+* Beans
+* JIT Compilation
+* Console (ANSI)
+* Object Cross Conversion (i.e. from String to Long)
+* Date
+* Files
+* Module
+* Resources
+* Strings
+* Validation
 
 
 ## Future Plans
