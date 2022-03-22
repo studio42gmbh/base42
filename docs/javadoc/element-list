@@ -1,0 +1,12 @@
+module:de.sft.base
+de.s42.base.arrays
+de.s42.base.beans
+de.s42.base.compile
+de.s42.base.console
+de.s42.base.conversion
+de.s42.base.date
+de.s42.base.files
+de.s42.base.modules
+de.s42.base.resources
+de.s42.base.strings
+de.s42.base.validation
