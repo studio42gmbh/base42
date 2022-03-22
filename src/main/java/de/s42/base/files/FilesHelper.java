@@ -23,6 +23,7 @@
  */
 package de.s42.base.files;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -35,6 +36,13 @@ import java.nio.file.StandardOpenOption;
 import java.util.Comparator;
 import java.util.stream.Stream;
 import java.util.zip.ZipInputStream;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.filechooser.FileSystemView;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -339,4 +347,56 @@ public final class FilesHelper
 		return baos.toByteArray();
 	}
 
+	public static void saveImageAsFilePng(BufferedImage image, String outputFile) throws IOException
+	{
+		assert outputFile != null;
+
+		saveImageAsFilePng(image, Path.of(outputFile));
+	}
+
+	public static void saveImageAsFilePng(BufferedImage image, Path outputFile) throws IOException
+	{
+		assert image != null;
+		assert outputFile != null;
+
+		ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(image);
+		ImageWriter writer = ImageIO.getImageWriters(type, "png").next();
+
+		ImageWriteParam param = writer.getDefaultWriteParam();
+		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+		param.setCompressionQuality(1.0f);
+
+		try (ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
+			writer.setOutput(out);
+			writer.write(null, new IIOImage(image, null, null), param);
+			writer.dispose();
+		}
+	}
+
+	public static void saveImageAsFileJpg(BufferedImage image, String outputFile, float quality) throws IOException
+	{
+		assert outputFile != null;
+
+		saveImageAsFileJpg(image, Path.of(outputFile), quality);
+	}
+
+	public static void saveImageAsFileJpg(BufferedImage image, Path outputFile, float quality) throws IOException
+	{
+		assert image != null;
+		assert outputFile != null;
+		assert quality >= 0.0f && quality <= 1.0f;
+
+		ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(image);
+		ImageWriter writer = ImageIO.getImageWriters(type, "jpg").next();
+
+		ImageWriteParam param = writer.getDefaultWriteParam();
+		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+		param.setCompressionQuality(quality);
+
+		try (ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
+			writer.setOutput(out);
+			writer.write(null, new IIOImage(image, null, null), param);
+			writer.dispose();
+		}
+	}
 }

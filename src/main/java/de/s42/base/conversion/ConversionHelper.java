@@ -24,6 +24,7 @@
 package de.s42.base.conversion;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -217,6 +218,11 @@ public final class ConversionHelper
 		addConverter(Long.class, float.class, (Long value) -> {
 			return (float) value;
 		});
+		
+		//BigDecimal -> float
+		addConverter(BigDecimal.class, float.class, (BigDecimal value) -> {
+			return value.floatValue();
+		});
 
 		//Long -> Float
 		addConverter(Long.class, Float.class, (Long value) -> {
@@ -228,6 +234,11 @@ public final class ConversionHelper
 			return (double) value;
 		});
 
+		//BigDecimal -> double
+		addConverter(BigDecimal.class, double.class, (BigDecimal value) -> {
+			return value.doubleValue();
+		});
+		
 		//Long -> Double
 		addConverter(Long.class, Double.class, (Long value) -> {
 			return (double) value;
