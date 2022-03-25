@@ -21,22 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-module de.sft.base
-{
-	requires java.compiler;
-	requires java.desktop;
-	requires org.json;
+package de.s42.base.uuid;
 
-	exports de.s42.base.arrays;
-	exports de.s42.base.beans;
-	exports de.s42.base.compile;
-	exports de.s42.base.console;
-	exports de.s42.base.conversion;
-	exports de.s42.base.date;
-	exports de.s42.base.files;
-	exports de.s42.base.modules;
-	exports de.s42.base.resources;
-	exports de.s42.base.strings;
-	exports de.s42.base.uuid;
-	exports de.s42.base.validation;
+import java.nio.ByteBuffer;
+import java.util.UUID;
+
+/**
+ *
+ * @author Benjamin Schiller
+ */
+public final class UUIDHelper
+{
+
+	private UUIDHelper()
+	{
+		// never instantiated
+	}
+
+	public static byte[] toBytes(UUID uuid)
+	{
+		assert uuid != null;
+
+		ByteBuffer result = ByteBuffer.wrap(new byte[16]);
+		result.putLong(uuid.getMostSignificantBits());
+		result.putLong(uuid.getLeastSignificantBits());
+		return result.array();
+	}
+
+	public static UUID toUuid(byte[] data)
+	{
+		assert data != null;
+
+		ByteBuffer buf = ByteBuffer.wrap(data);
+		long firstLong = buf.getLong();
+		long secondLong = buf.getLong();
+		return new UUID(firstLong, secondLong);
+	}
 }
