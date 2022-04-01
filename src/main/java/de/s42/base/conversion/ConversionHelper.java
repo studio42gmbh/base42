@@ -23,6 +23,7 @@
  */
 package de.s42.base.conversion;
 
+import de.s42.base.uuid.UUIDHelper;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -58,6 +59,11 @@ public final class ConversionHelper
 
 	static {
 
+		//byte[] -> UUID
+		addConverter(byte[].class, UUID.class, (byte[] value) -> {
+			return UUIDHelper.toUuid(value);
+		});
+		
 		//String -> int
 		addConverter(String.class, int.class, (String value) -> {
 			return Integer.parseInt(value);
