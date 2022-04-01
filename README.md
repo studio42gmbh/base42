@@ -2,7 +2,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/studio42gmbh/base42)
 ![GitHub last commit](https://img.shields.io/github/last-commit/studio42gmbh/base42)
 ![GitHub issues](https://img.shields.io/github/issues/studio42gmbh/base42)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/studio42gmbh/base42/Java%20CI%20with%20Maven)
+<!-- ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/studio42gmbh/base42/Java%20CI%20with%20Maven) -->
 
 # Base 42
 This is the library that contains all basic helpers and utils used across projects of Studio 42.
