@@ -23,29 +23,31 @@
  */
 package de.s42.base.testing;
 
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 /**
  *
  * @author Benjamin Schiller
  */
-public class AssertHelper
+public class AssertHelperTest
 {
 
-	public final static double EPSILON = 0.1E-5;
-
-	public static void assertEpsilonEquals(double actual, double expected) throws AssertionError
+	@Test
+	public void validDoubleEquals()
 	{
-		assertEpsilonEquals(actual, expected, "");
+		AssertHelper.assertEpsilonEquals(1.0, 1.0);
+		AssertHelper.assertEpsilonEquals(1.11111115, 1.111111);
+		AssertHelper.assertEpsilonEquals(1.00, 1.0 + AssertHelper.EPSILON * 0.5);
+
+		Assert.assertEquals(AssertHelper.epsilonEquals(1.0, 1.0), true);
+		Assert.assertEquals(AssertHelper.epsilonEquals(1.11111115, 1.111111), true);
+		Assert.assertEquals(AssertHelper.epsilonEquals(1.00, 1.0 + AssertHelper.EPSILON * 0.5), true);
 	}
 
-	public static void assertEpsilonEquals(double actual, double expected, String message) throws AssertionError
+	@Test(expectedExceptions = AssertionError.class)
+	public void invalidDoubleEquals()
 	{
-		if (!epsilonEquals(actual, expected)) {
-			throw new AssertionError(message + " - expected almost [" + expected + "] but found [" + actual + "] (EPSILON : " + EPSILON + ")");
-		}
-	}
-
-	public static boolean epsilonEquals(double actual, double expected)
-	{
-		return Math.abs(actual - expected) < EPSILON;
+		AssertHelper.assertEpsilonEquals(2.0, 1.0);
 	}
 }
