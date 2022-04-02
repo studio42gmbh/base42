@@ -26,6 +26,7 @@ Helpers for:
 * Files
 * Module
 * Resources
+* Testing
 * Strings
 * Validation
 
