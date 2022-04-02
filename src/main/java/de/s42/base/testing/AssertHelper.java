@@ -21,23 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-module de.sft.base
-{
-	requires java.compiler;
-	requires java.desktop;
-	requires org.json;
+package de.s42.base.testing;
 
-	exports de.s42.base.arrays;
-	exports de.s42.base.beans;
-	exports de.s42.base.compile;
-	exports de.s42.base.console;
-	exports de.s42.base.conversion;
-	exports de.s42.base.date;
-	exports de.s42.base.files;
-	exports de.s42.base.modules;
-	exports de.s42.base.resources;
-	exports de.s42.base.strings;
-	exports de.s42.base.testing;
-	exports de.s42.base.uuid;
-	exports de.s42.base.validation;
+/**
+ *
+ * @author Benjamin Schiller
+ */
+public class AssertHelper
+{
+
+	public final static double EPSILON = 0.1E-5;
+
+	public static void assertEpsilonEquals(double actual, double expected) throws AssertionError
+	{
+		assertEpsilonEquals(actual, expected, "");
+	}
+
+	public static void assertEpsilonEquals(double actual, double expected, String message) throws AssertionError
+	{
+		if (Math.abs(actual - expected) > EPSILON) {
+			throw new AssertionError(message + " - expected almost [" + expected + "] but found [" + actual + "] (EPSILON : " + EPSILON + ")");
+		}
+	}
 }
