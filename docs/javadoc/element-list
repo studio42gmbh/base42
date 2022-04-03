@@ -9,4 +9,6 @@ de.s42.base.files
 de.s42.base.modules
 de.s42.base.resources
 de.s42.base.strings
+de.s42.base.testing
+de.s42.base.uuid
 de.s42.base.validation

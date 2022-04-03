@@ -26,6 +26,7 @@ package de.s42.base.files;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -292,7 +293,22 @@ public final class FilesHelper
 		assert filePath != null;
 		assert Files.isRegularFile(filePath) : "Is not a readable file " + FilesHelper.createMavenNetbeansFileConsoleLink(filePath);
 
-		ByteBuffer buffer;
+		return ByteBuffer.wrap(Files.readAllBytes(filePath));
+	}
+
+	public static MappedByteBuffer getFileAsMappedByteBuffer(String fileName) throws IOException
+	{
+		assert fileName != null;
+
+		return getFileAsMappedByteBuffer(Path.of(fileName));
+	}
+
+	public static MappedByteBuffer getFileAsMappedByteBuffer(Path filePath) throws IOException
+	{
+		assert filePath != null;
+		assert Files.isRegularFile(filePath) : "Is not a readable file " + FilesHelper.createMavenNetbeansFileConsoleLink(filePath);
+
+		MappedByteBuffer buffer;
 		File file = filePath.toFile();
 		if (!file.isFile()) {
 			throw new IOException("File not found " + filePath);
