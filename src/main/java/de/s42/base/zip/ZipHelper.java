@@ -21,24 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-module de.sft.base
-{
-	requires java.compiler;
-	requires java.desktop;
-	requires org.json;
+package de.s42.base.zip;
 
-	exports de.s42.base.arrays;
-	exports de.s42.base.beans;
-	exports de.s42.base.compile;
-	exports de.s42.base.console;
-	exports de.s42.base.conversion;
-	exports de.s42.base.date;
-	exports de.s42.base.files;
-	exports de.s42.base.modules;
-	exports de.s42.base.resources;
-	exports de.s42.base.strings;
-	exports de.s42.base.testing;
-	exports de.s42.base.uuid;
-	exports de.s42.base.validation;
-	exports de.s42.base.zip;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+/**
+ *
+ * @author Benjamin Schiller
+ */
+public final class ZipHelper
+{
+
+	private ZipHelper()
+	{
+		// nesver instantiated
+	}
+
+	/**
+	 * Test if the given file is a ZIP archive. See
+	 * https://stackoverflow.com/questions/33934178/how-to-identify-a-zip-file-in-java
+	 *
+	 * @param file
+	 * @return
+	 */
+	public static boolean isArchive(Path file)
+	{
+		assert file != null;
+		assert Files.isRegularFile(file);
+
+		int fileSignature = 0;
+		try (RandomAccessFile raf = new RandomAccessFile(file.toFile(), "r")) {
+			fileSignature = raf.readInt();
+		} catch (IOException e) {
+			// handle if you like
+		}
+
+		// see https://en.wikipedia.org/wiki/List_of_file_signatures
+		return fileSignature == 0x504B0304 || fileSignature == 0x504B0506 || fileSignature == 0x504B0708;
+	}
+
 }
