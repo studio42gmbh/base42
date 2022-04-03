@@ -29,6 +29,7 @@ Helpers for:
 * Testing
 * Strings
 * Validation
+* Zip
 
 
 ## Future Plans
