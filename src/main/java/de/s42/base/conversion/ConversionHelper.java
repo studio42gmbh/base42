@@ -63,7 +63,7 @@ public final class ConversionHelper
 		addConverter(byte[].class, UUID.class, (byte[] value) -> {
 			return UUIDHelper.toUuid(value);
 		});
-		
+
 		//String -> int
 		addConverter(String.class, int.class, (String value) -> {
 			return Integer.parseInt(value);
@@ -224,7 +224,7 @@ public final class ConversionHelper
 		addConverter(Long.class, float.class, (Long value) -> {
 			return (float) value;
 		});
-		
+
 		//BigDecimal -> float
 		addConverter(BigDecimal.class, float.class, (BigDecimal value) -> {
 			return value.floatValue();
@@ -244,7 +244,7 @@ public final class ConversionHelper
 		addConverter(BigDecimal.class, double.class, (BigDecimal value) -> {
 			return value.doubleValue();
 		});
-		
+
 		//Long -> Double
 		addConverter(Long.class, Double.class, (Long value) -> {
 			return (double) value;

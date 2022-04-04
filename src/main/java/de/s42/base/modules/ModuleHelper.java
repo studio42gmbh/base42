@@ -23,7 +23,6 @@
  */
 package de.s42.base.modules;
 
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,11 +36,6 @@ public final class ModuleHelper
 	private ModuleHelper()
 	{
 		// never instantiated
-	}
-
-	public final static Path getWorkingDirectory()
-	{
-		return Path.of(System.getProperty("user.dir")).toAbsolutePath();
 	}
 
 	public final static Map<String, String> parseArguments(String[] args)

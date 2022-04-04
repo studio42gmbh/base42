@@ -29,6 +29,7 @@ package de.s42.base.strings;
  */
 public final class StringHelper
 {
+
 	private StringHelper()
 	{
 		// never instantiated
@@ -37,5 +38,5 @@ public final class StringHelper
 	public final static String lowerCaseFirst(String transform)
 	{
 		return transform.substring(0, 1).toLowerCase() + transform.substring(1);
-	}	
+	}
 }

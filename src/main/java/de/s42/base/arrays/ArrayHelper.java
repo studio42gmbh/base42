@@ -31,11 +31,14 @@ import java.util.Arrays;
  */
 public final class ArrayHelper
 {
+
 	private ArrayHelper()
 	{
+		// never instantiated
 	}
-	
-	public static String[] concatenate(String[] array1, String[] array2) {
+
+	public static String[] concatenate(String[] array1, String[] array2)
+	{
 		String[] result = Arrays.copyOf(array1, array1.length + array2.length);
 		System.arraycopy(array2, 0, result, array1.length, array2.length);
 		return result;

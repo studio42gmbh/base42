@@ -274,6 +274,11 @@ public final class FilesHelper
 		return FileSystemView.getFileSystemView().getHomeDirectory().toPath();
 	}
 
+	public static Path getWorkingDirectory()
+	{
+		return Path.of(System.getProperty("user.dir")).toAbsolutePath();
+	}
+
 	public static Path pathOf(String fileName)
 	{
 		assert fileName != null;
