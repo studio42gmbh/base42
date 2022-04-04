@@ -215,6 +215,11 @@ public final class ConversionHelper
 			return (long) value;
 		});
 
+		//Long -> int
+		addConverter(Long.class, int.class, (Long value) -> {
+			return value.intValue();
+		});
+
 		//Long -> Date
 		addConverter(Long.class, Date.class, (Long value) -> {
 			return new Date(value);
@@ -222,7 +227,7 @@ public final class ConversionHelper
 
 		//Long -> float
 		addConverter(Long.class, float.class, (Long value) -> {
-			return (float) value;
+			return value.floatValue();
 		});
 
 		//BigDecimal -> float
@@ -232,12 +237,12 @@ public final class ConversionHelper
 
 		//Long -> Float
 		addConverter(Long.class, Float.class, (Long value) -> {
-			return (float) value;
+			return value.floatValue();
 		});
 
 		//Long -> double
 		addConverter(Long.class, double.class, (Long value) -> {
-			return (double) value;
+			return value.doubleValue();
 		});
 
 		//BigDecimal -> double
