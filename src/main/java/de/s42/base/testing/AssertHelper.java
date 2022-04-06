@@ -48,4 +48,20 @@ public class AssertHelper
 	{
 		return Math.abs(actual - expected) < EPSILON;
 	}
+
+	public static void assertStartsWith(String actual, String expectedStart)
+	{
+		assertStartsWith(actual, expectedStart, "");
+	}
+
+	public static void assertStartsWith(String actual, String expectedStart, String message)
+	{
+		assert actual != null;
+		assert expectedStart != null;
+		assert message != null;
+
+		if (!actual.startsWith(expectedStart)) {
+			throw new AssertionError(message + " - expected to start with '" + expectedStart + "' but found '" + actual + "'");
+		}
+	}
 }
