@@ -31,6 +31,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import org.json.JSONObject;
 
 /**
  *
@@ -195,30 +196,10 @@ public final class BeanHelper
 		}
 	}
 
-	public static String describe(Object object) throws IntrospectionException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public static String toJSON(Object bean)
 	{
-		assert object != null;
+		JSONObject obj = new JSONObject(bean);
 
-		StringBuilder description = new StringBuilder();
-
-		description
-			.append("Bean ")
-			.append(object.getClass().getCanonicalName())
-			.append("\n");
-
-		for (Map.Entry<String, Method> property : getReadProperties(object).entrySet()) {
-
-			if ("class".equalsIgnoreCase(property.getKey())) {
-				continue;
-			}
-
-			description.append("	Property ")
-				.append(property.getKey())
-				.append(" : ")
-				.append(property.getValue().invoke(object))
-				.append("\n");
-		}
-
-		return description.toString();
+		return obj.toString();
 	}
 }

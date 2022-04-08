@@ -23,6 +23,8 @@
  */
 package de.s42.base.strings;
 
+import de.s42.base.beans.BeanHelper;
+
 /**
  *
  * @author Benjamin Schiller
@@ -35,8 +37,13 @@ public final class StringHelper
 		// never instantiated
 	}
 
-	public final static String lowerCaseFirst(String transform)
+	public static String lowerCaseFirst(String transform)
 	{
 		return transform.substring(0, 1).toLowerCase() + transform.substring(1);
+	}
+
+	public static String toString(Object bean)
+	{
+		return BeanHelper.toJSON(bean);
 	}
 }
