@@ -40,10 +40,10 @@ import org.json.JSONObject;
 public final class BeanHelper
 {
 	
-	private final static Map<Class, Map<String, Method>> readPropertyMap = new HashMap();
-	private final static Map<Class, Map<String, Method>> writePropertyMap = new HashMap();
-	private final static Map<Class, Map<String, Method>> ownReadPropertyMap = new HashMap();
-	private final static Map<Class, Map<String, Method>> ownWritePropertyMap = new HashMap();
+	private final static Map<Class, Map<String, Method>> readPropertyMap = new HashMap<>();
+	private final static Map<Class, Map<String, Method>> writePropertyMap = new HashMap<>();
+	private final static Map<Class, Map<String, Method>> ownReadPropertyMap = new HashMap<>();
+	private final static Map<Class, Map<String, Method>> ownWritePropertyMap = new HashMap<>();
 	
 	private BeanHelper()
 	{
@@ -77,7 +77,7 @@ public final class BeanHelper
 		
 		synchronized (BeanHelper.class) {
 			
-			ownReadProperties = new HashMap();
+			ownReadProperties = new HashMap<>();
 			Set<Method> declaredMethods = getDeclaredMethods(objectClass);
 			BeanInfo beanInfo = Introspector.getBeanInfo(objectClass);
 			for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors()) {
@@ -114,7 +114,7 @@ public final class BeanHelper
 		
 		synchronized (BeanHelper.class) {
 			
-			readProperties = new HashMap();
+			readProperties = new HashMap<>();
 			BeanInfo beanInfo = Introspector.getBeanInfo(objectClass);
 			for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors()) {
 				
@@ -150,7 +150,7 @@ public final class BeanHelper
 		
 		synchronized (BeanHelper.class) {
 			
-			writeProperties = new HashMap();
+			writeProperties = new HashMap<>();
 			BeanInfo beanInfo = Introspector.getBeanInfo(objectClass);
 			for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors()) {
 				
@@ -217,7 +217,7 @@ public final class BeanHelper
 		
 		synchronized (BeanHelper.class) {
 			
-			writeProperties = new HashMap();
+			writeProperties = new HashMap<>();
 			Set<Method> declaredMethods = getDeclaredMethods(objectClass);
 			BeanInfo beanInfo = Introspector.getBeanInfo(objectClass);
 			for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors()) {

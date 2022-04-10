@@ -190,7 +190,7 @@ public final class CompileHelper
 		try {
 			JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
-			//@todo WARP ugly fallback - do we really want to do this? actually solving ant task usage
+			// @improvement ugly fallback - do we really want to do this? actually solving ant task usage
 			if (compiler == null) {
 
 				compiler = (JavaCompiler) Class.forName("com.sun.tools.javac.api.JavacTool").getConstructor().newInstance();
@@ -291,12 +291,12 @@ public final class CompileHelper
 		}
 	}
 
-	public static <InstanceType extends Object> InstanceType getCompiledInstance(String javaClassCode, String className) throws InvalidCompilation
+	public static <InstanceType> InstanceType getCompiledInstance(String javaClassCode, String className) throws InvalidCompilation
 	{
 		return getCompiledInstance(javaClassCode, className, null, null);
 	}
 
-	public static <InstanceType extends Object> InstanceType getCompiledInstance(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
+	public static <InstanceType> InstanceType getCompiledInstance(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
 	{
 		Class compiledClass = getCompiledClass(javaClassCode, className, classLoader, classPath);
 

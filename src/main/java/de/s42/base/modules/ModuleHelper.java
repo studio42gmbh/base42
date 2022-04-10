@@ -40,7 +40,7 @@ public final class ModuleHelper
 
 	public final static Map<String, String> parseArguments(String[] args)
 	{
-		Map<String, String> argParameters = new HashMap();
+		Map<String, String> argParameters = new HashMap<>();
 
 		for (String arg : args) {
 			String[] argParts = arg.split("=");

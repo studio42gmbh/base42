@@ -54,7 +54,7 @@ public final class ConversionHelper
 	{
 	}
 
-	private final static Map<Class, Map<Class, Function<?, ?>>> converters = Collections.synchronizedMap(new HashMap());
+	private final static Map<Class, Map<Class, Function<?, ?>>> converters = Collections.synchronizedMap(new HashMap<>());
 	private final static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
 	static {
@@ -91,6 +91,11 @@ public final class ConversionHelper
 
 		//String -> Double
 		addConverter(String.class, Double.class, (String value) -> {
+			return Double.valueOf(value);
+		});
+
+		//String -> Number
+		addConverter(String.class, Number.class, (String value) -> {
 			return Double.valueOf(value);
 		});
 
@@ -217,6 +222,11 @@ public final class ConversionHelper
 
 		//Long -> int
 		addConverter(Long.class, int.class, (Long value) -> {
+			return value.intValue();
+		});
+
+		//Long -> Integer
+		addConverter(Long.class, Integer.class, (Long value) -> {
 			return value.intValue();
 		});
 
@@ -410,7 +420,7 @@ public final class ConversionHelper
 		}
 	}
 
-	public static <T extends Object> T convert(Object value, Class targetClass, T defaultValue) throws RuntimeException
+	public static <ReturnType> ReturnType convert(Object value, Class targetClass, ReturnType defaultValue) throws RuntimeException
 	{
 		if (value == null) {
 
@@ -421,7 +431,7 @@ public final class ConversionHelper
 			return null;
 		}
 
-		T result = convert(value, targetClass);
+		ReturnType result = convert(value, targetClass);
 
 		if (result == null) {
 
@@ -435,7 +445,7 @@ public final class ConversionHelper
 		return result;
 	}
 
-	public static <T extends Object> T convert(Object value, Class targetClass) throws RuntimeException
+	public static <ReturnType> ReturnType convert(Object value, Class targetClass) throws RuntimeException
 	{
 		assert targetClass != null;
 
@@ -451,17 +461,17 @@ public final class ConversionHelper
 
 		//cast to object return original
 		if (targetClass.equals(Object.class)) {
-			return (T) value;
+			return (ReturnType) value;
 		}
 
 		//equal class remains unchanged - its not an interceptor approach
 		if (targetClass.isInstance(value)) {
-			return (T) value;
+			return (ReturnType) value;
 		}
 
 		//handling for all enums
 		if (targetClass.isEnum()) {
-			return (T) Enum.valueOf(targetClass, value.toString());
+			return (ReturnType) Enum.valueOf(targetClass, value.toString());
 		}
 
 		//convert array types and check if all entries are consistent
@@ -476,7 +486,7 @@ public final class ConversionHelper
 				Array.set(targetArray, i, sourceArray[i]);
 			}
 
-			return (T) targetArray;
+			return (ReturnType) targetArray;
 		}
 
 		//handling arrays from string
@@ -493,17 +503,17 @@ public final class ConversionHelper
 				++i;
 			}
 
-			return (T) array;
+			return (ReturnType) array;
 		}
 
 		//handling for all enums to String
 		if (String.class.equals(targetClass) && value.getClass().isEnum()) {
-			return (T) value.toString();
+			return (ReturnType) value.toString();
 		}
 
 		//handle automatic conversion of implementations to their interfaces
 		if (targetClass.isInterface() && targetClass.isAssignableFrom(value.getClass())) {
-			return (T) value;
+			return (ReturnType) value;
 		}
 
 		Map<Class, Function<?, ?>> targetMappings = converters.get(value.getClass());
@@ -514,13 +524,13 @@ public final class ConversionHelper
 
 		Function converter = targetMappings.get(targetClass);
 
-		//@todo allow to check for converters of parent classes? if under what contract?
+		// @improvement allow to check for converters of parent classes? if under what contract?
 		if (converter == null) {
 			throw new RuntimeException("No target mappings for source class " + value.getClass().getName() + " to " + targetClass.getName());
 		}
 
 		try {
-			return (T) converter.apply(value);
+			return (ReturnType) converter.apply(value);
 		} catch (RuntimeException ex) {
 			throw new RuntimeException("Error converting from " + value.getClass().getName() + " to " + targetClass.getName() + " - " + ex.getMessage(), ex);
 		}

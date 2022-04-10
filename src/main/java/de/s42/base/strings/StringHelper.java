@@ -71,12 +71,16 @@ public final class StringHelper
 					continue;
 				}
 
+				Object val = BeanHelper.readProperty(object, name);
+				
+				if (val == null) {
+					continue;
+				}
+				
 				builder
 					.append(" ")
 					.append(name)
 					.append(" : ");
-
-				Object val = BeanHelper.readProperty(object, name);
 
 				if (val instanceof String) {
 					builder
