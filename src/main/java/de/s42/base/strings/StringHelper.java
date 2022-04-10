@@ -24,6 +24,8 @@
 package de.s42.base.strings;
 
 import de.s42.base.beans.BeanHelper;
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  *
@@ -39,11 +41,62 @@ public final class StringHelper
 
 	public static String lowerCaseFirst(String transform)
 	{
+		assert transform != null;
+
 		return transform.substring(0, 1).toLowerCase() + transform.substring(1);
 	}
 
-	public static String toString(Object bean)
+	public static String toString(Object object)
 	{
-		return BeanHelper.toJSON(bean);
+		try {
+			assert object != null;
+
+			//return BeanHelper.toJSON(bean);
+			StringBuilder builder = new StringBuilder();
+
+			builder.append(object.getClass().getName());
+
+			if (BeanHelper.hasReadProperty(object, "name")) {
+				builder
+					.append(" ")
+					.append((Object) BeanHelper.readProperty(object, "name"));
+			}
+
+			builder.append(" {");
+
+			for (String name : BeanHelper.getReadPropertyNames(object)) {
+
+				if (name.equals("name")
+					|| name.equals("class")) {
+					continue;
+				}
+
+				builder
+					.append(" ")
+					.append(name)
+					.append(" : ");
+
+				Object val = BeanHelper.readProperty(object, name);
+
+				if (val instanceof String) {
+					builder
+						.append("\"")
+						.append(val)
+						.append("\"");
+				} else {
+					builder
+						.append(val);
+				}
+
+				builder
+					.append(";");
+			}
+
+			builder.append(" }");
+
+			return builder.toString();
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			throw new RuntimeException("Error stringifying - " + ex.getMessage(), ex);
+		}
 	}
 }
