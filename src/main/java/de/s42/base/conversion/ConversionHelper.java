@@ -535,4 +535,20 @@ public final class ConversionHelper
 			throw new RuntimeException("Error converting from " + value.getClass().getName() + " to " + targetClass.getName() + " - " + ex.getMessage(), ex);
 		}
 	}
+
+	public static <ReturnType> ReturnType[] convertArray(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
+	{
+		if (values == null) {
+			return null;
+		}
+
+		ReturnType[] result = (ReturnType[]) Array.newInstance(targetClass, values.length);
+
+		for (int i = 0; i < values.length; ++i) {
+			result[i] = convert(values[i], targetClass);
+		}
+
+		return result;
+	}
+
 }

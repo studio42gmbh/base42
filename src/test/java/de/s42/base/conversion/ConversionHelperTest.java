@@ -34,7 +34,7 @@ public class ConversionHelperTest
 {
 
 	@Test
-	public void convertArray()
+	public void validConvertArray()
 	{
 		Object[] source = {1.1f, 2.2f, 3.3f};
 		Float[] target = (Float[]) ConversionHelper.convert(source, Float[].class);
@@ -44,5 +44,15 @@ public class ConversionHelperTest
 		}
 		//epsilon tets
 		Assert.assertTrue(Math.abs(sum - 6.6f) < 0.0001);
+	}
+
+	@Test
+	public void validArrayConvert()
+	{
+		String values = "1,2,3";
+
+		Integer[] ints = ConversionHelper.convertArray(values.split(","), Integer.class);
+
+		Assert.assertEquals(ints, new Integer[]{1, 2, 3});
 	}
 }
