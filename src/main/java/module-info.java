@@ -29,6 +29,7 @@ module de.sft.base
 
 	exports de.s42.base.arrays;
 	exports de.s42.base.beans;
+	exports de.s42.base.collections;
 	exports de.s42.base.compile;
 	exports de.s42.base.console;
 	exports de.s42.base.conversion;
