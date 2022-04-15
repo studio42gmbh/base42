@@ -25,6 +25,8 @@
 //</editor-fold>
 package de.s42.base.files;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -420,6 +422,30 @@ public final class FilesHelper
 			writer.setOutput(out);
 			writer.write(null, new IIOImage(image, null, null), param);
 			writer.dispose();
+		}
+	}
+
+	public static BufferedImage getFileAsScaledImage(Path file, int width, int height)
+	{
+		BufferedImage original = getFileAsImage(file);
+		Image scaled = original.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
+		BufferedImage scaledBuffered = new BufferedImage(width, height, original.getType());
+		Graphics g = scaledBuffered.getGraphics();
+		g.drawImage(scaled, 0, 0, null);
+		g.dispose();
+		original.flush();
+		scaled.flush();
+		return scaledBuffered;
+	}
+
+	public static BufferedImage getFileAsImage(Path file)
+	{
+		try {
+			BufferedImage image;
+			image = ImageIO.read(file.toFile());
+			return image;
+		} catch (IOException ex) {
+			throw new RuntimeException("Unable to read file " + file.normalize().toAbsolutePath().toString() + " - " + ex.getMessage(), ex);
 		}
 	}
 }

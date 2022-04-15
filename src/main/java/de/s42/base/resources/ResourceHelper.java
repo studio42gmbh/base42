@@ -25,12 +25,16 @@
 //</editor-fold>
 package de.s42.base.resources;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.zip.ZipInputStream;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -119,4 +123,60 @@ public final class ResourceHelper
 		}
 		return baos.toByteArray();
 	}
+	
+	public final static InputStream getResourceAsStream(final Class moduleClass, final String relativeResourceName)
+	{
+		InputStream in = moduleClass.getResourceAsStream(relativeResourceName);
+
+		if (in == null) {
+			throw new RuntimeException("Mssing resource '" + relativeResourceName + "' in module " + moduleClass.getName());
+		}
+
+		return in;
+	}
+
+	public final static InputStream getResourceAsStream(final String resourceName)
+	{
+		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
+
+		if (in == null) {
+			throw new RuntimeException("Mssing resource '" + resourceName + "'");
+		}
+
+		return in;
+	}	
+	
+	public final static Icon getResourceAsIcon(Class moduleClass, String relativeResourceName, int width, int height)
+	{
+		return new ImageIcon(getResourceAsImage(moduleClass, relativeResourceName).getScaledInstance(width, height, BufferedImage.SCALE_AREA_AVERAGING));
+	}
+	
+	public final static BufferedImage getResourceAsImage(Class moduleClass, String relativeResourceName)
+	{
+		try {
+			BufferedImage image;
+			try (InputStream in = getResourceAsStream(moduleClass, relativeResourceName)) {
+				image = ImageIO.read(in);
+			}
+			return image;
+		}
+		catch (IOException ex) {
+			throw new RuntimeException("Unable to read module resource " + relativeResourceName + " - " + ex.getMessage(), ex);
+		}
+	}
+	
+	public final static BufferedImage getResourceAsImage(String relativeResourceName)
+	{
+		try {
+			BufferedImage image;
+			try (InputStream in = getResourceAsStream(relativeResourceName)) {
+				image = ImageIO.read(in);
+			}
+			return image;
+		}
+		catch (IOException ex) {
+			throw new RuntimeException("Unable to read module resource " + relativeResourceName + " - " + ex.getMessage(), ex);
+		}
+	}
+	
 }
