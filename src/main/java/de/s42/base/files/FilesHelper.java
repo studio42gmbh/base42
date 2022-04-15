@@ -106,13 +106,13 @@ public final class FilesHelper
 
 		// needs at least 2 signs for the regex - see source above ref: .+ @ (?:\\S+, (.+), )?line (\\d+), column (\\d+)
 		if (message.isEmpty() && sanitize) {
-			message = "  ";
+			message = " ";
 		}
 
 		StringBuilder msg = new StringBuilder();
 		msg
 			.append(message)
-			.append("@ ")
+			.append(" @ ")
 			.append(fileShort)
 			.append(", ")
 			.append(file)
