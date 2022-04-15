@@ -124,12 +124,12 @@ public class MappedList<KeyType, DataType>
 		return Optional.ofNullable(map.get(key));
 	}
 	
-	public Optional<DataType> get(int index)
+	public DataType get(int index)
 	{
 		assert index >= 0;
 		assert index < list.size();
 
-		return Optional.ofNullable(list.get(index));
+		return list.get(index);
 	}	
 
 	public boolean contains(KeyType key)
