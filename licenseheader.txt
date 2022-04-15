@@ -1,5 +1,6 @@
 <#if licenseFirst??>
 ${licenseFirst}
+// <editor-fold desc="The MIT License" defaultstate="collapsed">
 </#if>
 ${licensePrefix}The MIT License
 ${licensePrefix}
@@ -24,4 +25,5 @@ ${licensePrefix}OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DE
 ${licensePrefix}THE SOFTWARE.
 <#if licenseLast??>
 ${licenseLast}
+//</editor-fold>
 </#if>

@@ -1,7 +1,8 @@
+// <editor-fold desc="The MIT License" defaultstate="collapsed">
 /*
  * The MIT License
  * 
- * Copyright 2021 Studio 42 GmbH (https://www.s42m.de).
+ * Copyright 2022 Studio 42 GmbH (https://www.s42m.de).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+//</editor-fold>
 package de.s42.base.conversion;
 
 import de.s42.base.uuid.UUIDHelper;
@@ -29,6 +31,9 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -56,6 +61,7 @@ public final class ConversionHelper
 
 	private final static Map<Class, Map<Class, Function<?, ?>>> converters = Collections.synchronizedMap(new HashMap<>());
 	private final static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+	public final static DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
 
 	static {
 
@@ -158,7 +164,18 @@ public final class ConversionHelper
 
 		//String -> Date
 		addConverter(String.class, Date.class, (String value) -> {
-			return new Date(Long.parseLong(value));
+			
+			// date as timestamp
+			if (value.matches("[0-9]+")) {
+				return new Date(Long.parseLong(value));
+			}
+			else {			
+				try {
+					return DATE_FORMAT.parse(value);
+				} catch (ParseException ex) {
+					throw new RuntimeException("Error converting to date - " + ex.getMessage(), ex);
+				}
+			}			
 		});
 
 		//String -> URL
@@ -546,6 +563,35 @@ public final class ConversionHelper
 
 		for (int i = 0; i < values.length; ++i) {
 			result[i] = convert(values[i], targetClass);
+		}
+
+		return result;
+	}
+
+	@SuppressWarnings("null")
+	public static <ReturnType> ReturnType[] convertArray(ReturnType[] values, Class<? extends ReturnType>[] targetClasses) throws RuntimeException
+	{
+		if (values == null && targetClasses == null) {
+			return null;
+		}
+
+		if ((values != null && targetClasses == null)
+			|| (values == null && targetClasses != null)) {
+			throw new RuntimeException("values and targetClasses have to be either both null or non null");
+		}
+
+		if (values.length == 0 && targetClasses.length == 0) {
+			return values;
+		}
+
+		if (values.length != targetClasses.length) {
+			throw new RuntimeException("values count not matching has to have " + targetClasses.length + " parameter(s) but has " + values.length);
+		}
+
+		ReturnType[] result = (ReturnType[]) Array.newInstance(values.getClass().componentType(), values.length);
+
+		for (int i = 0; i < result.length; ++i) {
+			result[i] = convert(values[i], targetClasses[i]);
 		}
 
 		return result;

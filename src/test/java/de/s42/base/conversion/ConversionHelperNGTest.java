@@ -23,22 +23,30 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-package de.s42.base.compile;
+package de.s42.base.conversion;
+
+import java.text.ParseException;
+import java.util.Date;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
  *
  * @author Benjamin Schiller
  */
-public class InvalidCompilation extends Exception
+public class ConversionHelperNGTest
 {
 
-	public InvalidCompilation(String msg)
+	public ConversionHelperNGTest()
 	{
-		super(msg);
 	}
 
-	public InvalidCompilation(String msg, Throwable cause)
+	@Test
+	public void validStringToDate() throws ParseException
 	{
-		super(msg, cause);
+		Assert.assertEquals(ConversionHelper.convert("12222222222", Date.class), new Date(12222222222L));
+		Assert.assertEquals(
+			ConversionHelper.convert("2022-04-14 10:12:56:000", Date.class),
+			ConversionHelper.DATE_FORMAT.parse("2022-04-14 10:12:56:000"));
 	}
 }
