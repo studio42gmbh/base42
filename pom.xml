@@ -78,6 +78,7 @@
 						<arg>-deprecation</arg>
 						<!--arg>-Xlint:unchecked</arg//-->
 					</compilerArgs>
+				 <showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
 			<plugin>
