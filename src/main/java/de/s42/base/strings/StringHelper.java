@@ -28,6 +28,8 @@ package de.s42.base.strings;
 import de.s42.base.beans.BeanHelper;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.AbstractMap;
+import java.util.Map;
 
 /**
  *
@@ -35,6 +37,18 @@ import java.lang.reflect.InvocationTargetException;
  */
 public final class StringHelper
 {
+	private final static Map<Class, Boolean> unescapedTypes = Map.ofEntries(
+		new AbstractMap.SimpleEntry<>(boolean.class, true),
+		new AbstractMap.SimpleEntry<>(float.class, true),
+		new AbstractMap.SimpleEntry<>(double.class, true),
+		new AbstractMap.SimpleEntry<>(long.class, true),
+		new AbstractMap.SimpleEntry<>(int.class, true),
+		new AbstractMap.SimpleEntry<>(Boolean.class, true),
+		new AbstractMap.SimpleEntry<>(Float.class, true),
+		new AbstractMap.SimpleEntry<>(Double.class, true),
+		new AbstractMap.SimpleEntry<>(Long.class, true),
+		new AbstractMap.SimpleEntry<>(Integer.class, true)
+	);
 
 	private StringHelper()
 	{
@@ -84,7 +98,8 @@ public final class StringHelper
 					.append(name)
 					.append(" : ");
 
-				if (val instanceof String) {
+				//detect types which have to be escaped and which not
+				if (!unescapedTypes.containsKey(val.getClass())) {
 					builder
 						.append("\"")
 						.append(val)
