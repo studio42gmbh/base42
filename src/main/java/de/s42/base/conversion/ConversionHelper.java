@@ -497,12 +497,14 @@ public final class ConversionHelper
 			Object[] sourceArray = ((Object[]) (value));
 			int length = sourceArray.length;
 			Class targetComponentType = targetClass.getComponentType();
-			Object targetArray = Array.newInstance(targetComponentType, length);
+			Object[] targetArray = (Object[])Array.newInstance(targetComponentType, length);
 
 			for (int i = 0; i < length; ++i) {
-				Array.set(targetArray, i, sourceArray[i]);
+				
+				// convert each element of the array
+				targetArray[i] = convert(sourceArray[i], targetComponentType);
 			}
-
+			
 			return (ReturnType) targetArray;
 		}
 
