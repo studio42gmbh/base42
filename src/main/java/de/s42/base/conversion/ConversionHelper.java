@@ -164,18 +164,17 @@ public final class ConversionHelper
 
 		//String -> Date
 		addConverter(String.class, Date.class, (String value) -> {
-			
+
 			// date as timestamp
 			if (value.matches("[0-9]+")) {
 				return new Date(Long.parseLong(value));
-			}
-			else {			
+			} else {
 				try {
 					return DATE_FORMAT.parse(value);
 				} catch (ParseException ex) {
 					throw new RuntimeException("Error converting to date - " + ex.getMessage(), ex);
 				}
-			}			
+			}
 		});
 
 		//String -> URL
@@ -410,6 +409,11 @@ public final class ConversionHelper
 				throw new IllegalArgumentException(ex.getMessage(), ex);
 			}
 		});
+
+		//UUID -> String
+		addConverter(UUID.class, String.class, (UUID value) -> {
+			return value.toString();
+		});
 	}
 
 	public static String bytesToHex(byte[] bytes)
@@ -497,14 +501,14 @@ public final class ConversionHelper
 			Object[] sourceArray = ((Object[]) (value));
 			int length = sourceArray.length;
 			Class targetComponentType = targetClass.getComponentType();
-			Object[] targetArray = (Object[])Array.newInstance(targetComponentType, length);
+			Object[] targetArray = (Object[]) Array.newInstance(targetComponentType, length);
 
 			for (int i = 0; i < length; ++i) {
-				
+
 				// convert each element of the array
 				targetArray[i] = convert(sourceArray[i], targetComponentType);
 			}
-			
+
 			return (ReturnType) targetArray;
 		}
 
@@ -599,4 +603,21 @@ public final class ConversionHelper
 		return result;
 	}
 
+	public static boolean canConvert(Class sourceClass, Class targetClass)
+	{
+		Map<Class, Function<?, ?>> targetMappings = converters.get(sourceClass);
+
+		if (targetMappings == null) {
+			return false;
+		}
+
+		Function converter = targetMappings.get(targetClass);
+
+		// @improvement allow to check for converters of parent classes? if under what contract?
+		if (converter == null) {
+			return false;
+		}
+
+		return true;
+	}
 }
