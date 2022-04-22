@@ -298,6 +298,7 @@ public final class CompileHelper
 		return getCompiledInstance(javaClassCode, className, null, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <InstanceType> InstanceType getCompiledInstance(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
 	{
 		Class compiledClass = getCompiledClass(javaClassCode, className, classLoader, classPath);

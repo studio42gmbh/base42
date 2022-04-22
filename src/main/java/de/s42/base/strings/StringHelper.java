@@ -26,10 +26,20 @@
 package de.s42.base.strings;
 
 import de.s42.base.beans.BeanHelper;
-import java.beans.IntrospectionException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.AbstractMap;
+import de.s42.base.beans.BeanInfo;
+import de.s42.base.beans.BeanProperty;
+import de.s42.base.beans.InvalidBean;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.BiConsumer;
 
 /**
  *
@@ -37,22 +47,141 @@ import java.util.Map;
  */
 public final class StringHelper
 {
-	private final static Map<Class, Boolean> unescapedTypes = Map.ofEntries(
-		new AbstractMap.SimpleEntry<>(boolean.class, true),
-		new AbstractMap.SimpleEntry<>(float.class, true),
-		new AbstractMap.SimpleEntry<>(double.class, true),
-		new AbstractMap.SimpleEntry<>(long.class, true),
-		new AbstractMap.SimpleEntry<>(int.class, true),
-		new AbstractMap.SimpleEntry<>(Boolean.class, true),
-		new AbstractMap.SimpleEntry<>(Float.class, true),
-		new AbstractMap.SimpleEntry<>(Double.class, true),
-		new AbstractMap.SimpleEntry<>(Long.class, true),
-		new AbstractMap.SimpleEntry<>(Integer.class, true)
-	);
+
+	private final static Map<Class, BiConsumer<?, StringBuilder>> writers = Collections.synchronizedMap(new HashMap<>());
+
+	static {
+
+		// UUID
+		addWriter(UUID.class, (UUID value, StringBuilder builder) -> {
+			builder.append("\"").append(value).append("\"");
+		});
+
+		// String
+		addWriter(String.class, (String value, StringBuilder builder) -> {
+			builder.append("\"").append(value).append("\"");
+		});
+
+		// String[]
+		addWriter(String[].class, (String[] value, StringBuilder builder) -> {
+			write(value, builder);
+		});
+
+		// Class
+		addWriter(Class.class, (Class value, StringBuilder builder) -> {
+			builder.append(value.getName());
+		});
+
+		// List
+		addWriter(List.class, (List value, StringBuilder builder) -> {
+			write(value, builder);
+		});
+
+		// ArrayList
+		addWriter(ArrayList.class, (List value, StringBuilder builder) -> {
+			write(value, builder);
+		});
+
+		// Collections.unmodifiableList
+		addWriter(Collections.unmodifiableList(List.of()).getClass(), (List value, StringBuilder builder) -> {
+			write(value, builder);
+		});
+
+		// Set
+		addWriter(Set.class, (Set value, StringBuilder builder) -> {
+			write(value, builder);
+		});
+
+		// HashSet
+		addWriter(HashSet.class, (Set value, StringBuilder builder) -> {
+			write(value, builder);
+		});
+
+		// Collections.unmodifiableSet
+		addWriter(Collections.unmodifiableSet(Set.of()).getClass(), (Set value, StringBuilder builder) -> {
+			write(value, builder);
+		});
+	}
 
 	private StringHelper()
 	{
 		// never instantiated
+	}
+
+	public static void write(Object[] array, StringBuilder builder)
+	{
+		assert builder != null;
+
+		if (array == null || array.length == 0) {
+			builder.append("null");
+			return;
+		}
+
+		for (int i = 0; i < array.length; ++i) {
+			if (i > 0) {
+				builder.append(", ");
+			}
+			write(array[i], builder);
+		}
+	}
+
+	public static void write(Collection collection, StringBuilder builder)
+	{
+		assert builder != null;
+
+		if (collection == null || collection.isEmpty()) {
+			builder.append("null");
+			return;
+		}
+
+		Iterator it = collection.iterator();
+		boolean first = true;
+		while (it.hasNext()) {
+			if (!first) {
+				builder.append(", ");
+			}
+			first = false;
+			write(it.next(), builder);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void write(Object value, StringBuilder builder)
+	{
+		assert builder != null;
+
+		if (value == null) {
+			builder.append("null");
+			return;
+		}
+
+		BiConsumer writer = getWriter(value.getClass());
+
+		if (writer != null) {
+			writer.accept(value, builder);
+		} else {
+			builder
+				//.append("\"")
+				.append(value);
+			//.append("\"");
+		}
+	}
+
+	public static BiConsumer<?, StringBuilder> getWriter(Class sourceClass)
+	{
+		assert sourceClass != null;
+
+		return writers.get(sourceClass);
+	}
+
+	public synchronized static void addWriter(Class sourceClass, BiConsumer<?, StringBuilder> writer) throws RuntimeException
+	{
+		assert sourceClass != null;
+		assert writer != null;
+
+		if (writers.putIfAbsent(sourceClass, writer) != null) {
+			throw new RuntimeException("Writer for class " + sourceClass.getName() + " is already mapped");
+		}
 	}
 
 	public static String lowerCaseFirst(String transform)
@@ -62,62 +191,82 @@ public final class StringHelper
 		return transform.substring(0, 1).toLowerCase() + transform.substring(1);
 	}
 
+	public static String toString(Class type, String name, String[] attributeNames, Object[] attributeValues)
+	{
+		assert type != null;
+		assert attributeNames != null;
+		assert attributeValues != null;
+		assert attributeNames.length == attributeValues.length;
+
+		if (attributeNames.length != attributeValues.length) {
+			throw new RuntimeException("attributeNames.length != attributeValues.length");
+		}
+
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(type.getName());
+
+		if (name != null) {
+			builder.append(" ").append(name);
+		}
+
+		builder.append(" {");
+
+		for (int i = 0; i < attributeNames.length; ++i) {
+
+			String attributeName = attributeNames[i];
+			Object attributeValue = attributeValues[i];
+
+			builder
+				.append(" ")
+				.append(attributeName)
+				.append(" : ");
+
+			write(attributeValue, builder);
+
+			builder.append(";");
+		}
+
+		if (attributeNames.length > 0) {
+			builder.append(" }");
+		} else {
+			builder.append("}");
+		}
+
+		return builder.toString();
+	}
+
+	@SuppressWarnings("unchecked")
 	public static String toString(Object object)
 	{
+		if (object == null) {
+			return "null";
+		}
+
 		try {
-			assert object != null;
+			BeanInfo<?> info = BeanHelper.getBeanInfo(object.getClass());
 
-			//return BeanHelper.toJSON(bean);
-			StringBuilder builder = new StringBuilder();
-
-			builder.append(object.getClass().getName());
-
-			if (BeanHelper.hasReadProperty(object, "name")) {
-				builder
-					.append(" ")
-					.append((Object) BeanHelper.readProperty(object, "name"));
-			}
-
-			builder.append(" {");
-
-			for (String name : BeanHelper.getReadPropertyNames(object)) {
-
-				if (name.equals("name")
-					|| name.equals("class")) {
+			// @todo Optimize this quick and not so optimal copying solution for read properties
+			List<BeanProperty> readProperties = new ArrayList<>(info.getReadProperties());
+			String[] attributeNames = new String[readProperties.size() - 1];
+			Object[] attributeValues = new Object[readProperties.size() - 1];
+			int i = 0;
+			for (BeanProperty property : readProperties) {
+				if (property.getName().equals("class")) {
 					continue;
 				}
-
-				Object val = BeanHelper.readProperty(object, name);
-				
-				if (val == null) {
-					continue;
-				}
-				
-				builder
-					.append(" ")
-					.append(name)
-					.append(" : ");
-
-				//detect types which have to be escaped and which not
-				if (!unescapedTypes.containsKey(val.getClass())) {
-					builder
-						.append("\"")
-						.append(val)
-						.append("\"");
-				} else {
-					builder
-						.append(val);
-				}
-
-				builder
-					.append(";");
+				attributeNames[i] = property.getName();
+				attributeValues[i] = property.read(object);
+				i++;
 			}
 
-			builder.append(" }");
+			// @todo implement smart to string
+			return toString(object.getClass(), null, attributeNames, attributeValues);
+			//return toString(info.getBeanClass(), null, info.getReadPropertyNames(), attributeValues);
+			//return object.getClass().getName() + "@" + object.hashCode();
 
-			return builder.toString();
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			throw new RuntimeException("Error stringifying - " + ex.getMessage(), ex);
+		} catch (InvalidBean ex) {
+			throw new RuntimeException("Error to string - " + ex.getMessage(), ex);
 		}
 	}
 }

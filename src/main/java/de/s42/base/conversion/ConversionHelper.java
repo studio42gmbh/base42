@@ -52,6 +52,7 @@ import org.json.JSONObject;
  *
  * @author Benjamin Schiller
  */
+@SuppressWarnings("unchecked")
 public final class ConversionHelper
 {
 
@@ -400,9 +401,7 @@ public final class ConversionHelper
 				List result = new ArrayList();
 				for (int i = 0; i < value.length(); ++i) {
 
-					Object val = value.get(i);
-
-					result.add(val);
+					result.add(value.get(i));
 				}
 				return result.toArray();
 			} catch (JSONException ex) {
@@ -441,7 +440,7 @@ public final class ConversionHelper
 		}
 	}
 
-	public static <ReturnType> ReturnType convert(Object value, Class targetClass, ReturnType defaultValue) throws RuntimeException
+	public static <ReturnType> ReturnType convert(Object value, Class<? extends ReturnType> targetClass, ReturnType defaultValue) throws RuntimeException
 	{
 		if (value == null) {
 
@@ -466,7 +465,7 @@ public final class ConversionHelper
 		return result;
 	}
 
-	public static <ReturnType> ReturnType convert(Object value, Class targetClass) throws RuntimeException
+	public static <ReturnType> ReturnType convert(Object value, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
 		assert targetClass != null;
 
@@ -492,7 +491,7 @@ public final class ConversionHelper
 
 		//handling for all enums
 		if (targetClass.isEnum()) {
-			return (ReturnType) Enum.valueOf(targetClass, value.toString());
+			return (ReturnType) Enum.valueOf((Class<Enum>)targetClass, value.toString());
 		}
 
 		//convert array types and check if all entries are consistent
@@ -569,6 +568,21 @@ public final class ConversionHelper
 
 		for (int i = 0; i < values.length; ++i) {
 			result[i] = convert(values[i], targetClass);
+		}
+
+		return result;
+	}
+
+	public static <ReturnType> List<ReturnType> convertList(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
+	{
+		if (values == null) {
+			return null;
+		}
+
+		List<ReturnType> result = new ArrayList<>();
+
+		for (int i = 0; i < values.length; ++i) {
+			result.add(convert(values[i], targetClass));
 		}
 
 		return result;

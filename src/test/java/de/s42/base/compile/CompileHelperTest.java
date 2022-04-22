@@ -64,6 +64,7 @@ public class CompileHelperTest
 	{
 		Class testActionClass = CompileHelper.getCompiledClass(validClassCode, validClassName);
 
+		@SuppressWarnings("unchecked")
 		TestAction testAction = (TestAction) testActionClass.getConstructor().newInstance();
 
 		Assert.assertEquals("YAY", testAction.doAction());

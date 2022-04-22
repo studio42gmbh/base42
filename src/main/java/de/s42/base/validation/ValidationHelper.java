@@ -69,8 +69,10 @@ public final class ValidationHelper
 		return isVariableName(variableName);
 	}
 
-	public final static boolean isTypeOf(Object value, Class type)
+	public final static boolean isTypeOf(Object value, Class<?> type)
 	{
+		assert type != null;
+		
 		if (value == null) {
 			return false;
 		}

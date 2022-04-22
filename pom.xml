@@ -72,11 +72,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<!--showDeprecation>true</showDeprecation//-->
-					<!--debug>true</debug//-->
 					<compilerArgs>
 						<arg>-deprecation</arg>
-						<!--arg>-Xlint:unchecked</arg//-->
+						<arg>-Xlint:unchecked</arg>
 					</compilerArgs>
 				 <showDeprecation>true</showDeprecation>
 				</configuration>

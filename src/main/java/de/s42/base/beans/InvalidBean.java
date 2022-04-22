@@ -25,49 +25,25 @@
 //</editor-fold>
 package de.s42.base.beans;
 
-import java.util.*;
-import org.json.JSONObject;
-
 /**
  *
  * @author Benjamin Schiller
  */
-public final class BeanHelper
+public class InvalidBean extends Exception
 {
 
-	private final static Map<Class, BeanInfo> infos = Collections.synchronizedMap(new HashMap<>());
-
-	private BeanHelper()
+	public InvalidBean(String msg)
 	{
-		// never instantiated
+		super(msg);
 	}
 
-	// @todo does it matter that theoretically this call might cause multiple info generation?
-	// see java.beans.ThreadGroupContext and java.beans.Introspector.getBeanInfo()
-	@SuppressWarnings("unchecked")
-	public static <BeanType> BeanInfo<BeanType> getBeanInfo(Class<? extends BeanType> beanClass) throws InvalidBean
+	public InvalidBean(Throwable cause)
 	{
-		if (beanClass == null) {
-			throw new RuntimeException("beanClass may not be null");
-		}
-
-		BeanInfo<BeanType> info = infos.get(beanClass);
-
-		if (info != null) {
-			return info;
-		}
-
-		info = new BeanInfo(beanClass);
-
-		infos.put(beanClass, info);
-
-		return info;
+		super(cause);
 	}
 
-	public static String toJSON(Object bean)
+	public InvalidBean(String msg, Throwable cause)
 	{
-		JSONObject obj = new JSONObject(bean);
-
-		return obj.toString();
+		super(msg, cause);
 	}
 }
