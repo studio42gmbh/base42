@@ -28,6 +28,7 @@ package de.s42.base.collections;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class MappedList<KeyType, DataType>
 {
 
 	protected final List<DataType> list = new ArrayList<>();
+	protected final Set<DataType> set = new HashSet<>();
 	protected final Map<KeyType, DataType> map = new HashMap<>();
 
 	public MappedList()
@@ -62,12 +64,13 @@ public class MappedList<KeyType, DataType>
 	public void clear()
 	{
 		list.clear();
+		set.clear();
 		map.clear();
 	}
 
 	public void addAll(MappedList<KeyType, DataType> other)
 	{
-		for (Map.Entry<KeyType, DataType> entry : other.asMap().entrySet()) {
+		for (Map.Entry<KeyType, DataType> entry : other.map().entrySet()) {
 			add(entry.getKey(), entry.getValue());
 		}
 	}
@@ -82,18 +85,7 @@ public class MappedList<KeyType, DataType>
 			list.remove(oldValue);
 		}
 		list.add(value);
-	}
-
-	public void replace(KeyType key, DataType value)
-	{
-		assert key != null;
-		assert value != null;
-
-		DataType oldValue = map.put(key, value);
-		if (oldValue != null) {
-			list.remove(oldValue);
-		}
-		list.add(value);
+		set.add(value);
 	}
 
 	public void remove(KeyType key)
@@ -101,7 +93,10 @@ public class MappedList<KeyType, DataType>
 		assert key != null;
 
 		DataType value = map.remove(key);
-		list.remove(value);
+		if (value != null) {
+			list.remove(value);
+			set.remove(value);
+		}
 	}
 
 	public void removeByData(DataType value)
@@ -112,9 +107,11 @@ public class MappedList<KeyType, DataType>
 		for (Map.Entry<KeyType, DataType> entry : entries) {
 			if (value.equals(entry.getValue())) {
 				entries.remove(entry);
+				list.remove(value);
+				set.remove(value);
+				return;
 			}
 		}
-		list.remove(value);
 	}
 
 	public Optional<DataType> get(KeyType key)
@@ -123,14 +120,14 @@ public class MappedList<KeyType, DataType>
 
 		return Optional.ofNullable(map.get(key));
 	}
-	
+
 	public DataType get(int index)
 	{
 		assert index >= 0;
 		assert index < list.size();
 
 		return list.get(index);
-	}	
+	}
 
 	public boolean contains(KeyType key)
 	{
@@ -139,12 +136,22 @@ public class MappedList<KeyType, DataType>
 		return map.containsKey(key);
 	}
 
-	public List<DataType> asList()
+	public Set<KeyType> keys()
+	{
+		return Collections.unmodifiableSet(map.keySet());
+	}
+
+	public Set<DataType> values()
+	{
+		return Collections.unmodifiableSet(set);
+	}
+
+	public List<DataType> list()
 	{
 		return Collections.unmodifiableList(list);
 	}
 
-	public Map<KeyType, DataType> asMap()
+	public Map<KeyType, DataType> map()
 	{
 		return Collections.unmodifiableMap(map);
 	}
