@@ -45,7 +45,8 @@ public final class ZipHelper
 	 * https://stackoverflow.com/questions/33934178/how-to-identify-a-zip-file-in-java
 	 *
 	 * @param file this file will be tested if it is an archive
-	 * @return true if the file contains the according file signature (fileSignature == 0x504B0304 || fileSignature == 0x504B0506 || fileSignature == 0x504B0708)
+	 * @return true if the file contains the according file signature (fileSignature == 0x504B0304 || fileSignature ==
+	 * 0x504B0506 || fileSignature == 0x504B0708)
 	 */
 	public static boolean isArchive(Path file)
 	{
@@ -59,8 +60,12 @@ public final class ZipHelper
 			// handle if you like
 		}
 
+		return isArchive(fileSignature);
+	}
+
+	public static boolean isArchive(int fileSignature)
+	{
 		// see https://en.wikipedia.org/wiki/List_of_file_signatures
 		return fileSignature == 0x504B0304 || fileSignature == 0x504B0506 || fileSignature == 0x504B0708;
 	}
-
 }
