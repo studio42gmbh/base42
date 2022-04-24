@@ -39,8 +39,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -491,7 +493,7 @@ public final class ConversionHelper
 
 		//handling for all enums
 		if (targetClass.isEnum()) {
-			return (ReturnType) Enum.valueOf((Class<Enum>)targetClass, value.toString());
+			return (ReturnType) Enum.valueOf((Class<Enum>) targetClass, value.toString());
 		}
 
 		//convert array types and check if all entries are consistent
@@ -583,6 +585,23 @@ public final class ConversionHelper
 
 		for (int i = 0; i < values.length; ++i) {
 			result.add(convert(values[i], targetClass));
+		}
+
+		return result;
+	}
+
+	public static <ReturnType> Set<ReturnType> convertSet(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
+	{
+		if (values == null) {
+			return null;
+		}
+
+		Set<ReturnType> result = new HashSet<>();
+
+		for (int i = 0; i < values.length; ++i) {
+			if (!result.add(convert(values[i], targetClass))) {
+				throw new RuntimeException("Element " + i + " is already contained in Set");
+			}
 		}
 
 		return result;

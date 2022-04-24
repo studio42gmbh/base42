@@ -27,6 +27,8 @@ package de.s42.base.conversion;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -37,8 +39,27 @@ import org.testng.annotations.Test;
 public class ConversionHelperNGTest
 {
 
-	public ConversionHelperNGTest()
+	@Test
+	public void validConvertArray()
 	{
+		Object[] source = {1.1f, 2.2f, 3.3f};
+		Float[] target = (Float[]) ConversionHelper.convert(source, Float[].class);
+		float sum = 0.0f;
+		for (Float v : target) {
+			sum += v;
+		}
+		//epsilon tets
+		Assert.assertTrue(Math.abs(sum - 6.6f) < 0.0001);
+	}
+
+	@Test
+	public void validArrayConvert()
+	{
+		String values = "1,2,3";
+
+		Integer[] ints = ConversionHelper.convertArray(values.split(","), Integer.class);
+
+		Assert.assertEquals(ints, new Integer[]{1, 2, 3});
 	}
 
 	@Test
@@ -48,5 +69,38 @@ public class ConversionHelperNGTest
 		Assert.assertEquals(
 			ConversionHelper.convert("2022-04-14 10:12:56:000", Date.class),
 			ConversionHelper.DATE_FORMAT.parse("2022-04-14 10:12:56:000"));
+	}
+
+	@Test
+	public void validConvertList()
+	{
+		Object[] source = {1.1f, 2.2f, 3.3f, 1.1f};
+		List<Float> target = (List<Float>) ConversionHelper.convertList(source, Float.class);
+		float sum = 0.0f;
+		for (Float v : target) {
+			sum += v;
+		}
+		//epsilon tets
+		Assert.assertTrue(Math.abs(sum - 7.7f) < 0.0001);
+	}
+
+	@Test
+	public void validConvertSet()
+	{
+		Object[] source = {1.1f, 2.2f, 3.3f};
+		Set<Float> target = (Set<Float>) ConversionHelper.convertSet(source, Float.class);
+		float sum = 0.0f;
+		for (Float v : target) {
+			sum += v;
+		}
+		//epsilon tets
+		Assert.assertTrue(Math.abs(sum - 6.6f) < 0.0001);
+	}
+
+	@Test(expectedExceptions = RuntimeException.class)
+	public void invalidConvertSet()
+	{
+		Object[] source = {1.1f, 2.2f, 1.1f};
+		ConversionHelper.convertSet(source, Float.class);
 	}
 }
