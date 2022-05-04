@@ -136,6 +136,11 @@ public class MappedList<KeyType, DataType>
 		return map.containsKey(key);
 	}
 
+	public Object[] toArray()
+	{
+		return list.toArray();
+	}
+
 	public Set<KeyType> keys()
 	{
 		return Collections.unmodifiableSet(map.keySet());
