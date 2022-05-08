@@ -259,11 +259,6 @@ public final class ConversionHelper
 			return value.floatValue();
 		});
 
-		//BigDecimal -> float
-		addConverter(BigDecimal.class, float.class, (BigDecimal value) -> {
-			return value.floatValue();
-		});
-
 		//Long -> Float
 		addConverter(Long.class, Float.class, (Long value) -> {
 			return value.floatValue();
@@ -271,11 +266,6 @@ public final class ConversionHelper
 
 		//Long -> double
 		addConverter(Long.class, double.class, (Long value) -> {
-			return value.doubleValue();
-		});
-
-		//BigDecimal -> double
-		addConverter(BigDecimal.class, double.class, (BigDecimal value) -> {
 			return value.doubleValue();
 		});
 
@@ -380,6 +370,46 @@ public final class ConversionHelper
 				return null;
 			}
 			return value.getTime();
+		});
+
+		//BigDecimal -> Double
+		addConverter(BigDecimal.class, Double.class, (BigDecimal value) -> {
+			return value.doubleValue();
+		});
+
+		//BigDecimal -> double
+		addConverter(BigDecimal.class, double.class, (BigDecimal value) -> {
+			return value.doubleValue();
+		});
+
+		//BigDecimal -> Float
+		addConverter(BigDecimal.class, Float.class, (BigDecimal value) -> {
+			return value.floatValue();
+		});
+
+		//BigDecimal -> float
+		addConverter(BigDecimal.class, float.class, (BigDecimal value) -> {
+			return value.floatValue();
+		});
+
+		//BigDecimal -> Long
+		addConverter(BigDecimal.class, Long.class, (BigDecimal value) -> {
+			return value.longValue();
+		});
+
+		//BigDecimal -> long
+		addConverter(BigDecimal.class, long.class, (BigDecimal value) -> {
+			return value.longValue();
+		});
+
+		//BigDecimal -> Integer
+		addConverter(BigDecimal.class, Integer.class, (BigDecimal value) -> {
+			return value.intValue();
+		});
+
+		//BigDecimal -> int
+		addConverter(BigDecimal.class, int.class, (BigDecimal value) -> {
+			return value.intValue();
 		});
 
 		//Class -> String
@@ -589,6 +619,22 @@ public final class ConversionHelper
 
 		return result;
 	}
+	
+	public static <ReturnType> List<ReturnType> convertList(List values, Class<? extends ReturnType> targetClass) throws RuntimeException
+	{
+		if (values == null) {
+			return null;
+		}
+
+		List result = Collections.checkedList(new ArrayList<>(), targetClass);
+
+		for (Object value : values) {
+			result.add(convert(value, targetClass));
+		}
+
+		return result;
+	}
+	
 
 	public static <ReturnType> Set<ReturnType> convertSet(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
