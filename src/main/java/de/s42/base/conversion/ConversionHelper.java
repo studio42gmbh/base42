@@ -445,6 +445,136 @@ public final class ConversionHelper
 		addConverter(UUID.class, String.class, (UUID value) -> {
 			return value.toString();
 		});
+
+		//String -> Character
+		addConverter(String.class, Character.class, (String value) -> {
+			return value.charAt(0);
+		});
+
+		//String -> char
+		addConverter(String.class, char.class, (String value) -> {
+			return value.charAt(0);
+		});
+
+		//Long -> Byte
+		addConverter(Long.class, Byte.class, (Long value) -> {
+			return value.byteValue();
+		});
+
+		//Long -> byte
+		addConverter(Long.class, byte.class, (Long value) -> {
+			return value.byteValue();
+		});
+
+		//long -> Byte
+		addConverter(long.class, Byte.class, (Long value) -> {
+			return value.byteValue();
+		});
+
+		//long -> byte
+		addConverter(long.class, byte.class, (Long value) -> {
+			return value.byteValue();
+		});
+
+		//Integer -> Byte
+		addConverter(Integer.class, Byte.class, (Integer value) -> {
+			return value.byteValue();
+		});
+
+		//Integer -> byte
+		addConverter(Integer.class, byte.class, (Integer value) -> {
+			return value.byteValue();
+		});
+
+		//int -> Byte
+		addConverter(int.class, Byte.class, (Integer value) -> {
+			return value.byteValue();
+		});
+
+		//int -> byte
+		addConverter(int.class, byte.class, (Integer value) -> {
+			return value.byteValue();
+		});
+
+		//Short -> Byte
+		addConverter(Short.class, Byte.class, (Short value) -> {
+			return value.byteValue();
+		});
+
+		//Short -> byte
+		addConverter(Short.class, byte.class, (Short value) -> {
+			return value.byteValue();
+		});
+
+		//short -> Byte
+		addConverter(short.class, Byte.class, (Short value) -> {
+			return value.byteValue();
+		});
+
+		//short -> byte
+		addConverter(short.class, byte.class, (Short value) -> {
+			return value.byteValue();
+		});
+
+		//Long -> Short
+		addConverter(Long.class, Short.class, (Long value) -> {
+			return value.shortValue();
+		});
+
+		//Long -> short
+		addConverter(Long.class, short.class, (Long value) -> {
+			return value.shortValue();
+		});
+
+		//long -> Short
+		addConverter(long.class, Short.class, (Long value) -> {
+			return value.shortValue();
+		});
+
+		//long -> short
+		addConverter(long.class, short.class, (Long value) -> {
+			return value.shortValue();
+		});
+
+		//Integer -> Short
+		addConverter(Integer.class, Short.class, (Integer value) -> {
+			return value.shortValue();
+		});
+
+		//Integer -> short
+		addConverter(Integer.class, short.class, (Integer value) -> {
+			return value.shortValue();
+		});
+
+		//int -> Short
+		addConverter(int.class, Short.class, (Integer value) -> {
+			return value.shortValue();
+		});
+
+		//int -> short
+		addConverter(int.class, short.class, (Integer value) -> {
+			return value.shortValue();
+		});
+
+		//Byte -> Short
+		addConverter(Byte.class, Short.class, (Integer value) -> {
+			return value.shortValue();
+		});
+
+		//Byte -> short
+		addConverter(Byte.class, short.class, (Integer value) -> {
+			return value.shortValue();
+		});
+
+		//byte -> Short
+		addConverter(byte.class, Short.class, (Integer value) -> {
+			return value.shortValue();
+		});
+
+		//byte -> short
+		addConverter(byte.class, short.class, (Integer value) -> {
+			return value.shortValue();
+		});
 	}
 
 	public static String bytesToHex(byte[] bytes)
@@ -619,7 +749,7 @@ public final class ConversionHelper
 
 		return result;
 	}
-	
+
 	public static <ReturnType> List<ReturnType> convertList(List values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
 		if (values == null) {
@@ -634,7 +764,6 @@ public final class ConversionHelper
 
 		return result;
 	}
-	
 
 	public static <ReturnType> Set<ReturnType> convertSet(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
