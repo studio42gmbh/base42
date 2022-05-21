@@ -410,7 +410,9 @@ public final class FilesHelper
 		assert image != null;
 		assert outputFile != null;
 		assert quality >= 0.0f && quality <= 1.0f;
-
+		
+		// @todo might want to check if the colormodel is able to be written into a jpg -> give proper error then (default error is rather weird)
+		
 		ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(image);
 		ImageWriter writer = ImageIO.getImageWriters(type, "jpg").next();
 

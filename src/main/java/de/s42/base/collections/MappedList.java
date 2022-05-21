@@ -88,7 +88,7 @@ public class MappedList<KeyType, DataType>
 		set.add(value);
 	}
 
-	public void remove(KeyType key)
+	public boolean remove(KeyType key)
 	{
 		assert key != null;
 
@@ -96,10 +96,13 @@ public class MappedList<KeyType, DataType>
 		if (value != null) {
 			list.remove(value);
 			set.remove(value);
+			return true;
 		}
+
+		return false;
 	}
 
-	public void removeByData(DataType value)
+	public boolean removeByData(DataType value)
 	{
 		assert value != null;
 
@@ -109,9 +112,11 @@ public class MappedList<KeyType, DataType>
 				entries.remove(entry);
 				list.remove(value);
 				set.remove(value);
-				return;
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	public Optional<DataType> get(KeyType key)
@@ -134,6 +139,13 @@ public class MappedList<KeyType, DataType>
 		assert key != null;
 
 		return map.containsKey(key);
+	}
+
+	public boolean containsData(DataType data)
+	{
+		assert data != null;
+
+		return map.containsValue(data);
 	}
 
 	public Object[] toArray()
