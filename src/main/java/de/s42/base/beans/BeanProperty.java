@@ -34,6 +34,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -125,16 +126,63 @@ public final class BeanProperty<BeanClass>
 	{
 		assert annotationClass != null;
 
-		if (field == null) {
-			return false;
+		boolean annotation = false;
+
+		if (field != null) {
+			
+			annotation =  field.isAnnotationPresent(annotationClass);
+			
+			if (annotation) {
+				return true;
+			}
 		}
 
-		return field.isAnnotationPresent(annotationClass);
+		if (readMethod != null) {
+			
+			annotation = readMethod.isAnnotationPresent(annotationClass);
+
+			if (annotation) {
+				return true;
+			}
+		}
+		
+		if (writeMethod != null) {
+			
+			return writeMethod.isAnnotationPresent(annotationClass);
+		}
+			
+		return false;
 	}
 
-	public <AnnotationType extends Annotation> AnnotationType getAnnotation(Class<? extends AnnotationType> annotationClass)
+	public <AnnotationType extends Annotation> Optional<AnnotationType> getAnnotation(Class<? extends AnnotationType> annotationClass)
 	{
-		return field.getAnnotation(annotationClass);
+		assert annotationClass != null;
+
+		AnnotationType annotation = null;
+			
+		if (field != null) {
+			
+			annotation =  field.getAnnotation(annotationClass);
+			
+			if (annotation != null) {
+				return Optional.of(annotation);
+			}
+		}
+
+		if (readMethod != null) {
+			
+			annotation = readMethod.getAnnotation(annotationClass);
+
+			if (annotation != null) {
+				return Optional.of(annotation);
+			}
+		}
+		
+		if (writeMethod != null) {
+			return Optional.ofNullable(writeMethod.getAnnotation(annotationClass));
+		}
+		
+		return Optional.empty();
 	}
 
 	public boolean isPublicField()
