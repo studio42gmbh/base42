@@ -41,6 +41,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Comparator;
 import java.util.stream.Stream;
 import java.util.zip.ZipInputStream;
+import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageTypeSpecifier;
@@ -62,6 +63,23 @@ public final class FilesHelper
 	private FilesHelper()
 	{
 		// never instantiated
+	}
+
+	// https://docs.oracle.com/javase/8/docs/api/index.html?javax/activation/MimetypesFileTypeMap.html
+	private final static MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+
+	public final static String getMimeType(Path file) throws IOException
+	{
+		assert file != null;
+
+		String mimeType = fileTypeMap.getContentType(file.toFile());
+
+		if (mimeType != null) {
+			return mimeType;
+		}
+
+		// Default to application/octet-stream instead of null
+		return "application/octet-stream";
 	}
 
 	public final static String createMavenNetbeansFileConsoleLink(Path file)
@@ -262,7 +280,7 @@ public final class FilesHelper
 	{
 		assert path != null;
 
-		try (Stream<Path> walk = Files.walk(path)) {
+		try ( Stream<Path> walk = Files.walk(path)) {
 			walk.sorted(Comparator.reverseOrder())
 				.filter((p) -> {
 					return !p.equals(path);
@@ -323,7 +341,7 @@ public final class FilesHelper
 			throw new IOException("File not found " + filePath);
 		}
 
-		try (FileInputStream fis = new FileInputStream(file); FileChannel fc = fis.getChannel()) {
+		try ( FileInputStream fis = new FileInputStream(file);  FileChannel fc = fis.getChannel()) {
 			buffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
 		}
 
@@ -360,7 +378,7 @@ public final class FilesHelper
 		}
 
 		ByteArrayOutputStream baos;
-		try (ZipInputStream zipStream = new ZipInputStream(new FileInputStream(file))) {
+		try ( ZipInputStream zipStream = new ZipInputStream(new FileInputStream(file))) {
 			zipStream.getNextEntry();
 			baos = new ByteArrayOutputStream();
 			byte[] buffer = new byte[1024];
@@ -391,7 +409,7 @@ public final class FilesHelper
 		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		param.setCompressionQuality(1.0f);
 
-		try (ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
+		try ( ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
 			writer.setOutput(out);
 			writer.write(null, new IIOImage(image, null, null), param);
 			writer.dispose();
@@ -410,9 +428,8 @@ public final class FilesHelper
 		assert image != null;
 		assert outputFile != null;
 		assert quality >= 0.0f && quality <= 1.0f;
-		
+
 		// @todo might want to check if the colormodel is able to be written into a jpg -> give proper error then (default error is rather weird)
-		
 		ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(image);
 		ImageWriter writer = ImageIO.getImageWriters(type, "jpg").next();
 
@@ -420,7 +437,7 @@ public final class FilesHelper
 		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		param.setCompressionQuality(quality);
 
-		try (ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
+		try ( ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
 			writer.setOutput(out);
 			writer.write(null, new IIOImage(image, null, null), param);
 			writer.dispose();

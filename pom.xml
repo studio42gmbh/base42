@@ -27,6 +27,13 @@
 			<scope>test</scope>
 			<type>jar</type>
 		</dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+			<scope>compile</scope>
+			<type>jar</type>
+		</dependency>
 	</dependencies>		
 	<build>
 		<plugins>
@@ -79,7 +86,7 @@
 						<arg>-deprecation</arg>
 						<arg>-Xlint:unchecked</arg>
 					</compilerArgs>
-				 <showDeprecation>true</showDeprecation>
+					<showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
 			<plugin>

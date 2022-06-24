@@ -28,6 +28,7 @@ module de.sft.base
 	requires java.compiler;
 	requires java.desktop;
 	requires org.json;
+	requires activation;
 
 	exports de.s42.base.arrays;
 	exports de.s42.base.beans;
