@@ -191,6 +191,13 @@ public final class StringHelper
 		return transform.substring(0, 1).toLowerCase() + transform.substring(1);
 	}
 
+	public static String upperCaseFirst(String transform)
+	{
+		assert transform != null;
+
+		return transform.substring(0, 1).toUpperCase() + transform.substring(1);
+	}
+
 	public static String toString(Class type, String name, String[] attributeNames, Object[] attributeValues)
 	{
 		assert type != null;
