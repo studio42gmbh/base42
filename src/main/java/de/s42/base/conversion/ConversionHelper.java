@@ -575,6 +575,15 @@ public final class ConversionHelper
 		addConverter(byte.class, short.class, (Integer value) -> {
 			return value.shortValue();
 		});
+
+		//String (as JSON String) -> Map
+		addConverter(String.class, Map.class, (String value) -> {
+
+			JSONObject data = new JSONObject(value);
+
+			return data.toMap();
+		});
+
 	}
 
 	public static String bytesToHex(byte[] bytes)
