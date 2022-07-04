@@ -34,7 +34,14 @@
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
-	</dependencies>		
+	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub studio42 GmbH Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/studio42gmbh/base42</url>
+		</repository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
