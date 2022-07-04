@@ -25,5 +25,5 @@ jobs:
       - run: mkdir release && cp target/*.jar release
       - uses: actions/upload-artifact@v3
         with:
-          name: Package
+          name: base42
           path: release
