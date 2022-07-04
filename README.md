@@ -36,7 +36,6 @@ Helpers for:
 
 * Expand where necessary to wrap basic functionality nicely
 
-
 ## Usage
 
 * Download project
