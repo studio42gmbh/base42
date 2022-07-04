@@ -22,8 +22,3 @@ jobs:
           java-version: 14
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - run: mkdir release && cp target/*.jar release
-      - uses: actions/upload-artifact@v3
-        with:
-          name: base42
-          path: release
