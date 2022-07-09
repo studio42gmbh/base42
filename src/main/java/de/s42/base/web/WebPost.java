@@ -31,12 +31,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.json.JSONObject;
 
 /**
  *
@@ -48,6 +51,12 @@ public class WebPost
 	protected URL url;
 
 	protected final Map<String, Object> parameters = new HashMap<>();
+
+	// See https://stackoverflow.com/questions/16150089/how-to-handle-cookies-in-httpurlconnection-using-cookiemanager
+	static {
+		CookieManager cookieManager = new CookieManager();
+		CookieHandler.setDefault(cookieManager);
+	}
 
 	public WebPost()
 	{
@@ -68,10 +77,12 @@ public class WebPost
 		this.url = url;
 	}
 
-	public WebPost(Map<String, Object> parameters)
+	public WebPost(String url, Map<String, Object> parameters) throws MalformedURLException
 	{
 		assert parameters != null;
+		assert url != null;
 
+		this.url = new URL(url);
 		this.parameters.putAll(parameters);
 	}
 
@@ -99,7 +110,7 @@ public class WebPost
 		parameters.remove(key);
 	}
 
-	public String perform() throws IOException
+	public WebPostResult perform() throws IOException
 	{
 		String boundary = UUID.randomUUID().toString();
 
@@ -132,27 +143,31 @@ public class WebPost
 
 		conn.setRequestProperty("Content-Length", String.valueOf(dataToSend.length));
 
-		OutputStream web = conn.getOutputStream();
-
-		web.write(dataToSend);
-
-		String callResult;
-		try ( //retrieve result
-			InputStream in = conn.getInputStream()) {
-			BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-			callResult = "";
-			String line = r.readLine();
-			while (line != null) {
-				if (line.length() > 0) {
-					callResult += line + "\n";
-				}
-				line = r.readLine();
-			}
+		OutputStream out = conn.getOutputStream();
+		out.write(dataToSend);
+				
+		int statusCode = conn.getResponseCode();
+		
+		String callResult = null;
+		
+		InputStream in = null;
+		if (statusCode >= 100  && statusCode <= 399) {
+			in = conn.getInputStream();
 		}
-
+		else {
+			in = conn.getErrorStream();
+		}
+		
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		for (int length; (length = in.read(buffer)) != -1; ) {
+			result.write(buffer, 0, length);
+		}
+		callResult = result.toString("UTF-8");		
+		
 		conn.disconnect();
-
-		return callResult;
+		
+		return new WebPostResult(statusCode, new JSONObject(callResult));
 	}
 
 	public URL getUrl()

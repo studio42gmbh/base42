@@ -175,7 +175,13 @@ public final class ConversionHelper
 				try {
 					return DATE_FORMAT.parse(value);
 				} catch (ParseException ex) {
-					throw new RuntimeException("Error converting to date - " + ex.getMessage(), ex);
+
+					// Try Timestamp
+					try {
+						return java.sql.Timestamp.valueOf(value);
+					} catch (IllegalArgumentException ex2) {
+						throw new RuntimeException("Error converting to date - " + ex2.getMessage(), ex2);
+					}
 				}
 			}
 		});

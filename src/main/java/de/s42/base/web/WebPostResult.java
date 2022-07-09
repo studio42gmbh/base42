@@ -23,28 +23,68 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-module de.sft.base
-{
-	requires java.compiler;
-	requires java.desktop;
-	requires java.sql;
-	requires org.json;
-	requires activation;
+package de.s42.base.web;
 
-	exports de.s42.base.arrays;
-	exports de.s42.base.beans;
-	exports de.s42.base.collections;
-	exports de.s42.base.compile;
-	exports de.s42.base.console;
-	exports de.s42.base.conversion;
-	exports de.s42.base.date;
-	exports de.s42.base.files;
-	exports de.s42.base.modules;
-	exports de.s42.base.resources;
-	exports de.s42.base.strings;
-	exports de.s42.base.testing;
-	exports de.s42.base.uuid;
-	exports de.s42.base.validation;
-	exports de.s42.base.web;
-	exports de.s42.base.zip;
+import de.s42.base.strings.StringHelper;
+import org.json.JSONObject;
+
+/**
+ *
+ * @author Benjamin Schiller
+ */
+public class WebPostResult
+{
+
+	protected int statusCode;
+	protected JSONObject response;
+
+	public WebPostResult()
+	{
+
+	}
+
+	public WebPostResult(int statusCode, JSONObject response)
+	{
+		assert response != null;
+		assert statusCode >= 100;
+
+		this.statusCode = statusCode;
+		this.response = response;
+	}
+
+	public int getStatusCode()
+	{
+		return statusCode;
+	}
+
+	public void setStatusCode(int statusCode)
+	{
+		this.statusCode = statusCode;
+	}
+
+	public JSONObject getResponse()
+	{
+		return response;
+	}
+
+	public void setResponse(JSONObject response)
+	{
+		this.response = response;
+	}
+
+	public boolean isSuccess()
+	{
+		return !isError();
+	}
+
+	public boolean isError()
+	{
+		return statusCode > 399;
+	}
+
+	@Override
+	public String toString()
+	{
+		return StringHelper.toString(this);
+	}
 }
