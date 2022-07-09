@@ -194,6 +194,24 @@ public final class ConversionHelper
 			return Path.of(value);
 		});
 
+		//String (as JSON String) -> Map
+		addConverter(String.class, Map.class, (String value) -> {
+
+			JSONObject data = new JSONObject(value);
+
+			return data.toMap();
+		});
+
+		//String -> Character
+		addConverter(String.class, Character.class, (String value) -> {
+			return value.charAt(0);
+		});
+
+		//String -> char
+		addConverter(String.class, char.class, (String value) -> {
+			return value.charAt(0);
+		});
+
 		//Integer -> int
 		addConverter(Integer.class, int.class, (Integer value) -> {
 			return (int) value;
@@ -446,16 +464,6 @@ public final class ConversionHelper
 			return value.toString();
 		});
 
-		//String -> Character
-		addConverter(String.class, Character.class, (String value) -> {
-			return value.charAt(0);
-		});
-
-		//String -> char
-		addConverter(String.class, char.class, (String value) -> {
-			return value.charAt(0);
-		});
-
 		//Long -> Byte
 		addConverter(Long.class, Byte.class, (Long value) -> {
 			return value.byteValue();
@@ -575,15 +583,6 @@ public final class ConversionHelper
 		addConverter(byte.class, short.class, (Integer value) -> {
 			return value.shortValue();
 		});
-
-		//String (as JSON String) -> Map
-		addConverter(String.class, Map.class, (String value) -> {
-
-			JSONObject data = new JSONObject(value);
-
-			return data.toMap();
-		});
-
 	}
 
 	public static String bytesToHex(byte[] bytes)
