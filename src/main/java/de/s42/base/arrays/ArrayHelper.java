@@ -39,6 +39,13 @@ public final class ArrayHelper
 		// never instantiated
 	}
 
+	public static Object[] concatenate(Object[] array1, Object[] array2)
+	{
+		Object[] result = Arrays.copyOf(array1, array1.length + array2.length);
+		System.arraycopy(array2, 0, result, array1.length, array2.length);
+		return result;
+	}
+	
 	public static String[] concatenate(String[] array1, String[] array2)
 	{
 		String[] result = Arrays.copyOf(array1, array1.length + array2.length);
