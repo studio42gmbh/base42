@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
  *
  * @author Benjamin Schiller
  */
-public class ConversionHelperNGTest
+public class ConversionHelperTest
 {
 
 	@Test

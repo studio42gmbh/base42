@@ -671,20 +671,40 @@ public final class ConversionHelper
 		}
 
 		//convert array types and check if all entries are consistent
-		if (targetClass.isArray() && value.getClass().isArray()) {
+		if (value.getClass().isArray()) {
 
-			Object[] sourceArray = ((Object[]) (value));
-			int length = sourceArray.length;
-			Class targetComponentType = targetClass.getComponentType();
-			Object[] targetArray = (Object[]) Array.newInstance(targetComponentType, length);
+			if (targetClass.isArray()) {
 
-			for (int i = 0; i < length; ++i) {
+				Object[] sourceArray = ((Object[]) (value));
+				int length = sourceArray.length;
+				Class targetComponentType = targetClass.getComponentType();
+				Object[] targetArray = (Object[]) Array.newInstance(targetComponentType, length);
 
-				// convert each element of the array
-				targetArray[i] = convert(sourceArray[i], targetComponentType);
+				for (int i = 0; i < length; ++i) {
+
+					// convert each element of the array
+					targetArray[i] = convert(sourceArray[i], targetComponentType);
+				}
+
+				return (ReturnType) targetArray;
+			} // Convert array into string
+			else if (String.class.isAssignableFrom(targetClass)) {
+
+				Object[] sourceArray = ((Object[]) (value));
+				int length = sourceArray.length;
+
+				StringBuilder builder = new StringBuilder();
+
+				for (int i = 0; i < length; ++i) {
+
+					builder.append(convert(sourceArray[i], String.class));
+					if (i < length - 1) {
+						builder.append(", ");
+					}
+				}
+
+				return (ReturnType) builder.toString();
 			}
-
-			return (ReturnType) targetArray;
 		}
 
 		//handling arrays from string
@@ -717,6 +737,12 @@ public final class ConversionHelper
 		Map<Class, Function<?, ?>> targetMappings = converters.get(value.getClass());
 
 		if (targetMappings == null) {
+			
+			// Default conversion to String using the given toString method of the value
+			if (String.class.isAssignableFrom(targetClass)) {
+				return (ReturnType) value.toString();
+			}
+						
 			throw new RuntimeException("No source mappings for source class " + value.getClass().getName() + " to " + targetClass.getName());
 		}
 
@@ -724,6 +750,12 @@ public final class ConversionHelper
 
 		// @improvement allow to check for converters of parent classes? if under what contract?
 		if (converter == null) {
+			
+			// Default conversion to String using the given toString method of the value
+			if (String.class.isAssignableFrom(targetClass)) {
+				return (ReturnType) value.toString();
+			}
+			
 			throw new RuntimeException("No target mappings for source class " + value.getClass().getName() + " to " + targetClass.getName());
 		}
 
