@@ -269,6 +269,32 @@ public final class FilesHelper
 		}
 	}
 
+	public final static void copyFile(String sourcePath, String targetPath, boolean createDirectories, boolean overwrite) throws IOException
+	{
+		assert sourcePath != null;
+		assert targetPath != null;
+
+		copyFile(Path.of(sourcePath), Path.of(targetPath), createDirectories, overwrite);
+	}
+
+	public final static void copyFile(Path sourcePath, Path targetPath, boolean createDirectories, boolean overwrite) throws IOException
+	{
+		assert sourcePath != null;
+		assert targetPath != null;
+
+		if (createDirectories) {
+			if (!Files.exists(targetPath)) {
+				Files.createDirectories(targetPath.getParent());
+			}
+		}
+
+		if (overwrite) {
+			Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+		} else {
+			Files.copy(sourcePath, targetPath);
+		}
+	}
+
 	public final static void emptyDirectory(String path) throws IOException
 	{
 		assert path != null;
