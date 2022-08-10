@@ -69,7 +69,7 @@ public final class BeanProperty<BeanClass>
 	)
 	{
 		assert name != null;
-		assert propertyClass != null  : "propertyClass != null in property " + name;
+		assert propertyClass != null : "propertyClass != null in property " + name;
 
 		int modifiers = (field != null) ? field.getModifiers() : 0;
 
@@ -97,12 +97,14 @@ public final class BeanProperty<BeanClass>
 
 		try {
 			if (writeMethod != null) {
-				writeMethod.invoke(object, (Object)value);
+				writeMethod.invoke(object, (Object) value);
 			} else {
 				field.set(object, value);
 			}
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			throw new InvalidBean("Error writing value " + value + " to propery " + getName() + " from bean " + object + " - " + ex.getMessage(), ex);
+		} catch (InvocationTargetException ex) {
+			throw new InvalidBean("Error writing value " + value + " to property " + getName() + " from bean " + object + " - " + ex.getCause().getMessage(), ex);
+		} catch (IllegalAccessException | IllegalArgumentException ex) {
+			throw new InvalidBean("Error writing value " + value + " to property " + getName() + " from bean " + object + " - " + ex.getMessage(), ex);
 		}
 	}
 
@@ -117,8 +119,10 @@ public final class BeanProperty<BeanClass>
 			} else {
 				return (ReturnType) field.get(object);
 			}
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			throw new InvalidBean("Error reading propery from bean - " + ex.getMessage(), ex);
+		} catch (InvocationTargetException ex) {
+			throw new InvalidBean("Error reading property from bean - " + ex.getCause().getMessage(), ex);
+		} catch (IllegalAccessException ex) {
+			throw new InvalidBean("Error reading property from bean - " + ex.getMessage(), ex);
 		}
 	}
 
@@ -126,31 +130,31 @@ public final class BeanProperty<BeanClass>
 	{
 		assert annotationClass != null;
 
-		boolean annotation = false;
+		boolean annotation;
 
 		if (field != null) {
-			
-			annotation =  field.isAnnotationPresent(annotationClass);
-			
+
+			annotation = field.isAnnotationPresent(annotationClass);
+
 			if (annotation) {
 				return true;
 			}
 		}
 
 		if (readMethod != null) {
-			
+
 			annotation = readMethod.isAnnotationPresent(annotationClass);
 
 			if (annotation) {
 				return true;
 			}
 		}
-		
+
 		if (writeMethod != null) {
-			
+
 			return writeMethod.isAnnotationPresent(annotationClass);
 		}
-			
+
 		return false;
 	}
 
@@ -158,30 +162,30 @@ public final class BeanProperty<BeanClass>
 	{
 		assert annotationClass != null;
 
-		AnnotationType annotation = null;
-			
+		AnnotationType annotation;
+
 		if (field != null) {
-			
-			annotation =  field.getAnnotation(annotationClass);
-			
+
+			annotation = field.getAnnotation(annotationClass);
+
 			if (annotation != null) {
 				return Optional.of(annotation);
 			}
 		}
 
 		if (readMethod != null) {
-			
+
 			annotation = readMethod.getAnnotation(annotationClass);
 
 			if (annotation != null) {
 				return Optional.of(annotation);
 			}
 		}
-		
+
 		if (writeMethod != null) {
 			return Optional.ofNullable(writeMethod.getAnnotation(annotationClass));
 		}
-		
+
 		return Optional.empty();
 	}
 
