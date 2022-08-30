@@ -208,6 +208,14 @@ public final class ConversionHelper
 			return data.toMap();
 		});
 
+		//String (as JSON String) -> List
+		addConverter(String.class, List.class, (String value) -> {
+
+			JSONArray data = new JSONArray(value);
+
+			return data.toList();
+		});
+
 		//String -> Character
 		addConverter(String.class, Character.class, (String value) -> {
 			return value.charAt(0);
@@ -737,12 +745,12 @@ public final class ConversionHelper
 		Map<Class, Function<?, ?>> targetMappings = converters.get(value.getClass());
 
 		if (targetMappings == null) {
-			
+
 			// Default conversion to String using the given toString method of the value
 			if (String.class.isAssignableFrom(targetClass)) {
 				return (ReturnType) value.toString();
 			}
-						
+
 			throw new RuntimeException("No source mappings for source class " + value.getClass().getName() + " to " + targetClass.getName());
 		}
 
@@ -750,12 +758,12 @@ public final class ConversionHelper
 
 		// @improvement allow to check for converters of parent classes? if under what contract?
 		if (converter == null) {
-			
+
 			// Default conversion to String using the given toString method of the value
 			if (String.class.isAssignableFrom(targetClass)) {
 				return (ReturnType) value.toString();
 			}
-			
+
 			throw new RuntimeException("No target mappings for source class " + value.getClass().getName() + " to " + targetClass.getName());
 		}
 
@@ -868,10 +876,6 @@ public final class ConversionHelper
 		Function converter = targetMappings.get(targetClass);
 
 		// @improvement allow to check for converters of parent classes? if under what contract?
-		if (converter == null) {
-			return false;
-		}
-
-		return true;
+		return (converter != null);
 	}
 }
