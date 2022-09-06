@@ -256,6 +256,11 @@ public final class ConversionHelper
 			return new Date((long) value);
 		});
 
+		//int -> Date
+		addConverter(int.class, Date.class, (Integer value) -> {
+			return new Date((long) value);
+		});
+
 		//int -> String
 		addConverter(int.class, String.class, (Integer value) -> {
 			return value.toString();
@@ -283,6 +288,11 @@ public final class ConversionHelper
 
 		//Long -> Date
 		addConverter(Long.class, Date.class, (Long value) -> {
+			return new Date(value);
+		});
+
+		//long -> Date
+		addConverter(long.class, Date.class, (Long value) -> {
 			return new Date(value);
 		});
 
