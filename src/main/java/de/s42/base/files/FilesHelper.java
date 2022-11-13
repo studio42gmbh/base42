@@ -148,6 +148,12 @@ public final class FilesHelper
 
 		return msg.toString();
 	}
+	
+	public final static String sanitizeFileName(String name)
+	{
+		// todo What could be a general sinitization for filenames?
+		return name;
+	}
 
 	public final static boolean fileExists(String path)
 	{

@@ -25,11 +25,9 @@
 //</editor-fold>
 package de.s42.base.web;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -145,28 +143,27 @@ public class WebPost
 
 		OutputStream out = conn.getOutputStream();
 		out.write(dataToSend);
-				
+
 		int statusCode = conn.getResponseCode();
-		
+
 		String callResult = null;
-		
+
 		InputStream in = null;
-		if (statusCode >= 100  && statusCode <= 399) {
+		if (statusCode >= 100 && statusCode <= 399) {
 			in = conn.getInputStream();
-		}
-		else {
+		} else {
 			in = conn.getErrorStream();
 		}
-		
+
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
-		for (int length; (length = in.read(buffer)) != -1; ) {
+		for (int length; (length = in.read(buffer)) != -1;) {
 			result.write(buffer, 0, length);
 		}
-		callResult = result.toString("UTF-8");		
-		
+		callResult = result.toString("UTF-8");
+
 		conn.disconnect();
-		
+
 		return new WebPostResult(statusCode, new JSONObject(callResult));
 	}
 

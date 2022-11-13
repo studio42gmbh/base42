@@ -26,6 +26,10 @@
 package de.s42.base.conversion;
 
 import de.s42.base.uuid.UUIDHelper;
+import java.awt.Color;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -80,7 +84,7 @@ public final class ConversionHelper
 
 		//String -> Integer
 		addConverter(String.class, Integer.class, (String value) -> {
-			return Integer.valueOf(value);
+			return Integer.parseInt(value);
 		});
 
 		//String -> float
@@ -90,7 +94,7 @@ public final class ConversionHelper
 
 		//String -> Float
 		addConverter(String.class, Float.class, (String value) -> {
-			return Float.valueOf(value);
+			return Float.parseFloat(value);
 		});
 
 		//String -> double
@@ -100,12 +104,12 @@ public final class ConversionHelper
 
 		//String -> Double
 		addConverter(String.class, Double.class, (String value) -> {
-			return Double.valueOf(value);
+			return Double.parseDouble(value);
 		});
 
 		//String -> Number
 		addConverter(String.class, Number.class, (String value) -> {
-			return Double.valueOf(value);
+			return Double.parseDouble(value);
 		});
 
 		//String -> long
@@ -115,17 +119,31 @@ public final class ConversionHelper
 
 		//String -> Long
 		addConverter(String.class, Long.class, (String value) -> {
-			return Long.valueOf(value);
+			return Long.parseLong(value);
 		});
 
 		//String -> boolean
 		addConverter(String.class, boolean.class, (String value) -> {
-			return Boolean.parseBoolean(value);
+
+			if (value.equalsIgnoreCase("true")) {
+				return true;
+			} else if (value.equalsIgnoreCase("false")) {
+				return false;
+			}
+
+			throw new IllegalArgumentException("Value has to be 'true' or 'false'");
 		});
 
 		//String -> Boolean
 		addConverter(String.class, Boolean.class, (String value) -> {
-			return Boolean.valueOf(value);
+
+			if (value.equalsIgnoreCase("true")) {
+				return true;
+			} else if (value.equalsIgnoreCase("false")) {
+				return false;
+			}
+
+			throw new IllegalArgumentException("Value has to be 'true' or 'false'");
 		});
 
 		//String -> Class
@@ -607,6 +625,63 @@ public final class ConversionHelper
 		addConverter(byte.class, short.class, (Integer value) -> {
 			return value.shortValue();
 		});
+
+		//Rectangle -> String
+		addConverter(Rectangle.class, String.class, (Rectangle value) -> {
+			return "" + value.x + "," + value.y + "," + value.width + "," + value.height;
+		});
+
+		//Point -> String
+		addConverter(Point.class, String.class, (Point value) -> {
+			return "" + value.x + "," + value.y;
+		});
+
+		//Color -> String
+		addConverter(Color.class, String.class, (Color value) -> {
+			return "" + ((float) value.getRed() / 255.0f) + "," + ((float) value.getGreen() / 255.0f) + "," + ((float) value.getBlue() / 255.0f) + "," + ((float) value.getAlpha() / 255.0f);
+		});
+
+		//Insets -> String
+		addConverter(Insets.class, String.class, (Insets value) -> {
+			return "" + value.top + "," + value.left + "," + value.bottom + "," + value.right;
+		});
+
+		//String -> Insets
+		addConverter(String.class, Insets.class, (String value) -> {
+
+			Integer[] parts = convertArray(value.split(","), Integer.class);
+
+			return new Insets(parts[0], parts[1], parts[2], parts[3]);
+		});
+
+		//String -> Rectangle
+		addConverter(String.class, Rectangle.class, (String value) -> {
+
+			Integer[] parts = convertArray(value.split(","), Integer.class);
+
+			return new Rectangle(parts[0], parts[1], parts[2], parts[3]);
+		});
+
+		//String -> Point
+		addConverter(String.class, Point.class, (String value) -> {
+
+			Integer[] parts = convertArray(value.split(","), Integer.class);
+
+			return new Point(parts[0], parts[1]);
+		});
+
+		//String -> Color
+		addConverter(String.class, Color.class, (String value) -> {
+			
+			if (value.startsWith("#")) {
+				return Color.decode(value);
+			}
+			else {
+				Float[] parts = convertArray(value.split(","), Float.class);
+				return new Color(parts[0], parts[1], parts[2], parts[3]);
+			}
+		});
+
 	}
 
 	public static String bytesToHex(byte[] bytes)
