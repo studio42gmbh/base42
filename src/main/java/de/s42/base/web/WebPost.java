@@ -115,6 +115,8 @@ public class WebPost
 		String type = "multipart/form-data; boundary=" + boundary;
 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		//conn.setDefaultUseCaches(true);
+		//conn.setUseCaches(true);
 		conn.setDoOutput(true);
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("Content-Type", type);
@@ -146,9 +148,9 @@ public class WebPost
 
 		int statusCode = conn.getResponseCode();
 
-		String callResult = null;
-
-		InputStream in = null;
+		String callResult;
+		InputStream in;
+		
 		if (statusCode >= 100 && statusCode <= 399) {
 			in = conn.getInputStream();
 		} else {
@@ -161,6 +163,8 @@ public class WebPost
 			result.write(buffer, 0, length);
 		}
 		callResult = result.toString("UTF-8");
+		
+		in.close();
 
 		conn.disconnect();
 
