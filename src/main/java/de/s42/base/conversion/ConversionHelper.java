@@ -27,6 +27,7 @@ package de.s42.base.conversion;
 
 import de.s42.base.uuid.UUIDHelper;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -636,6 +637,11 @@ public final class ConversionHelper
 			return "" + value.x + "," + value.y;
 		});
 
+		//Dimension -> String
+		addConverter(Dimension.class, String.class, (Dimension value) -> {
+			return "" + value.width + "," + value.height;
+		});
+
 		//Color -> String
 		addConverter(Color.class, String.class, (Color value) -> {
 			return "" + ((float) value.getRed() / 255.0f) + "," + ((float) value.getGreen() / 255.0f) + "," + ((float) value.getBlue() / 255.0f) + "," + ((float) value.getAlpha() / 255.0f);
@@ -668,6 +674,14 @@ public final class ConversionHelper
 			Integer[] parts = convertArray(value.split(","), Integer.class);
 
 			return new Point(parts[0], parts[1]);
+		});
+
+		//String -> Dimension
+		addConverter(String.class, Dimension.class, (String value) -> {
+
+			Integer[] parts = convertArray(value.split(","), Integer.class);
+
+			return new Dimension(parts[0], parts[1]);
 		});
 
 		//String -> Color
