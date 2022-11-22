@@ -57,11 +57,11 @@ public final class BeanInfo<BeanClass>
 	protected final Class<BeanClass> beanClass;
 	protected final java.beans.BeanInfo beanInfo;
 	protected final int modifiers;
-	protected final Set<BeanProperty<BeanClass>> properties;
-	protected final Set<BeanProperty<BeanClass>> ownProperties;
-	protected final Set<BeanProperty<BeanClass>> readProperties;
-	protected final Set<BeanProperty<BeanClass>> writeProperties;
-	protected final Map<String, BeanProperty<BeanClass>> propertiesByName;
+	protected final Set<BeanProperty<BeanClass, ?>> properties;
+	protected final Set<BeanProperty<BeanClass, ?>> ownProperties;
+	protected final Set<BeanProperty<BeanClass, ?>> readProperties;
+	protected final Set<BeanProperty<BeanClass, ?>> writeProperties;
+	protected final Map<String, BeanProperty<BeanClass, ?>> propertiesByName;
 
 	//@SuppressWarnings("unchecked")
 	public BeanInfo(Class<BeanClass> beanClass) throws InvalidBean
@@ -79,11 +79,11 @@ public final class BeanInfo<BeanClass>
 			properties = Collections.unmodifiableSet(createProperties(beanClass));
 
 			// prepare filtered properties
-			Set<BeanProperty<BeanClass>> ownProps = new HashSet<>();
-			Set<BeanProperty<BeanClass>> rProps = new HashSet<>();
-			Set<BeanProperty<BeanClass>> wProps = new HashSet<>();
-			Map<String, BeanProperty<BeanClass>> propsByName = new HashMap<>();
-			for (BeanProperty<BeanClass> property : properties) {
+			Set<BeanProperty<BeanClass, ?>> ownProps = new HashSet<>();
+			Set<BeanProperty<BeanClass, ?>> rProps = new HashSet<>();
+			Set<BeanProperty<BeanClass, ?>> wProps = new HashSet<>();
+			Map<String, BeanProperty<BeanClass, ?>> propsByName = new HashMap<>();
+			for (BeanProperty<BeanClass, ?> property : properties) {
 				if (property.isOwn()) {
 					ownProps.add(property);
 				}
@@ -105,13 +105,13 @@ public final class BeanInfo<BeanClass>
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <BeanClass> Set<BeanProperty<BeanClass>> createProperties(Class beanClass) throws InvalidBean
+	public static <BeanClass> Set<BeanProperty<BeanClass, ?>> createProperties(Class beanClass) throws InvalidBean
 	{
 		assert beanClass != null;
 
 		try {
 
-			Set<BeanProperty<BeanClass>> result = new HashSet<>();
+			Set<BeanProperty<BeanClass, ?>> result = new HashSet<>();
 
 			Map<String, Field> fields = new HashMap<>();
 			for (Field field : beanClass.getDeclaredFields()) {
@@ -232,7 +232,7 @@ public final class BeanInfo<BeanClass>
 			throw new RuntimeException("Bean class " + beanClass.getCanonicalName() + " does not match object class " + bean.getClass().getCanonicalName());
 		}
 
-		BeanProperty<BeanClass> prop = propertiesByName.get(propertyName);
+		BeanProperty<BeanClass, ?> prop = propertiesByName.get(propertyName);
 
 		if (prop == null) {
 			throw new RuntimeException("Property " + propertyName + " is not contained in bean " + beanClass.getCanonicalName());
@@ -250,7 +250,7 @@ public final class BeanInfo<BeanClass>
 			throw new RuntimeException("Bean class " + beanClass.getCanonicalName() + " does not match object class " + bean.getClass().getCanonicalName());
 		}
 
-		BeanProperty<BeanClass> prop = propertiesByName.get(propertyName);
+		BeanProperty<BeanClass, ?> prop = propertiesByName.get(propertyName);
 
 		if (prop == null) {
 			throw new RuntimeException("Property " + propertyName + " is not contained in bean " + beanClass.getCanonicalName());
@@ -268,7 +268,7 @@ public final class BeanInfo<BeanClass>
 			throw new RuntimeException("Bean class " + beanClass.getCanonicalName() + " does not match object class " + bean.getClass().getCanonicalName());
 		}
 
-		BeanProperty<BeanClass> prop = propertiesByName.get(propertyName);
+		BeanProperty<BeanClass, ?> prop = propertiesByName.get(propertyName);
 
 		if (prop == null) {
 			throw new RuntimeException("Property " + propertyName + " is not contained in bean " + beanClass.getCanonicalName());
@@ -302,11 +302,12 @@ public final class BeanInfo<BeanClass>
 		return property != null && property.canWrite();
 	}
 
-	public Optional<BeanProperty<BeanClass>> getProperty(String name)
+	@SuppressWarnings("unchecked")
+	public <PropertyClass> Optional<BeanProperty<BeanClass, PropertyClass>> getProperty(String name)
 	{
 		assert name != null;
 
-		return Optional.ofNullable(propertiesByName.get(name));
+		return Optional.ofNullable((BeanProperty<BeanClass, PropertyClass>)propertiesByName.get(name));
 	}
 
 	public Class getBeanClass()
@@ -314,27 +315,27 @@ public final class BeanInfo<BeanClass>
 		return beanClass;
 	}
 
-	public Set<BeanProperty<BeanClass>> getProperties()
+	public Set<BeanProperty<BeanClass, ?>> getProperties()
 	{
 		return properties;
 	}
 
-	public Set<BeanProperty<BeanClass>> getOwnProperties()
+	public Set<BeanProperty<BeanClass, ?>> getOwnProperties()
 	{
 		return ownProperties;
 	}
 
-	public Set<BeanProperty<BeanClass>> getReadProperties()
+	public Set<BeanProperty<BeanClass, ?>> getReadProperties()
 	{
 		return readProperties;
 	}
 
-	public Set<BeanProperty<BeanClass>> getWriteProperties()
+	public Set<BeanProperty<BeanClass, ?>> getWriteProperties()
 	{
 		return writeProperties;
 	}
 
-	public Map<String, BeanProperty<BeanClass>> getPropertiesByName()
+	public Map<String, BeanProperty<BeanClass, ?>> getPropertiesByName()
 	{
 		return propertiesByName;
 	}

@@ -40,12 +40,13 @@ import java.util.Optional;
  *
  * @author Benjamin Schiller
  * @param <BeanClass>
+ * @param <PropertyClass>
  */
-public final class BeanProperty<BeanClass>
+public final class BeanProperty<BeanClass, PropertyClass>
 {
 
 	protected final String name;
-	protected final Class<BeanClass> propertyClass;
+	protected final Class<PropertyClass> propertyClass;
 	protected final Method readMethod;
 	protected final Method writeMethod;
 	protected final Field field;
@@ -59,7 +60,7 @@ public final class BeanProperty<BeanClass>
 
 	public BeanProperty(
 		String name,
-		Class<BeanClass> propertyClass,
+		Class<PropertyClass> propertyClass,
 		Method readMethod,
 		Method writeMethod,
 		Field field,
@@ -254,7 +255,7 @@ public final class BeanProperty<BeanClass>
 		return descriptor;
 	}
 
-	public Class<BeanClass> getPropertyClass()
+	public Class<PropertyClass> getPropertyClass()
 	{
 		return propertyClass;
 	}
