@@ -246,6 +246,12 @@ public final class StringHelper
 	@SuppressWarnings("unchecked")
 	public static String toString(Object object)
 	{
+		return toString(object, Collections.EMPTY_SET);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static String toString(Object object, Set<String> ignoredProperties)
+	{
 		if (object == null) {
 			return "null";
 		}
@@ -255,20 +261,20 @@ public final class StringHelper
 
 			// @todo Optimize this quick and not so optimal copying solution for read properties
 			List<BeanProperty> readProperties = new ArrayList<>(info.getReadProperties());
-			String[] attributeNames = new String[readProperties.size() - 1];
-			Object[] attributeValues = new Object[readProperties.size() - 1];
-			int i = 0;
+			List<String> attributeNames = new ArrayList<>(readProperties.size() - 1);
+			List<Object> attributeValues = new ArrayList<>(readProperties.size() - 1);
 			for (BeanProperty property : readProperties) {
-				if (property.getName().equals("class")) {
+				String propertyName = property.getName();
+				if ("class".equals(propertyName)
+					|| ignoredProperties.contains(propertyName)) {
 					continue;
 				}
-				attributeNames[i] = property.getName();
-				attributeValues[i] = property.read(object);
-				i++;
+				attributeNames.add(propertyName);
+				attributeValues.add(property.read(object));
 			}
 
 			// @todo implement smart to string
-			return toString(object.getClass(), null, attributeNames, attributeValues);
+			return toString(object.getClass(), null, attributeNames.toArray(String[]::new), attributeValues.toArray());
 			//return toString(info.getBeanClass(), null, info.getReadPropertyNames(), attributeValues);
 			//return object.getClass().getName() + "@" + object.hashCode();
 

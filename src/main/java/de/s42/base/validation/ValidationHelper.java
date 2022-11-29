@@ -82,19 +82,11 @@ public final class ValidationHelper
 
 	public final static boolean isString(Object value)
 	{
-		if (value == null) {
-			return false;
-		}
-
 		return (value instanceof String);
 	}
 
 	public final static boolean isStringNotBlank(Object value)
 	{
-		if (value == null) {
-			return false;
-		}
-
 		if (value instanceof String) {
 			return !((String) value).isBlank();
 		}
@@ -121,28 +113,16 @@ public final class ValidationHelper
 
 	public final static boolean isFloat(Object value)
 	{
-		if (value == null) {
-			return false;
-		}
-
 		return (value instanceof Float);
 	}
 
 	public final static boolean isDouble(Object value)
 	{
-		if (value == null) {
-			return false;
-		}
-
 		return (value instanceof Double);
 	}
 
 	public final static boolean isBoolean(Object value)
 	{
-		if (value == null) {
-			return false;
-		}
-
 		return (value instanceof Boolean);
 	}
 
@@ -166,19 +146,11 @@ public final class ValidationHelper
 
 	public final static boolean isInteger(Object value)
 	{
-		if (value == null) {
-			return false;
-		}
-
 		return (value instanceof Integer);
 	}
 
 	public final static boolean isLong(Object value)
 	{
-		if (value == null) {
-			return false;
-		}
-
 		return (value instanceof Long);
 	}
 

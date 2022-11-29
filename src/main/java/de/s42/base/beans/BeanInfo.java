@@ -103,6 +103,21 @@ public final class BeanInfo<BeanClass>
 			throw new InvalidBean("Error creating bean info - " + ex.getMessage(), ex);
 		}
 	}
+	
+	// @todo could be optimized? necessary?
+	protected static List<Field> getAllFields(Class beanClass)
+	{
+		List<Field> fields = new ArrayList<>();
+
+		fields.addAll(Arrays.asList(beanClass.getDeclaredFields()));
+		
+		// Retrieve parents fields
+		if (beanClass.getSuperclass() != null) {
+			fields.addAll(getAllFields(beanClass.getSuperclass()));
+		}		
+		
+		return fields;
+	}	
 
 	@SuppressWarnings("unchecked")
 	public static <BeanClass> Set<BeanProperty<BeanClass, ?>> createProperties(Class beanClass) throws InvalidBean
@@ -114,7 +129,7 @@ public final class BeanInfo<BeanClass>
 			Set<BeanProperty<BeanClass, ?>> result = new HashSet<>();
 
 			Map<String, Field> fields = new HashMap<>();
-			for (Field field : beanClass.getDeclaredFields()) {
+			for (Field field : getAllFields(beanClass)/*beanClass.getDeclaredFields()*/) {
 				fields.put(field.getName(), field);
 			}
 
@@ -264,7 +279,8 @@ public final class BeanInfo<BeanClass>
 		assert bean != null;
 		assert propertyName != null;
 
-		if (!bean.getClass().equals(beanClass)) {
+		//if (!bean.getClass().equals(beanClass)) {
+		if (!beanClass.isAssignableFrom(bean.getClass())) {
 			throw new RuntimeException("Bean class " + beanClass.getCanonicalName() + " does not match object class " + bean.getClass().getCanonicalName());
 		}
 

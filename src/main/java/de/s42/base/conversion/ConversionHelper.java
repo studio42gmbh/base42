@@ -686,16 +686,51 @@ public final class ConversionHelper
 
 		//String -> Color
 		addConverter(String.class, Color.class, (String value) -> {
-			
+
 			if (value.startsWith("#")) {
 				return Color.decode(value);
-			}
-			else {
+			} else {
 				Float[] parts = convertArray(value.split(","), Float.class);
 				return new Color(parts[0], parts[1], parts[2], parts[3]);
 			}
 		});
+	}
 
+	public static Class<?> wrapPrimitives(Class<?> clazz)
+	{
+		if (!clazz.isPrimitive()) {
+			return clazz;
+		}
+
+		if (clazz == Integer.TYPE) {
+			return Integer.class;
+		}
+		if (clazz == Long.TYPE) {
+			return Long.class;
+		}
+		if (clazz == Boolean.TYPE) {
+			return Boolean.class;
+		}
+		if (clazz == Byte.TYPE) {
+			return Byte.class;
+		}
+		if (clazz == Character.TYPE) {
+			return Character.class;
+		}
+		if (clazz == Float.TYPE) {
+			return Float.class;
+		}
+		if (clazz == Double.TYPE) {
+			return Double.class;
+		}
+		if (clazz == Short.TYPE) {
+			return Short.class;
+		}
+		if (clazz == Void.TYPE) {
+			return Void.class;
+		}
+
+		return clazz;
 	}
 
 	public static String bytesToHex(byte[] bytes)
