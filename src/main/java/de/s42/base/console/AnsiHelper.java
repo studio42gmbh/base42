@@ -103,18 +103,37 @@ public final class AnsiHelper
 
 	public static String coloredString(String text, TerminalColor color)
 	{
+		return coloredString(text, color, true);
+	}
+
+	public static String coloredString(String text, TerminalColor color, boolean ansiEnabled)
+	{
 		assert text != null;
 		assert color != null;
+		
+		if (!ansiEnabled) {
+			return text;
+		}
 
 		return color.ansiCode + text + TerminalColor.Reset.ansiCode;
 	}
-
+	
 	public static String coloredString(String text, TerminalColor color, TerminalBackgroundColor background)
+	{
+		return coloredString(text, color, background, true);
+	}
+	
+	public static String coloredString(String text, TerminalColor color, TerminalBackgroundColor background, boolean ansiEnabled)
 	{
 		assert text != null;
 		assert color != null;
 		assert background != null;
 
+		if (!ansiEnabled) {
+			return text;
+		}
+		
 		return color.ansiCode + background.ansiCode + text + TerminalColor.Reset.ansiCode;
 	}
+	
 }
