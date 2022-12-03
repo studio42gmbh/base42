@@ -282,4 +282,93 @@ public final class StringHelper
 			throw new RuntimeException("Error to string - " + ex.getMessage(), ex);
 		}
 	}
+	
+	public static String escapeJavaString(String content)
+	{
+		// @todo This might get more sophisticated for edge cases with encoding for example but should do most of the cases
+		return content.replace("\\", "\\\\").replace("\n", "\\n").replace("\"", "\\\"");
+	}
+	
+	public static String unescapeJavaString(String content)
+	{
+
+		StringBuilder builder = new StringBuilder(content.length());
+
+		for (int i = 0; i < content.length(); i++) {
+			
+			char ch = content.charAt(i);
+			
+			// Found escape back slash
+			if (ch == '\\') {
+				
+				char nextChar = (i == content.length() - 1) ? '\\' : content
+					.charAt(i + 1);
+				
+				// Octal escape
+				if (nextChar >= '0' && nextChar <= '7') {
+					String code = "" + nextChar;
+					i++;
+					if ((i < content.length() - 1) && content.charAt(i + 1) >= '0'
+						&& content.charAt(i + 1) <= '7') {
+						code += content.charAt(i + 1);
+						i++;
+						if ((i < content.length() - 1) && content.charAt(i + 1) >= '0'
+							&& content.charAt(i + 1) <= '7') {
+							code += content.charAt(i + 1);
+							i++;
+						}
+					}
+					builder.append((char) Integer.parseInt(code, 8));
+					continue;
+				}
+				
+				// Progress
+				switch (nextChar) {
+					case '\\':
+						ch = '\\';
+						break;
+					case 'b':
+						ch = '\b';
+						break;
+					case 'f':
+						ch = '\f';
+						break;
+					case 'n':
+						ch = '\n';
+						break;
+					case 'r':
+						ch = '\r';
+						break;
+					case 't':
+						ch = '\t';
+						break;
+					case '\"':
+						ch = '\"';
+						break;
+					case '\'':
+						ch = '\'';
+						break;
+						
+					// Hex Unicode: u????
+					case 'u':
+						
+						if (i >= content.length() - 5) {
+							ch = 'u';
+							break;
+						}
+						
+						int code = Integer.parseInt(
+							"" + content.charAt(i + 2) + content.charAt(i + 3)
+							+ content.charAt(i + 4) + content.charAt(i + 5), 16);
+						builder.append(Character.toChars(code));
+						i += 5;
+						continue;
+				}
+				i++;
+			}
+			builder.append(ch);
+		}
+		return builder.toString();
+	}
+
 }

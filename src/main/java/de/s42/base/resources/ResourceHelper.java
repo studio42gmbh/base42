@@ -165,17 +165,17 @@ public final class ResourceHelper
 		}
 	}
 	
-	public final static BufferedImage getResourceAsImage(String relativeResourceName)
+	public final static BufferedImage getResourceAsImage(String absoluteResourceName)
 	{
 		try {
 			BufferedImage image;
-			try (InputStream in = getResourceAsStream(relativeResourceName)) {
+			try (InputStream in = getResourceAsStream(absoluteResourceName)) {
 				image = ImageIO.read(in);
 			}
 			return image;
 		}
 		catch (IOException ex) {
-			throw new RuntimeException("Unable to read module resource " + relativeResourceName + " - " + ex.getMessage(), ex);
+			throw new RuntimeException("Unable to read module resource " + absoluteResourceName + " - " + ex.getMessage(), ex);
 		}
 	}
 	
