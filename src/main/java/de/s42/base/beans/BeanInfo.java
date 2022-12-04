@@ -109,13 +109,13 @@ public final class BeanInfo<BeanClass>
 	{
 		List<Field> fields = new ArrayList<>();
 
-		fields.addAll(Arrays.asList(beanClass.getDeclaredFields()));
-		
 		// Retrieve parents fields
 		if (beanClass.getSuperclass() != null) {
 			fields.addAll(getAllFields(beanClass.getSuperclass()));
 		}		
 		
+		fields.addAll(Arrays.asList(beanClass.getDeclaredFields()));
+				
 		return fields;
 	}	
 
