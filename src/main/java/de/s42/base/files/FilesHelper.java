@@ -25,6 +25,7 @@
 //</editor-fold>
 package de.s42.base.files;
 
+import de.s42.base.conversion.ConversionHelper;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -38,6 +39,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 import java.util.stream.Stream;
 import java.util.zip.ZipInputStream;
@@ -148,7 +152,7 @@ public final class FilesHelper
 
 		return msg.toString();
 	}
-	
+
 	public final static String sanitizeFileName(String name)
 	{
 		// todo What could be a general sinitization for filenames?
@@ -179,6 +183,52 @@ public final class FilesHelper
 		assert path != null;
 
 		return Files.isDirectory(path);
+	}
+
+	public static String getFileMD5(String path) throws IOException, NoSuchAlgorithmException
+	{
+		assert path != null;
+
+		return getFileMD5(Path.of(path));
+	}
+
+	public static String getFileMD5(Path path) throws IOException, NoSuchAlgorithmException
+	{
+		assert path != null;
+
+		MessageDigest digest = MessageDigest.getInstance("MD5");
+		InputStream fileInputStream = Files.newInputStream(path);
+		DigestInputStream digestInputStream = new DigestInputStream(fileInputStream, digest);
+		
+		// Stream into digest
+		byte[] bytes = new byte[1024];		
+		while (digestInputStream.read(bytes) > 0) {
+		}
+
+		return ConversionHelper.bytesToHex(digest.digest());
+	}
+
+	public static String getFileSHA256(String path) throws IOException, NoSuchAlgorithmException
+	{
+		assert path != null;
+		
+		return getFileSHA256(Path.of(path));
+	}
+
+	public static String getFileSHA256(Path path) throws IOException, NoSuchAlgorithmException
+	{
+		assert path != null;
+
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		InputStream fileInputStream = Files.newInputStream(path);
+		DigestInputStream digestInputStream = new DigestInputStream(fileInputStream, digest);
+		
+		// Stream into digest
+		byte[] bytes = new byte[1024];		
+		while (digestInputStream.read(bytes) > 0) {
+		}
+		
+		return ConversionHelper.bytesToHex(digest.digest());
 	}
 
 	public final static JSONObject getFileAsJSON(String path) throws IOException, JSONException
