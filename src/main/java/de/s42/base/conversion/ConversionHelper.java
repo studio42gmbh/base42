@@ -733,6 +733,43 @@ public final class ConversionHelper
 		return clazz;
 	}
 
+	public static Class<?> unwrapPrimitives(Class<?> clazz)
+	{
+		if (clazz.isPrimitive()) {
+			return clazz;
+		}
+
+		if (Integer.class.equals(clazz)) {
+			return int.class;
+		}
+		if (Long.class.equals(clazz)) {
+			return long.class;
+		}
+		if (Boolean.class.equals(clazz)) {
+			return boolean.class;
+		}
+		if (Byte.class.equals(clazz)) {
+			return byte.class;
+		}
+		if (Character.class.equals(clazz)) {
+			return char.class;
+		}
+		if (Float.class.equals(clazz)) {
+			return float.class;
+		}
+		if (Double.class.equals(clazz)) {
+			return double.class;
+		}
+		if (Short.class.equals(clazz)) {
+			return short.class;
+		}
+		if (Void.class.equals(clazz)) {
+			return void.class;
+		}
+
+		return clazz;
+	}
+	
 	public static String bytesToHex(byte[] bytes)
 	{
 		char[] hexChars = new char[bytes.length * 2];
