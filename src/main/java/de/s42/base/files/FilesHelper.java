@@ -489,7 +489,7 @@ public final class FilesHelper
 
 		ImageWriteParam param = writer.getDefaultWriteParam();
 		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-		param.setCompressionQuality(1.0f);
+		param.setCompressionQuality(0.0f);
 
 		try ( ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
 			writer.setOutput(out);
