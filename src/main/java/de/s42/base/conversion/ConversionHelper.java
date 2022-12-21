@@ -627,6 +627,16 @@ public final class ConversionHelper
 			return value.shortValue();
 		});
 
+		//Character -> char
+		addConverter(Character.class, char.class, (Character value) -> {
+			return value;
+		});
+		
+		//char -> Character
+		addConverter(char.class, Character.class, (Character value) -> {
+			return value;
+		});
+
 		//Rectangle -> String
 		addConverter(Rectangle.class, String.class, (Rectangle value) -> {
 			return "" + value.x + "," + value.y + "," + value.width + "," + value.height;
