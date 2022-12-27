@@ -183,6 +183,17 @@ public final class StringHelper
 			throw new RuntimeException("Writer for class " + sourceClass.getName() + " is already mapped");
 		}
 	}
+	
+	public static boolean isLowerCaseFirst(String compare)
+	{
+		assert compare != null;
+		
+		if (compare.isBlank()) {
+			return false;
+		}
+			
+		return Character.isLowerCase(compare.charAt(0));
+	}
 
 	public static String lowerCaseFirst(String transform)
 	{
