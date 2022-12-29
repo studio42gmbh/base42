@@ -32,23 +32,41 @@ package de.s42.base.testing;
 public class AssertHelper
 {
 
-	public final static double EPSILON = 0.1E-5;
+	public final static float FLOAT_EPSILON = 0.1E-5f;
+	public final static double DOUBLE_EPSILON = 0.1E-7;
 
 	public static void assertEpsilonEquals(double actual, double expected) throws AssertionError
 	{
 		assertEpsilonEquals(actual, expected, "");
 	}
 
+	public static void assertEpsilonEquals(float actual, float expected) throws AssertionError
+	{
+		assertEpsilonEquals(actual, expected, "");
+	}
+	
 	public static void assertEpsilonEquals(double actual, double expected, String message) throws AssertionError
 	{
 		if (!epsilonEquals(actual, expected)) {
-			throw new AssertionError(message + " - expected almost [" + expected + "] but found [" + actual + "] (EPSILON : " + EPSILON + ")");
+			throw new AssertionError(message + " - expected almost [" + expected + "] but found [" + actual + "] (EPSILON : " + DOUBLE_EPSILON + ")");
 		}
+	}
+
+	public static void assertEpsilonEquals(float actual, float expected, String message) throws AssertionError
+	{
+		if (!epsilonEquals(actual, expected)) {
+			throw new AssertionError(message + " - expected almost [" + expected + "] but found [" + actual + "] (EPSILON : " + FLOAT_EPSILON + ")");
+		}
+	}
+
+	public static boolean epsilonEquals(float actual, float expected)
+	{
+		return Math.abs(actual - expected) < FLOAT_EPSILON;
 	}
 
 	public static boolean epsilonEquals(double actual, double expected)
 	{
-		return Math.abs(actual - expected) < EPSILON;
+		return Math.abs(actual - expected) < DOUBLE_EPSILON;
 	}
 
 	public static void assertStartsWith(String actual, String expectedStart)

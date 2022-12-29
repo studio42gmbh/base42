@@ -37,17 +37,35 @@ public class AssertHelperTest
 	public void validDoubleEquals()
 	{
 		AssertHelper.assertEpsilonEquals(1.0, 1.0);
-		AssertHelper.assertEpsilonEquals(1.11111115, 1.111111);
-		AssertHelper.assertEpsilonEquals(1.00, 1.0 + AssertHelper.EPSILON * 0.5);
+		AssertHelper.assertEpsilonEquals(1.1111111115, 1.111111111);
+		AssertHelper.assertEpsilonEquals(1.00, 1.0 + AssertHelper.DOUBLE_EPSILON * 0.5);
 
 		Assert.assertEquals(AssertHelper.epsilonEquals(1.0, 1.0), true);
-		Assert.assertEquals(AssertHelper.epsilonEquals(1.11111115, 1.111111), true);
-		Assert.assertEquals(AssertHelper.epsilonEquals(1.00, 1.0 + AssertHelper.EPSILON * 0.5), true);
+		Assert.assertEquals(AssertHelper.epsilonEquals(1.1111111115, 1.111111111), true);
+		Assert.assertEquals(AssertHelper.epsilonEquals(1.00, 1.0 + AssertHelper.DOUBLE_EPSILON * 0.5), true);
 	}
 
 	@Test(expectedExceptions = AssertionError.class)
 	public void invalidDoubleEquals()
 	{
 		AssertHelper.assertEpsilonEquals(2.0, 1.0);
+	}
+	
+	@Test
+	public void validFloatEquals()
+	{
+		AssertHelper.assertEpsilonEquals(1.0f, 1.0f);
+		AssertHelper.assertEpsilonEquals(1.11111115f, 1.111111f);
+		AssertHelper.assertEpsilonEquals(1.00f, 1.0f + AssertHelper.FLOAT_EPSILON * 0.5f);
+
+		Assert.assertEquals(AssertHelper.epsilonEquals(1.0f, 1.0f), true);
+		Assert.assertEquals(AssertHelper.epsilonEquals(1.11111115f, 1.111111f), true);
+		Assert.assertEquals(AssertHelper.epsilonEquals(1.00f, 1.0f + AssertHelper.FLOAT_EPSILON * 0.5f), true);
+	}
+
+	@Test(expectedExceptions = AssertionError.class)
+	public void invalidFloatEquals()
+	{
+		AssertHelper.assertEpsilonEquals(2.0f, 1.0f);
 	}
 }

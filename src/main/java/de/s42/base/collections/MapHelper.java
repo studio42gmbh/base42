@@ -477,7 +477,8 @@ public final class MapHelper
 			}
 			return false;
 		}
-
+		
+		/* @todo verify if not defining thos is sufficiently providing hashcode and equals as expected - was removed as equals with other maps didnt work properly
 		@Override
 		public int hashCode()
 		{
@@ -507,6 +508,7 @@ public final class MapHelper
 			final MapN<?, ?> other = (MapN<?, ?>) obj;
 			return Arrays.deepEquals(this.table, other.table);
 		}
+*/
 
 		@Override
 		@SuppressWarnings("unchecked")
