@@ -23,30 +23,32 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-module de.sft.base
-{
-	requires java.compiler;
-	requires java.desktop;
-	requires java.sql;
-	requires org.json;
-	requires activation;
+package de.s42.base.system;
 
-	exports de.s42.base.arrays;
-	exports de.s42.base.beans;
-	exports de.s42.base.collections;
-	exports de.s42.base.compile;
-	exports de.s42.base.console;
-	exports de.s42.base.conversion;
-	exports de.s42.base.date;
-	exports de.s42.base.files;
-	exports de.s42.base.modules;
-	exports de.s42.base.resources;
-	exports de.s42.base.sql;
-	exports de.s42.base.strings;
-	exports de.s42.base.system;
-	exports de.s42.base.testing;
-	exports de.s42.base.uuid;
-	exports de.s42.base.validation;
-	exports de.s42.base.web;
-	exports de.s42.base.zip;
+/**
+ *
+ * @author Benjamin.Schiller
+ */
+public final class SystemHelper
+{
+	private SystemHelper()
+	{
+		// never instantiated
+	}
+	
+	public static String getOSArchitecture()
+	{
+		return System.getProperty("os.arch");
+	}	
+		
+	public static String getOSName()
+	{
+		return System.getProperty("os.name");
+	}	
+	
+	public static String getOSVersion()
+	{
+		return System.getProperty("os.version");
+	}	
+	
 }
