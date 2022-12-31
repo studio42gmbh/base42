@@ -153,6 +153,23 @@ public final class FilesHelper
 		return msg.toString();
 	}
 
+	public final static String getExtension(Path path)
+	{
+		return getExtension(path.getFileName().toString());
+	}
+	
+	public final static String getExtension(String path)
+	{
+		int index = path.lastIndexOf('.');
+	
+		// No dot return empty ending
+		if (index == -1) {
+			return "";
+		}
+		
+		return path.substring(index + 1);
+	}
+
 	public final static String sanitizeFileName(String name)
 	{
 		// todo What could be a general sinitization for filenames?
