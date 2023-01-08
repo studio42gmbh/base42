@@ -149,6 +149,20 @@ public final class ValidationHelper
 		return (value instanceof Integer);
 	}
 
+	public final static boolean isNumber(Object value)
+	{
+		return (value instanceof Number);
+	}
+
+	public final static boolean isGreaterEqual0(Object value)
+	{
+		if (!isNumber(value)) {
+			return false;
+		}
+		
+		return ((Number)value).doubleValue() >= 0.0;
+	}
+	
 	public final static boolean isLong(Object value)
 	{
 		return (value instanceof Long);
