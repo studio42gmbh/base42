@@ -631,7 +631,7 @@ public final class ConversionHelper
 		addConverter(Character.class, char.class, (Character value) -> {
 			return value;
 		});
-		
+
 		//char -> Character
 		addConverter(char.class, Character.class, (Character value) -> {
 			return value;
@@ -704,6 +704,11 @@ public final class ConversionHelper
 				return new Color(parts[0], parts[1], parts[2], parts[3]);
 			}
 		});
+		
+		//URL -> String
+		addConverter(URL.class, String.class, (URL value) -> {
+			return value.toString();
+		});		
 	}
 
 	public static Class<?> wrapPrimitives(Class<?> clazz)
@@ -779,7 +784,7 @@ public final class ConversionHelper
 
 		return clazz;
 	}
-	
+
 	public static String bytesToHex(byte[] bytes)
 	{
 		char[] hexChars = new char[bytes.length * 2];
