@@ -167,7 +167,12 @@ public class WebPost
 		in.close();
 
 		conn.disconnect();
-
+		
+		// Allow an empty return -> leads to an enpty object
+		if (callResult == null || callResult.isBlank()) {
+			return new WebPostResult(statusCode, new JSONObject());
+		}
+		
 		return new WebPostResult(statusCode, new JSONObject(callResult));
 	}
 
