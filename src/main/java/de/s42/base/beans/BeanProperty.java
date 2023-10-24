@@ -204,6 +204,11 @@ public final class BeanProperty<BeanClass, PropertyClass>
 	{
 		return read;
 	}
+	
+	public boolean isReadWrite()
+	{
+		return read & write;
+	}
 
 	public boolean isWriteOnly()
 	{

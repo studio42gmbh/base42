@@ -151,6 +151,11 @@ public final class ResourceHelper
 		return new ImageIcon(getResourceAsImage(moduleClass, relativeResourceName).getScaledInstance(width, height, BufferedImage.SCALE_AREA_AVERAGING));
 	}
 	
+	public final static Icon getResourceAsIcon(String absoluteResourceName, int width, int height)
+	{
+		return new ImageIcon(getResourceAsImage(absoluteResourceName).getScaledInstance(width, height, BufferedImage.SCALE_AREA_AVERAGING));
+	}
+	
 	public final static BufferedImage getResourceAsImage(Class moduleClass, String relativeResourceName)
 	{
 		try {
