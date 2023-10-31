@@ -25,6 +25,8 @@
 //</editor-fold>
 package de.s42.base.collections;
 
+import java.util.Objects;
+
 /**
  *
  * @author Benjamin Schiller
@@ -57,5 +59,33 @@ public final class Pair<FirstType, SecondType>
 	public String toString()
 	{
 		return "" + first + ", " + second;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 7;
+		hash = 97 * hash + Objects.hashCode(this.first);
+		hash = 97 * hash + Objects.hashCode(this.second);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Pair<?, ?> other = (Pair<?, ?>) obj;
+		if (!Objects.equals(this.first, other.first)) {
+			return false;
+		}
+		return Objects.equals(this.second, other.second);
 	}
 }
