@@ -2,6 +2,8 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/studio42gmbh/base42)
 ![GitHub last commit](https://img.shields.io/github/last-commit/studio42gmbh/base42)
 ![GitHub issues](https://img.shields.io/github/issues/studio42gmbh/base42)
+![GitHub build](https://img.shields.io/github/actions/workflow/status/studio42gmbh/base42/maven.yml)
+
 
 # Base 42
 
