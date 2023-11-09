@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<name>Base 42</name>
-	<description>This library contains all basic helpers and utilities for Studio 42s Java codes.</description>
+	<description>This library contains all basic helpers and utilities for Studio 42s Java codes. https://github.com/studio42gmbh/base42</description>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.s42</groupId>
 	<artifactId>base42</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4-DEV</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -18,21 +17,18 @@
 			<artifactId>json</artifactId>
 			<version>20231013</version>
 			<scope>compile</scope>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>7.8.0</version>
 			<scope>test</scope>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 			<version>1.1.1</version>
 			<scope>compile</scope>
-			<type>jar</type>
 		</dependency>
 	</dependencies>
 	<distributionManagement>
@@ -45,6 +41,8 @@
 	<build>
 		<plugins>
 			<plugin>
+				<!-- https://maven.apache.org/plugins/maven-antrun-plugin/ -->
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>3.1.0</version>
 				<executions>
