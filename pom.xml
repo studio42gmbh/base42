@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<name>Base 42</name>
-	<description>This library contains all basic helpers and utilities for Studio 42s Java codes. https://github.com/studio42gmbh/base42</description>
+	<description>This library contains all basic helpers and utilities for Studio 42s Java codes. See https://github.com/studio42gmbh/base42</description>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.s42</groupId>
 	<artifactId>base42</artifactId>
@@ -73,7 +73,7 @@
 				<!-- https://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>3.2.2</version>
 				<configuration>
 					<!-- https://stackoverflow.com/questions/64688896/how-to-make-testng-print-detail-message-about-the-failure -->
 					<trimStackTrace>false</trimStackTrace> 
@@ -135,7 +135,7 @@
 				<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/aggregate-mojo.html -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>3.6.2</version>
 				<configuration>
 					<outputDirectory>${project.basedir}/docs</outputDirectory>
 					<reportOutputDirectory>${project.basedir}/docs</reportOutputDirectory>
