@@ -25,8 +25,10 @@
 //</editor-fold>
 package de.s42.base.compile;
 
+import de.s42.base.files.FilesHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +37,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -119,11 +122,12 @@ public final class CompileHelper
 			return result;
 		}
 
+		/*
 		boolean isEmpty()
 		{
 			return fileObjectMap.isEmpty();
 		}
-
+		 */
 		Map<String, byte[]> getClasses()
 		{
 			if (classes == null) {
@@ -187,6 +191,7 @@ public final class CompileHelper
 	private static ClassFileManager compileInternal(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
 	{
 		assert classLoader != null;
+		assert className != null;
 
 		//log.trace("Code", javaClassCode);
 		try {
@@ -224,8 +229,8 @@ public final class CompileHelper
 					classpath.append(mp);
 				}
 
-				if (classLoader instanceof URLClassLoader) {
-					for (URL url : ((URLClassLoader) classLoader).getURLs()) {
+				if (classLoader instanceof URLClassLoader uRLClassLoader) {
+					for (URL url : uRLClassLoader.getURLs()) {
 						if (classpath.length() > 0) {
 							classpath.append(separator);
 						}
@@ -260,6 +265,9 @@ public final class CompileHelper
 
 	public static byte[] getCompiledClassData(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
 	{
+		assert javaClassCode != null;
+		assert className != null;
+
 		if (classLoader == null) {
 			classLoader = CompileHelper.class.getClassLoader();
 		}
@@ -273,11 +281,17 @@ public final class CompileHelper
 
 	public static Class getCompiledClass(String javaClassCode, String className) throws InvalidCompilation
 	{
+		assert javaClassCode != null;
+		assert className != null;
+
 		return getCompiledClass(javaClassCode, className, null, null);
 	}
 
 	public static Class getCompiledClass(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
 	{
+		assert javaClassCode != null;
+		assert className != null;
+
 		if (classLoader == null) {
 			classLoader = CompileHelper.class.getClassLoader();
 		}
@@ -293,14 +307,42 @@ public final class CompileHelper
 		}
 	}
 
+	public static Class getCompiledClass(Path javaClassFile) throws IOException, InvalidCompilation
+	{
+		assert javaClassFile != null;
+
+		return getCompiledClass(javaClassFile, null, null);
+	}
+
+	public static Class getCompiledClass(Path javaClassFile, ClassLoader classLoader, String classPath) throws IOException, InvalidCompilation
+	{
+		assert javaClassFile != null;
+
+		String javaClassCode = FilesHelper.getFileAsString(javaClassFile);
+
+		String className = javaClassFile.getFileName().toString();
+
+		// Strip ending
+		int index = className.indexOf('.');
+		className = className.substring(0, index);
+
+		return getCompiledClass(javaClassCode, className, classLoader, classPath);
+	}
+
 	public static <InstanceType> InstanceType getCompiledInstance(String javaClassCode, String className) throws InvalidCompilation
 	{
+		assert javaClassCode != null;
+		assert className != null;
+
 		return getCompiledInstance(javaClassCode, className, null, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <InstanceType> InstanceType getCompiledInstance(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
 	{
+		assert javaClassCode != null;
+		assert className != null;
+
 		Class compiledClass = getCompiledClass(javaClassCode, className, classLoader, classPath);
 
 		try {
