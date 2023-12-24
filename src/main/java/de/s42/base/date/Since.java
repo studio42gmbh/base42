@@ -40,17 +40,17 @@ public class Since
 	private final static int MINUTE_MILLIS = 60 * SECOND_MILLIS;
 	private final static int HOUR_MILLIS = 60 * MINUTE_MILLIS;
 	private final static int DAY_MILLIS = 24 * HOUR_MILLIS;
-	
+
 	private final static DateFormat DATE_FORMAT = new SimpleDateFormat("yyy-MM-dd HH:mm");
-	
+
 	public static String formatSince(Date date)
 	{
 		assert date != null;
-		
+
 		String timeAgo = getTimeAgo(date.getTime());
-		
+
 		String dateFormatted = DATE_FORMAT.format(date);
-		
+
 		return timeAgo + " (" + dateFormatted + ")";
 	}
 
@@ -81,9 +81,4 @@ public class Since
 			return diff / DAY_MILLIS + " days ago";
 		}
 	}
-
-	// <editor-fold desc="Getters/Setters" defaultstate="collapsed">
-	//</editor-fold>
-	// <editor-fold desc="Hashcode/Equals/ToString/Compare" defaultstate="collapsed">
-	//</editor-fold>
 }
