@@ -63,7 +63,6 @@ public class Since
 			return null;
 		}
 
-		// TODO: localize
 		final long diff = now - since;
 		if (diff < MINUTE_MILLIS) {
 			return "just now";
