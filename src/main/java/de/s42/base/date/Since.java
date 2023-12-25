@@ -45,8 +45,10 @@ public class Since
 
 	public static String formatSince(Date date)
 	{
-		assert date != null;
-
+		if (date == null) {
+			return "";
+		}
+		
 		String timeAgo = getTimeAgo(date.getTime());
 
 		String dateFormatted = DATE_FORMAT.format(date);
