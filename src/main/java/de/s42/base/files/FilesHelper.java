@@ -75,13 +75,20 @@ public final class FilesHelper
 	public final static String getMimeType(Path file) throws IOException
 	{
 		assert file != null;
+		
+		String extension = FilesHelper.getExtension(file);
+		
+		// Special handling for calendar attachments
+		if (extension.equalsIgnoreCase("ics")) {
+			return "text/calendar";
+		}
 
 		String mimeType = fileTypeMap.getContentType(file.toFile());
 
 		if (mimeType != null) {
 			return mimeType;
 		}
-
+		
 		// Default to application/octet-stream instead of null
 		return "application/octet-stream";
 	}
