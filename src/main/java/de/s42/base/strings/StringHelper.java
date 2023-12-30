@@ -32,6 +32,7 @@ import de.s42.base.beans.InvalidBean;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -56,6 +57,12 @@ public final class StringHelper
 		addWriter(UUID.class, (UUID value, StringBuilder builder) -> {
 			builder.append("\"").append(value).append("\"");
 		});
+		
+		// Date
+		addWriter(Date.class, (Date value, StringBuilder builder) -> {
+			builder.append(value.getTime());
+		});
+		
 
 		// String
 		addWriter(String.class, (String value, StringBuilder builder) -> {
