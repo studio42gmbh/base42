@@ -59,7 +59,7 @@ public final class StringHelper
 
 		// String
 		addWriter(String.class, (String value, StringBuilder builder) -> {
-			builder.append("\"").append(value).append("\"");
+			builder.append("\"").append(escapeJavaString(value)).append("\"");
 		});
 
 		// String[]
