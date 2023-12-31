@@ -128,8 +128,8 @@ public class WebPost
 			os.write(boundary.getBytes());
 			os.write(("\r\nContent-Disposition: form-data; name=\"" + entry.getKey() + "\"\r\n\r\n").getBytes());
 
-			if (entry.getValue() instanceof byte[]) {
-				os.write((byte[]) entry.getValue());
+			if (entry.getValue() instanceof byte[] bs) {
+				os.write(bs);
 			} else {
 				os.write(entry.getValue().toString().getBytes("UTF-8"));
 			}
