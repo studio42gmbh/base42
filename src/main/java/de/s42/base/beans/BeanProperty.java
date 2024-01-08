@@ -44,7 +44,6 @@ import java.util.Optional;
  */
 public final class BeanProperty<BeanClass, PropertyClass>
 {
-
 	protected final String name;
 	protected final Class<PropertyClass> propertyClass;
 	protected final Method readMethod;
@@ -56,6 +55,7 @@ public final class BeanProperty<BeanClass, PropertyClass>
 	protected final boolean read;
 	protected final boolean hasGenericTypes;
 	protected final boolean publicField;
+	protected final boolean isTransient;
 	protected final PropertyDescriptor descriptor;
 
 	public BeanProperty(
@@ -90,6 +90,7 @@ public final class BeanProperty<BeanClass, PropertyClass>
 		read = readMethod != null || publicField;
 		write = writeMethod != null || publicField;
 		hasGenericTypes = !this.genericTypes.isEmpty();
+		isTransient = Modifier.isTransient(modifiers);
 	}
 
 	public void write(BeanClass object, Object value) throws InvalidBean
@@ -190,6 +191,11 @@ public final class BeanProperty<BeanClass, PropertyClass>
 		return Optional.empty();
 	}
 
+	public boolean isTransient()
+	{
+		return isTransient;
+	}
+	
 	public boolean isPublicField()
 	{
 		return publicField;
