@@ -67,7 +67,7 @@ public class WebBuilder
 	{
 		return build().postJSON().url(String.join("/", urlParts));
 	}
-	
+
 	public Web create()
 	{
 		return web;
@@ -89,7 +89,7 @@ public class WebBuilder
 		web.setUrl(url);
 		return this;
 	}
-	
+
 	public WebBuilder delete()
 	{
 		web.setMethod(WebMethod.DELETE);
@@ -106,14 +106,14 @@ public class WebBuilder
 	{
 		return postMultipart();
 	}
-	
+
 	public WebBuilder postJSON()
 	{
 		web.setMethod(WebMethod.POST);
 		web.setPostType(WebPostType.JSON);
 		return this;
 	}
-	
+
 	public WebBuilder postMultipart()
 	{
 		web.setMethod(WebMethod.POST);
@@ -154,6 +154,12 @@ public class WebBuilder
 	public WebBuilder headerCacheControlNoCache()
 	{
 		web.setHeader("Cache-Control", "no-cache");
+		return this;
+	}
+
+	public WebBuilder headerContentType(String contentType)
+	{
+		web.setHeader("Content-Type", contentType);
 		return this;
 	}
 }
