@@ -229,6 +229,8 @@ public class Web
 
 	protected WebResult getRepsonse(HttpURLConnection conn) throws IOException
 	{
+		assert conn != null;
+		
 		int statusCode = conn.getResponseCode();
 
 		String callResult;
@@ -255,7 +257,7 @@ public class Web
 		if (callResult == null || callResult.isBlank()) {
 			return new WebResult(statusCode, new JSONObject());
 		}
-
+		
 		return new WebResult(statusCode, new JSONObject(callResult));
 	}
 
@@ -281,8 +283,12 @@ public class Web
 
 	public void setParameter(String key, Object value)
 	{
+		// Ignore null parameters
+		if (value == null) {
+			return;
+		}
+		
 		assert key != null;
-		assert value != null;
 
 		parameters.put(key, value);
 	}
@@ -296,8 +302,12 @@ public class Web
 
 	public void setHeader(String key, String value)
 	{
+		// Ignore null parameters
+		if (value == null) {
+			return;
+		}
+		
 		assert key != null;
-		assert value != null;
 
 		headers.put(key, value);
 	}
@@ -316,6 +326,8 @@ public class Web
 
 	public void setUrl(URL url)
 	{
+		assert url != null;
+		
 		this.url = url;
 	}
 

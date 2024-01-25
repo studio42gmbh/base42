@@ -415,6 +415,11 @@ public final class ConversionHelper
 			return value.intValue();
 		});
 
+		//double -> Integer
+		addConverter(double.class, Integer.class, (Double value) -> {
+			return value.intValue();
+		});
+
 		//double -> String
 		addConverter(double.class, String.class, (Double value) -> {
 			return value.toString();

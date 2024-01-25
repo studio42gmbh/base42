@@ -28,6 +28,7 @@ package de.s42.base.web;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  *
@@ -123,12 +124,36 @@ public class WebBuilder
 
 	public WebBuilder parameter(String key, Object value)
 	{
+		Objects.requireNonNull(value);
+
+		web.setParameter(key, value);
+		return this;
+	}
+
+	public WebBuilder optParameter(String key, Object value)
+	{
+		if (value == null) {
+			return this;
+		}
+
 		web.setParameter(key, value);
 		return this;
 	}
 
 	public WebBuilder header(String key, String value)
 	{
+		Objects.requireNonNull(value);
+
+		web.setHeader(key, value);
+		return this;
+	}
+
+	public WebBuilder optHeader(String key, String value)
+	{
+		if (value == null) {
+			return this;
+		}
+
 		web.setHeader(key, value);
 		return this;
 	}

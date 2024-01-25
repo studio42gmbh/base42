@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
 	<action>
+		<actionName>CUSTOM-Dependency Tree</actionName>
+		<displayName>Dependency Tree</displayName>
+		<goals>
+			<goal>dependency:tree</goal>
+		</goals>
+	</action>
+	<action>
 		<actionName>javadoc</actionName>
 		<packagings>
 			<packaging>*</packaging>
