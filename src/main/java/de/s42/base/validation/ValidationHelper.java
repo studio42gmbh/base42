@@ -25,6 +25,7 @@
 //</editor-fold>
 package de.s42.base.validation;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -72,7 +73,7 @@ public final class ValidationHelper
 	public final static boolean isTypeOf(Object value, Class<?> type)
 	{
 		assert type != null;
-		
+
 		if (value == null) {
 			return false;
 		}
@@ -87,8 +88,8 @@ public final class ValidationHelper
 
 	public final static boolean isStringNotBlank(Object value)
 	{
-		if (value instanceof String) {
-			return !((String) value).isBlank();
+		if (value instanceof String string) {
+			return !string.isBlank();
 		}
 
 		return false;
@@ -104,8 +105,8 @@ public final class ValidationHelper
 			return true;
 		}
 
-		if (uuid instanceof String) {
-			return UUID_PATTERN.matcher((String) uuid).matches();
+		if (uuid instanceof String string) {
+			return UUID_PATTERN.matcher(string).matches();
 		}
 
 		return false;
@@ -159,10 +160,10 @@ public final class ValidationHelper
 		if (!isNumber(value)) {
 			return false;
 		}
-		
-		return ((Number)value).doubleValue() >= 0.0;
+
+		return ((Number) value).doubleValue() >= 0.0;
 	}
-	
+
 	public final static boolean isLong(Object value)
 	{
 		return (value instanceof Long);
@@ -170,15 +171,6 @@ public final class ValidationHelper
 
 	public final static boolean isEqual(Object value1, Object value2)
 	{
-		if (value1 == null) {
-
-			if (value2 == null) {
-				return true;
-			}
-
-			return value2.equals(value1);
-		}
-
-		return value1.equals(value2);
+		return Objects.equals(value2, value2);
 	}
 }
