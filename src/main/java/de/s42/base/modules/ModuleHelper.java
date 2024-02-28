@@ -42,6 +42,8 @@ public final class ModuleHelper
 
 	public final static Map<String, String> parseArguments(String[] args)
 	{
+		assert args != null;
+
 		Map<String, String> argParameters = new HashMap<>();
 
 		for (String arg : args) {

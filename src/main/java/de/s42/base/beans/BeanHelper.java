@@ -42,14 +42,10 @@ public final class BeanHelper
 		// never instantiated
 	}
 
-	// @todo does it matter that theoretically this call might cause multiple info generation?
-	// see java.beans.ThreadGroupContext and java.beans.Introspector.getBeanInfo()
 	@SuppressWarnings("unchecked")
 	public static <BeanType> BeanInfo<BeanType> getBeanInfo(Class<? extends BeanType> beanClass) throws InvalidBean
 	{
-		if (beanClass == null) {
-			throw new RuntimeException("beanClass may not be null");
-		}
+		assert beanClass != null;
 
 		BeanInfo<BeanType> info = infos.get(beanClass);
 
@@ -66,6 +62,8 @@ public final class BeanHelper
 
 	public static String toJSON(Object bean)
 	{
+		assert bean != null;
+
 		JSONObject obj = new JSONObject(bean);
 
 		return obj.toString();

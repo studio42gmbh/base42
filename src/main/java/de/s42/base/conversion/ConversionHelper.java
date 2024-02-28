@@ -709,15 +709,17 @@ public final class ConversionHelper
 				return new Color(parts[0], parts[1], parts[2], parts[3]);
 			}
 		});
-		
+
 		//URL -> String
 		addConverter(URL.class, String.class, (URL value) -> {
 			return value.toString();
-		});		
+		});
 	}
 
 	public static Class<?> wrapPrimitives(Class<?> clazz)
 	{
+		assert clazz != null;
+
 		if (!clazz.isPrimitive()) {
 			return clazz;
 		}
@@ -755,6 +757,8 @@ public final class ConversionHelper
 
 	public static Class<?> unwrapPrimitives(Class<?> clazz)
 	{
+		assert clazz != null;
+
 		if (clazz.isPrimitive()) {
 			return clazz;
 		}
@@ -792,6 +796,8 @@ public final class ConversionHelper
 
 	public static String bytesToHex(byte[] bytes)
 	{
+		assert bytes != null;
+
 		char[] hexChars = new char[bytes.length * 2];
 		for (int j = 0; j < bytes.length; j++) {
 			int v = bytes[j] & 0xFF;
@@ -803,6 +809,9 @@ public final class ConversionHelper
 
 	public synchronized static void addConverter(Class sourceClass, Class targetClass, Function<?, ?> converter) throws RuntimeException
 	{
+		assert targetClass != null;
+		assert converter != null;
+
 		Map<Class, Function<?, ?>> targetMappings = converters.get(sourceClass);
 
 		if (targetMappings == null) {
@@ -817,6 +826,8 @@ public final class ConversionHelper
 
 	public static <ReturnType> ReturnType convert(Object value, Class<? extends ReturnType> targetClass, ReturnType defaultValue) throws RuntimeException
 	{
+		assert targetClass != null;
+
 		if (value == null) {
 
 			if (defaultValue != null) {
@@ -967,6 +978,8 @@ public final class ConversionHelper
 
 	public static <ReturnType> ReturnType[] convertArray(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
+		assert targetClass != null;
+
 		if (values == null) {
 			return null;
 		}
@@ -982,6 +995,8 @@ public final class ConversionHelper
 
 	public static <ReturnType> List<ReturnType> convertList(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
+		assert targetClass != null;
+
 		if (values == null) {
 			return null;
 		}
@@ -997,6 +1012,8 @@ public final class ConversionHelper
 
 	public static <ReturnType> List<ReturnType> convertList(List values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
+		assert targetClass != null;
+
 		if (values == null) {
 			return null;
 		}
@@ -1012,6 +1029,8 @@ public final class ConversionHelper
 
 	public static <ReturnType> Set<ReturnType> convertSet(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
+		assert targetClass != null;
+
 		if (values == null) {
 			return null;
 		}
@@ -1030,6 +1049,8 @@ public final class ConversionHelper
 	@SuppressWarnings("null")
 	public static <ReturnType> ReturnType[] convertArray(ReturnType[] values, Class<? extends ReturnType>[] targetClasses) throws RuntimeException
 	{
+		assert targetClasses != null;
+
 		if (values == null && targetClasses == null) {
 			return null;
 		}
@@ -1058,6 +1079,9 @@ public final class ConversionHelper
 
 	public static boolean canConvert(Class sourceClass, Class targetClass)
 	{
+		assert sourceClass != null;
+		assert targetClass != null;
+
 		Map<Class, Function<?, ?>> targetMappings = converters.get(sourceClass);
 
 		if (targetMappings == null) {

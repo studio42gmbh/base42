@@ -63,7 +63,6 @@ public final class BeanInfo<BeanClass>
 	protected final Set<BeanProperty<BeanClass, ?>> writeProperties;
 	protected final Map<String, BeanProperty<BeanClass, ?>> propertiesByName;
 
-	//@SuppressWarnings("unchecked")
 	public BeanInfo(Class<BeanClass> beanClass) throws InvalidBean
 	{
 		assert beanClass != null;
@@ -103,21 +102,23 @@ public final class BeanInfo<BeanClass>
 			throw new InvalidBean("Error creating bean info - " + ex.getMessage(), ex);
 		}
 	}
-	
+
 	// @todo could be optimized? necessary?
 	protected static List<Field> getAllFields(Class beanClass)
 	{
+		assert beanClass != null;
+		
 		List<Field> fields = new ArrayList<>();
 
 		// Retrieve parents fields
 		if (beanClass.getSuperclass() != null) {
 			fields.addAll(getAllFields(beanClass.getSuperclass()));
-		}		
-		
+		}
+
 		fields.addAll(Arrays.asList(beanClass.getDeclaredFields()));
-				
+
 		return fields;
-	}	
+	}
 
 	@SuppressWarnings("unchecked")
 	public static <BeanClass> Set<BeanProperty<BeanClass, ?>> createProperties(Class beanClass) throws InvalidBean
@@ -172,8 +173,8 @@ public final class BeanInfo<BeanClass>
 
 			for (Type type : ((ParameterizedType) field.getGenericType()).getActualTypeArguments()) {
 
-				if (type instanceof Class) {
-					genericTypes.add((Class) type);
+				if (type instanceof Class class1) {
+					genericTypes.add(class1);
 				}
 			}
 		}
@@ -323,7 +324,7 @@ public final class BeanInfo<BeanClass>
 	{
 		assert name != null;
 
-		return Optional.ofNullable((BeanProperty<BeanClass, PropertyClass>)propertiesByName.get(name));
+		return Optional.ofNullable((BeanProperty<BeanClass, PropertyClass>) propertiesByName.get(name));
 	}
 
 	public Class getBeanClass()

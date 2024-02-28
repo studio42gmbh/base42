@@ -57,12 +57,11 @@ public final class StringHelper
 		addWriter(UUID.class, (UUID value, StringBuilder builder) -> {
 			builder.append("\"").append(value).append("\"");
 		});
-		
+
 		// Date
 		addWriter(Date.class, (Date value, StringBuilder builder) -> {
 			builder.append(value.getTime());
 		});
-		
 
 		// String
 		addWriter(String.class, (String value, StringBuilder builder) -> {
@@ -190,15 +189,15 @@ public final class StringHelper
 			throw new RuntimeException("Writer for class " + sourceClass.getName() + " is already mapped");
 		}
 	}
-	
+
 	public static boolean isLowerCaseFirst(String compare)
 	{
 		assert compare != null;
-		
+
 		if (compare.isBlank()) {
 			return false;
 		}
-			
+
 		return Character.isLowerCase(compare.charAt(0));
 	}
 
@@ -300,28 +299,31 @@ public final class StringHelper
 			throw new RuntimeException("Error to string - " + ex.getMessage(), ex);
 		}
 	}
-	
+
 	public static String escapeJavaString(String content)
 	{
+		assert content != null;
+
 		// @todo This might get more sophisticated for edge cases with encoding for example but should do most of the cases
 		return content.replace("\\", "\\\\").replace("\n", "\\n").replace("\"", "\\\"");
 	}
-	
+
 	public static String unescapeJavaString(String content)
 	{
+		assert content != null;
 
 		StringBuilder builder = new StringBuilder(content.length());
 
 		for (int i = 0; i < content.length(); i++) {
-			
+
 			char ch = content.charAt(i);
-			
+
 			// Found escape back slash
 			if (ch == '\\') {
-				
+
 				char nextChar = (i == content.length() - 1) ? '\\' : content
 					.charAt(i + 1);
-				
+
 				// Octal escape
 				if (nextChar >= '0' && nextChar <= '7') {
 					String code = "" + nextChar;
@@ -339,7 +341,7 @@ public final class StringHelper
 					builder.append((char) Integer.parseInt(code, 8));
 					continue;
 				}
-				
+
 				// Progress
 				switch (nextChar) {
 					case '\\':
@@ -366,15 +368,15 @@ public final class StringHelper
 					case '\'':
 						ch = '\'';
 						break;
-						
+
 					// Hex Unicode: u????
 					case 'u':
-						
+
 						if (i >= content.length() - 5) {
 							ch = 'u';
 							break;
 						}
-						
+
 						int code = Integer.parseInt(
 							"" + content.charAt(i + 2) + content.charAt(i + 3)
 							+ content.charAt(i + 4) + content.charAt(i + 5), 16);

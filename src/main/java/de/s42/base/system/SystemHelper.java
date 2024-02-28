@@ -31,24 +31,25 @@ package de.s42.base.system;
  */
 public final class SystemHelper
 {
+
 	private SystemHelper()
 	{
 		// never instantiated
 	}
-	
+
 	public static String getOSArchitecture()
 	{
 		return System.getProperty("os.arch");
-	}	
-		
+	}
+
 	public static String getOSName()
 	{
 		return System.getProperty("os.name");
-	}	
-	
+	}
+
 	public static String getOSVersion()
 	{
 		return System.getProperty("os.version");
-	}	
-	
+	}
+
 }

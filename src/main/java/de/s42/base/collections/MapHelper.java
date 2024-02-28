@@ -27,7 +27,6 @@ package de.s42.base.collections;
 
 import java.util.AbstractMap;
 import java.util.AbstractSet;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -340,10 +339,11 @@ public final class MapHelper
 		}
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public V getOrDefault(Object key, V defaultValue)
 		{
-			if (containsKey(key)) {
-				return get(key);
+			if (containsKey((K) key)) {
+				return (V) get((K) key);
 			}
 
 			return defaultValue;
@@ -477,7 +477,7 @@ public final class MapHelper
 			}
 			return false;
 		}
-		
+
 		/* @todo verify if not defining thos is sufficiently providing hashcode and equals as expected - was removed as equals with other maps didnt work properly
 		@Override
 		public int hashCode()
@@ -508,8 +508,7 @@ public final class MapHelper
 			final MapN<?, ?> other = (MapN<?, ?>) obj;
 			return Arrays.deepEquals(this.table, other.table);
 		}
-*/
-
+		 */
 		@Override
 		@SuppressWarnings("unchecked")
 		public V get(Object o)
@@ -561,29 +560,29 @@ public final class MapHelper
 
 			private int nextIndex()
 			{
-				int idx = this.idx;
+				int idx2 = this.idx;
 				if (REVERSE) {
-					if ((idx += 2) >= table.length) {
-						idx = 0;
+					if ((idx2 += 2) >= table.length) {
+						idx2 = 0;
 					}
 				} else {
-					if ((idx -= 2) < 0) {
-						idx = table.length - 2;
+					if ((idx2 -= 2) < 0) {
+						idx2 = table.length - 2;
 					}
 				}
-				return this.idx = idx;
+				return this.idx = idx2;
 			}
 
 			@Override
 			public Map.Entry<K, V> next()
 			{
 				if (remaining > 0) {
-					int idx;
-					while (table[idx = nextIndex()] == null) {
+					int idx2;
+					while (table[idx2 = nextIndex()] == null) {
 					}
 					@SuppressWarnings("unchecked")
 					Map.Entry<K, V> e
-						= new KeyValueHolder<>((K) table[idx], (V) table[idx + 1]);
+						= new KeyValueHolder<>((K) table[idx2], (V) table[idx2 + 1]);
 					remaining--;
 					return e;
 				} else {

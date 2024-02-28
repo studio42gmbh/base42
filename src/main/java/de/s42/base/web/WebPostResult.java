@@ -29,9 +29,11 @@ import de.s42.base.strings.StringHelper;
 import org.json.JSONObject;
 
 /**
+ * Is deprecated use Web and WebBuilder and WebResult instead.
  *
  * @author Benjamin Schiller
  */
+@Deprecated
 public class WebPostResult
 {
 

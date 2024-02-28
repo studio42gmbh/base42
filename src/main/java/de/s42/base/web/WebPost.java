@@ -40,9 +40,11 @@ import java.util.UUID;
 import org.json.JSONObject;
 
 /**
+ * Is deprecated Web and WebBuilder shoule be used instead
  *
  * @author Benjamin Schiller
  */
+@Deprecated
 public class WebPost
 {
 
@@ -150,7 +152,7 @@ public class WebPost
 
 		String callResult;
 		InputStream in;
-		
+
 		if (statusCode >= 100 && statusCode <= 399) {
 			in = conn.getInputStream();
 		} else {
@@ -163,16 +165,16 @@ public class WebPost
 			result.write(buffer, 0, length);
 		}
 		callResult = result.toString("UTF-8");
-		
+
 		in.close();
 
 		conn.disconnect();
-		
+
 		// Allow an empty return -> leads to an enpty object
 		if (callResult == null || callResult.isBlank()) {
 			return new WebPostResult(statusCode, new JSONObject());
 		}
-		
+
 		return new WebPostResult(statusCode, new JSONObject(callResult));
 	}
 

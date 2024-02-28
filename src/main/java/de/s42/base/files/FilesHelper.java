@@ -75,9 +75,9 @@ public final class FilesHelper
 	public final static String getMimeType(Path file) throws IOException
 	{
 		assert file != null;
-		
+
 		String extension = FilesHelper.getExtension(file);
-		
+
 		// Special handling for calendar attachments
 		if (extension.equalsIgnoreCase("ics")) {
 			return "text/calendar";
@@ -88,7 +88,7 @@ public final class FilesHelper
 		if (mimeType != null) {
 			return mimeType;
 		}
-		
+
 		// Default to application/octet-stream instead of null
 		return "application/octet-stream";
 	}
@@ -162,24 +162,30 @@ public final class FilesHelper
 
 	public final static String getExtension(Path path)
 	{
+		assert path != null;
+
 		return getExtension(path.getFileName().toString());
 	}
-	
+
 	public final static String getExtension(String path)
 	{
+		assert path != null;
+
 		int index = path.lastIndexOf('.');
-	
+
 		// No dot return empty ending
 		if (index == -1) {
 			return "";
 		}
-		
+
 		return path.substring(index + 1);
 	}
 
 	public final static String sanitizeFileName(String name)
 	{
-		// todo What could be a general sinitization for filenames?
+		assert name != null;
+
+		// @todo What could be a general sinitization for filenames?
 		return name;
 	}
 
@@ -199,6 +205,8 @@ public final class FilesHelper
 
 	public final static boolean directoryExists(String path)
 	{
+		assert path != null;
+
 		return directoryExists(Path.of(path));
 	}
 
@@ -223,9 +231,9 @@ public final class FilesHelper
 		MessageDigest digest = MessageDigest.getInstance("MD5");
 		InputStream fileInputStream = Files.newInputStream(path);
 		DigestInputStream digestInputStream = new DigestInputStream(fileInputStream, digest);
-		
+
 		// Stream into digest
-		byte[] bytes = new byte[1024];		
+		byte[] bytes = new byte[1024];
 		while (digestInputStream.read(bytes) > 0) {
 		}
 
@@ -235,7 +243,7 @@ public final class FilesHelper
 	public static String getFileSHA256(String path) throws IOException, NoSuchAlgorithmException
 	{
 		assert path != null;
-		
+
 		return getFileSHA256(Path.of(path));
 	}
 
@@ -246,12 +254,12 @@ public final class FilesHelper
 		MessageDigest digest = MessageDigest.getInstance("SHA-256");
 		InputStream fileInputStream = Files.newInputStream(path);
 		DigestInputStream digestInputStream = new DigestInputStream(fileInputStream, digest);
-		
+
 		// Stream into digest
-		byte[] bytes = new byte[1024];		
+		byte[] bytes = new byte[1024];
 		while (digestInputStream.read(bytes) > 0) {
 		}
-		
+
 		return ConversionHelper.bytesToHex(digest.digest());
 	}
 
@@ -386,7 +394,7 @@ public final class FilesHelper
 	{
 		assert path != null;
 
-		try ( Stream<Path> walk = Files.walk(path)) {
+		try (Stream<Path> walk = Files.walk(path)) {
 			walk.sorted(Comparator.reverseOrder())
 				.filter((p) -> {
 					return !p.equals(path);
@@ -447,7 +455,7 @@ public final class FilesHelper
 			throw new IOException("File not found " + filePath);
 		}
 
-		try ( FileInputStream fis = new FileInputStream(file);  FileChannel fc = fis.getChannel()) {
+		try (FileInputStream fis = new FileInputStream(file); FileChannel fc = fis.getChannel()) {
 			buffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
 		}
 
@@ -463,6 +471,8 @@ public final class FilesHelper
 
 	public final static String getZippedSingleFileAsString(Path filePath) throws IOException
 	{
+		assert filePath != null;
+
 		return new String(getZippedSingleFileAsByteArray(filePath), "UTF-8");
 	}
 
@@ -484,7 +494,7 @@ public final class FilesHelper
 		}
 
 		ByteArrayOutputStream baos;
-		try ( ZipInputStream zipStream = new ZipInputStream(new FileInputStream(file))) {
+		try (ZipInputStream zipStream = new ZipInputStream(new FileInputStream(file))) {
 			zipStream.getNextEntry();
 			baos = new ByteArrayOutputStream();
 			byte[] buffer = new byte[1024];
@@ -498,6 +508,7 @@ public final class FilesHelper
 
 	public static void saveImageAsFilePng(BufferedImage image, String outputFile) throws IOException
 	{
+		assert image != null;
 		assert outputFile != null;
 
 		saveImageAsFilePng(image, Path.of(outputFile));
@@ -515,7 +526,7 @@ public final class FilesHelper
 		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		param.setCompressionQuality(0.0f);
 
-		try ( ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
+		try (ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
 			writer.setOutput(out);
 			writer.write(null, new IIOImage(image, null, null), param);
 			writer.dispose();
@@ -524,8 +535,6 @@ public final class FilesHelper
 
 	public static void saveImageAsFileJpg(BufferedImage image, String outputFile, float quality) throws IOException
 	{
-		assert outputFile != null;
-
 		saveImageAsFileJpg(image, Path.of(outputFile), quality);
 	}
 
@@ -543,7 +552,7 @@ public final class FilesHelper
 		param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		param.setCompressionQuality(quality);
 
-		try ( ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
+		try (ImageOutputStream out = new FileImageOutputStream(outputFile.toFile())) {
 			writer.setOutput(out);
 			writer.write(null, new IIOImage(image, null, null), param);
 			writer.dispose();
@@ -552,6 +561,10 @@ public final class FilesHelper
 
 	public static BufferedImage getFileAsScaledImage(Path file, int width, int height)
 	{
+		assert file != null;
+		assert width > 0;
+		assert height > 0;
+
 		BufferedImage original = getFileAsImage(file);
 		Image scaled = original.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
 		BufferedImage scaledBuffered = new BufferedImage(width, height, original.getType());
@@ -565,6 +578,8 @@ public final class FilesHelper
 
 	public static BufferedImage getFileAsImage(Path file)
 	{
+		assert file != null;
+
 		try {
 			BufferedImage image;
 			image = ImageIO.read(file.toFile());

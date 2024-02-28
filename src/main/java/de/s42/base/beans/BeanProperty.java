@@ -44,6 +44,7 @@ import java.util.Optional;
  */
 public final class BeanProperty<BeanClass, PropertyClass>
 {
+
 	protected final String name;
 	protected final Class<PropertyClass> propertyClass;
 	protected final Method readMethod;
@@ -195,7 +196,7 @@ public final class BeanProperty<BeanClass, PropertyClass>
 	{
 		return isTransient;
 	}
-	
+
 	public boolean isPublicField()
 	{
 		return publicField;
@@ -210,7 +211,7 @@ public final class BeanProperty<BeanClass, PropertyClass>
 	{
 		return read;
 	}
-	
+
 	public boolean isReadWrite()
 	{
 		return read & write;

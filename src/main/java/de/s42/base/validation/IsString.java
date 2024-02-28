@@ -33,7 +33,7 @@ import java.util.function.Function;
  */
 public final class IsString implements Function<Object, Boolean>
 {
-	
+
 	@Override
 	public Boolean apply(Object value)
 	{

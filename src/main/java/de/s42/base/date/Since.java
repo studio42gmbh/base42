@@ -48,7 +48,7 @@ public class Since
 		if (date == null) {
 			return "";
 		}
-		
+
 		String timeAgo = getTimeAgo(date.getTime());
 
 		String dateFormatted = DATE_FORMAT.format(date);
@@ -58,7 +58,6 @@ public class Since
 
 	public static String getTimeAgo(long since)
 	{
-
 		long now = System.currentTimeMillis();
 
 		if (since > now || since <= 0) {

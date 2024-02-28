@@ -189,7 +189,7 @@ public class Web
 	protected WebResult read() throws ProtocolException, IOException
 	{
 		assert method != null;
-		
+
 		URL getUrl;
 
 		if (!parameters.isEmpty()) {
@@ -230,7 +230,7 @@ public class Web
 	protected WebResult getRepsonse(HttpURLConnection conn) throws IOException
 	{
 		assert conn != null;
-		
+
 		int statusCode = conn.getResponseCode();
 
 		String callResult;
@@ -257,24 +257,26 @@ public class Web
 		if (callResult == null || callResult.isBlank()) {
 			return new WebResult(statusCode, new JSONObject());
 		}
-		
+
 		return new WebResult(statusCode, new JSONObject(callResult));
 	}
 
 	public WebResult perform() throws IOException
 	{
-		if (null != method) switch (method) {
-			case POST -> {
-				return post();
-			}
-			case GET -> {
-				return read();
-			}
-			case DELETE -> {
-				return read();
-			}
-			case OPTIONS -> {
-				return read();
+		if (null != method) {
+			switch (method) {
+				case POST -> {
+					return post();
+				}
+				case GET -> {
+					return read();
+				}
+				case DELETE -> {
+					return read();
+				}
+				case OPTIONS -> {
+					return read();
+				}
 			}
 		}
 
@@ -287,7 +289,7 @@ public class Web
 		if (value == null) {
 			return;
 		}
-		
+
 		assert key != null;
 
 		parameters.put(key, value);
@@ -306,7 +308,7 @@ public class Web
 		if (value == null) {
 			return;
 		}
-		
+
 		assert key != null;
 
 		headers.put(key, value);
@@ -327,7 +329,7 @@ public class Web
 	public void setUrl(URL url)
 	{
 		assert url != null;
-		
+
 		this.url = url;
 	}
 

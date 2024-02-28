@@ -26,6 +26,7 @@
 package de.s42.base.sql;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * See https://www.postgresql.org/docs/current/errcodes-appendix.html or
@@ -36,6 +37,9 @@ import java.sql.SQLException;
 public final class SQLHelper
 {
 
+	// 23505 Uniqueness (https://www.postgresql.org/docs/current/errcodes-appendix.html -> unique_violation)
+	public final static String PSQL_UNIQUE_VIOLATION = "23505";
+
 	private SQLHelper()
 	{
 		// never instantiated
@@ -45,8 +49,7 @@ public final class SQLHelper
 	{
 		assert ex != null;
 
-		// 23505 Uniquenes
-		return "23505".equals(ex.getSQLState());
+		return Objects.equals(PSQL_UNIQUE_VIOLATION, ex.getSQLState());
 	}
 
 }

@@ -106,11 +106,15 @@ public final class ResourceHelper
 
 	public final static String getZippedSingleFileResourceAsString(String resourceName) throws IOException
 	{
+		assert resourceName != null;
+
 		return new String(getZippedSingleFileResourceAsByteArray(resourceName), "UTF-8");
 	}
 
 	public final static byte[] getZippedSingleFileResourceAsByteArray(String resourceName) throws IOException
 	{
+		assert resourceName != null;
+
 		ByteArrayOutputStream baos;
 		try (ZipInputStream zipStream = new ZipInputStream(ResourceHelper.class.getClassLoader().getResourceAsStream(resourceName))) {
 			zipStream.getNextEntry();
@@ -123,9 +127,12 @@ public final class ResourceHelper
 		}
 		return baos.toByteArray();
 	}
-	
-	public final static InputStream getResourceAsStream(final Class moduleClass, final String relativeResourceName)
+
+	public final static InputStream getResourceAsStream(Class moduleClass, String relativeResourceName)
 	{
+		assert moduleClass != null;
+		assert relativeResourceName != null;
+
 		InputStream in = moduleClass.getResourceAsStream(relativeResourceName);
 
 		if (in == null) {
@@ -137,6 +144,8 @@ public final class ResourceHelper
 
 	public final static InputStream getResourceAsStream(final String resourceName)
 	{
+		assert resourceName != null;
+
 		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
 
 		if (in == null) {
@@ -144,44 +153,56 @@ public final class ResourceHelper
 		}
 
 		return in;
-	}	
-	
+	}
+
 	public final static Icon getResourceAsIcon(Class moduleClass, String relativeResourceName, int width, int height)
 	{
+		assert moduleClass != null;
+		assert relativeResourceName != null;
+		assert width > 0;
+		assert height > 0;
+
 		return new ImageIcon(getResourceAsImage(moduleClass, relativeResourceName).getScaledInstance(width, height, BufferedImage.SCALE_AREA_AVERAGING));
 	}
-	
+
 	public final static Icon getResourceAsIcon(String absoluteResourceName, int width, int height)
 	{
+		assert absoluteResourceName != null;
+		assert width > 0;
+		assert height > 0;
+
 		return new ImageIcon(getResourceAsImage(absoluteResourceName).getScaledInstance(width, height, BufferedImage.SCALE_AREA_AVERAGING));
 	}
-	
+
 	public final static BufferedImage getResourceAsImage(Class moduleClass, String relativeResourceName)
 	{
+		assert moduleClass != null;
+		assert relativeResourceName != null;
+
 		try {
 			BufferedImage image;
 			try (InputStream in = getResourceAsStream(moduleClass, relativeResourceName)) {
 				image = ImageIO.read(in);
 			}
 			return image;
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException("Unable to read module resource " + relativeResourceName + " - " + ex.getMessage(), ex);
 		}
 	}
-	
+
 	public final static BufferedImage getResourceAsImage(String absoluteResourceName)
 	{
+		assert absoluteResourceName != null;
+
 		try {
 			BufferedImage image;
 			try (InputStream in = getResourceAsStream(absoluteResourceName)) {
 				image = ImageIO.read(in);
 			}
 			return image;
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException("Unable to read module resource " + absoluteResourceName + " - " + ex.getMessage(), ex);
 		}
 	}
-	
+
 }

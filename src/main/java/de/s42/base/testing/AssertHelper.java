@@ -44,9 +44,11 @@ public class AssertHelper
 	{
 		assertEpsilonEquals(actual, expected, "");
 	}
-	
+
 	public static void assertEpsilonEquals(double actual, double expected, String message) throws AssertionError
 	{
+		assert message != null;
+
 		if (!epsilonEquals(actual, expected)) {
 			throw new AssertionError(message + " - expected almost [" + expected + "] but found [" + actual + "] (EPSILON : " + DOUBLE_EPSILON + ")");
 		}

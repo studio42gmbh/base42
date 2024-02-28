@@ -110,19 +110,19 @@ public final class AnsiHelper
 	{
 		assert text != null;
 		assert color != null;
-		
+
 		if (!ansiEnabled) {
 			return text;
 		}
 
 		return color.ansiCode + text + TerminalColor.Reset.ansiCode;
 	}
-	
+
 	public static String coloredString(String text, TerminalColor color, TerminalBackgroundColor background)
 	{
 		return coloredString(text, color, background, true);
 	}
-	
+
 	public static String coloredString(String text, TerminalColor color, TerminalBackgroundColor background, boolean ansiEnabled)
 	{
 		assert text != null;
@@ -132,8 +132,8 @@ public final class AnsiHelper
 		if (!ansiEnabled) {
 			return text;
 		}
-		
+
 		return color.ansiCode + background.ansiCode + text + TerminalColor.Reset.ansiCode;
 	}
-	
+
 }

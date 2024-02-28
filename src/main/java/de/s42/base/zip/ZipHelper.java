@@ -1,3 +1,4 @@
+// <editor-fold desc="The MIT License" defaultstate="collapsed">
 /*
  * The MIT License
  * 
@@ -21,6 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+//</editor-fold>
 package de.s42.base.zip;
 
 import java.io.IOException;
@@ -37,7 +39,7 @@ public final class ZipHelper
 
 	private ZipHelper()
 	{
-		// nesver instantiated
+		// never instantiated
 	}
 
 	/**
@@ -63,9 +65,14 @@ public final class ZipHelper
 		return isArchive(fileSignature);
 	}
 
+	/**
+	 * Tests if the file signature is a valid ZIP - see https://en.wikipedia.org/wiki/List_of_file_signatures
+	 *
+	 * @param fileSignature
+	 * @return
+	 */
 	public static boolean isArchive(int fileSignature)
 	{
-		// see https://en.wikipedia.org/wiki/List_of_file_signatures
 		return fileSignature == 0x504B0304 || fileSignature == 0x504B0506 || fileSignature == 0x504B0708;
 	}
 }

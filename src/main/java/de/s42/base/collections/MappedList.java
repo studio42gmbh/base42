@@ -71,6 +71,8 @@ public class MappedList<KeyType, DataType>
 
 	public void addAll(MappedList<KeyType, DataType> other)
 	{
+		assert other != null;
+		
 		for (Map.Entry<KeyType, DataType> entry : other.map().entrySet()) {
 			add(entry.getKey(), entry.getValue());
 		}
@@ -197,6 +199,4 @@ public class MappedList<KeyType, DataType>
 		final MappedList<?, ?> other = (MappedList<?, ?>) obj;
 		return Objects.equals(this.map, other.map);
 	}
-	
-	
 }

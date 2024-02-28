@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-
 package de.s42.base.collections;
 
 import java.util.HashSet;
@@ -33,17 +32,16 @@ import java.util.List;
  *
  * @author Benjamin Schiller
  */
-public final class CollectionsHelper {
+public final class CollectionsHelper
+{
 
 	private CollectionsHelper()
 	{
 		// never instantiated
 	}
-	
-	public static <ListType> boolean listEqualsIgnoreOrder(List<ListType> list1, List<ListType> list2) {
+
+	public static <ListType> boolean listEqualsIgnoreOrder(List<ListType> list1, List<ListType> list2)
+	{
 		return new HashSet<>(list1).equals(new HashSet<>(list2));
-	}	
-	
-	// <editor-fold desc="Getters/Setters" defaultstate="collapsed">
-	//</editor-fold>
+	}
 }
