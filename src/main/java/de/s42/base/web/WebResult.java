@@ -26,6 +26,7 @@
 package de.s42.base.web;
 
 import de.s42.base.strings.StringHelper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -36,14 +37,14 @@ public class WebResult
 {
 
 	protected int statusCode;
-	protected JSONObject response;
+	protected Object response;
 
 	public WebResult()
 	{
 
 	}
 
-	public WebResult(int statusCode, JSONObject response)
+	public WebResult(int statusCode, Object response)
 	{
 		assert response != null;
 		assert statusCode >= 100;
@@ -62,12 +63,22 @@ public class WebResult
 		this.statusCode = statusCode;
 	}
 
-	public JSONObject getResponse()
+	public Object getResponse()
 	{
 		return response;
 	}
 
-	public void setResponse(JSONObject response)
+	public JSONObject getResponseAsObject()
+	{
+		return (JSONObject) response;
+	}
+
+	public JSONArray getResponseAsArray()
+	{
+		return (JSONArray) response;
+	}
+
+	public void setResponse(Object response)
 	{
 		this.response = response;
 	}

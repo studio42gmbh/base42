@@ -38,6 +38,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -257,7 +258,13 @@ public class Web
 		if (callResult == null || callResult.isBlank()) {
 			return new WebResult(statusCode, new JSONObject());
 		}
+		
+		// Check if it is an JSON array
+		if (callResult.trim().startsWith("[")) {			
+			return new WebResult(statusCode, new JSONArray(callResult));			
+		}
 
+		// Return a JSON object
 		return new WebResult(statusCode, new JSONObject(callResult));
 	}
 

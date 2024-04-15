@@ -26,6 +26,7 @@
 package de.s42.base.files;
 
 import de.s42.base.conversion.ConversionHelper;
+import jakarta.activation.MimetypesFileTypeMap;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -45,7 +46,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 import java.util.stream.Stream;
 import java.util.zip.ZipInputStream;
-import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageTypeSpecifier;

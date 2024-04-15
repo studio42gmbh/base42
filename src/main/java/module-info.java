@@ -29,7 +29,7 @@ module de.sft.base
 	requires java.desktop;
 	requires java.sql;
 	requires org.json;
-	requires activation;
+	requires jakarta.activation;
 
 	exports de.s42.base.arrays;
 	exports de.s42.base.beans;
