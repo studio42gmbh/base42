@@ -27,6 +27,7 @@ package de.s42.base.validation;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -46,47 +47,85 @@ public final class ValidationHelper
 		// never instantiated
 	}
 
-	public final static boolean isEmailAddress(String emailAddress)
+	/**
+	 * This mesthod allows to check for validity of a condition - otherwise throws a IllegalArgumentException with the
+	 * given message
+	 *
+	 * @param condition
+	 * @param exceptionSupplier
+	 * @throws IllegalArgumentException
+	 */
+	public static void isValid(boolean condition, Supplier<? extends RuntimeException> exceptionSupplier) throws RuntimeException
+	{
+		assert exceptionSupplier != null : "exceptioSupplier != null";
+
+		if (!condition) {
+			throw exceptionSupplier.get();
+		}
+	}
+
+	/**
+	 * This mesthod allows to check for validity of a condition - otherwise throws a IllegalArgumentException with the
+	 * given message
+	 *
+	 * @param condition
+	 * @param message
+	 * @throws IllegalArgumentException
+	 */
+	public static void isValid(boolean condition, String message) throws IllegalArgumentException
+	{
+		assert message != null : "message != null";
+
+		if (!condition) {
+			throw new IllegalArgumentException(message);
+		}
+	}
+
+	/**
+	 * This mesthod allows to check for validity of a condition - otherwise throws a IllegalArgumentException with the
+	 * given message
+	 *
+	 * @param condition
+	 * @throws IllegalArgumentException
+	 */
+	public static void isValid(boolean condition) throws IllegalArgumentException
+	{
+		if (!condition) {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	public static boolean isEmailAddress(String emailAddress)
 	{
 		return (emailAddress != null) && EMAIL_PATTERN.matcher(emailAddress).matches();
 	}
 
-	public final static boolean isMethodName(String methodName)
+	public static boolean isMethodName(String methodName)
 	{
 		return (methodName != null) && METHOD_NAME_PATTERN.matcher(methodName).matches();
 	}
 
-	public final static boolean isVariableName(String variableName)
+	public static boolean isVariableName(String variableName)
 	{
 		return (variableName != null) && VARIABLE_NAME_PATTERN.matcher(variableName).matches();
 	}
 
-	public final static boolean isVariableNameOrNull(String variableName)
+	public static boolean isVariableNameOrNull(String variableName)
 	{
-		if (variableName == null) {
-			return true;
-		}
-
-		return isVariableName(variableName);
+		return (variableName != null) && isVariableName(variableName);
 	}
 
-	public final static boolean isTypeOf(Object value, Class<?> type)
+	public static boolean isTypeOf(Object value, Class<?> type)
 	{
-		assert type != null;
-
-		if (value == null) {
-			return false;
-		}
-
-		return (type.isAssignableFrom(value.getClass()));
+		return (value != null) && (type.isAssignableFrom(value.getClass()));
 	}
 
-	public final static boolean isString(Object value)
+	public static boolean isString(Object value)
 	{
 		return (value instanceof String);
 	}
 
-	public final static boolean isStringNotBlank(Object value)
+	public static boolean isStringNotBlank(Object value)
 	{
 		if (value instanceof String string) {
 			return !string.isBlank();
@@ -95,7 +134,7 @@ public final class ValidationHelper
 		return false;
 	}
 
-	public final static boolean isUUID(Object uuid)
+	public static boolean isUUID(Object uuid)
 	{
 		if (uuid == null) {
 			return false;
@@ -112,64 +151,52 @@ public final class ValidationHelper
 		return false;
 	}
 
-	public final static boolean isFloat(Object value)
+	public static boolean isFloat(Object value)
 	{
 		return (value instanceof Float);
 	}
 
-	public final static boolean isDouble(Object value)
+	public static boolean isDouble(Object value)
 	{
 		return (value instanceof Double);
 	}
 
-	public final static boolean isBoolean(Object value)
+	public static boolean isBoolean(Object value)
 	{
 		return (value instanceof Boolean);
 	}
 
-	public final static boolean isArray(Object value)
+	public static boolean isArray(Object value)
 	{
-		if (value == null) {
-			return false;
-		}
-
-		return value.getClass().isArray();
+		return (value != null) && value.getClass().isArray();
 	}
 
-	public final static boolean isNotEmptyArray(Object value)
+	public static boolean isNotEmptyArray(Object value)
 	{
-		if (!isArray(value)) {
-			return false;
-		}
-
-		return ((Object[]) value).length > 0;
+		return isArray(value) && ((Object[]) value).length > 0;
 	}
 
-	public final static boolean isInteger(Object value)
+	public static boolean isInteger(Object value)
 	{
 		return (value instanceof Integer);
 	}
 
-	public final static boolean isNumber(Object value)
+	public static boolean isNumber(Object value)
 	{
 		return (value instanceof Number);
 	}
 
-	public final static boolean isGreaterEqual0(Object value)
+	public static boolean isGreaterEqual0(Object value)
 	{
-		if (!isNumber(value)) {
-			return false;
-		}
-
-		return ((Number) value).doubleValue() >= 0.0;
+		return isNumber(value) && ((Number) value).doubleValue() >= 0.0;
 	}
 
-	public final static boolean isLong(Object value)
+	public static boolean isLong(Object value)
 	{
 		return (value instanceof Long);
 	}
 
-	public final static boolean isEqual(Object value1, Object value2)
+	public static boolean isEqual(Object value1, Object value2)
 	{
 		return Objects.equals(value2, value2);
 	}

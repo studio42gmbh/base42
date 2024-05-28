@@ -25,8 +25,13 @@
 //</editor-fold>
 package de.s42.base.date;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -37,6 +42,11 @@ public class Now
 
 	private final Calendar now;
 
+	public static Now create()
+	{
+		return new Now();
+	}
+
 	public Now()
 	{
 		now = Calendar.getInstance();
@@ -44,7 +54,7 @@ public class Now
 
 	public Now(Date date)
 	{
-		assert date != null;
+		assert date != null : "date != null";
 
 		now = Calendar.getInstance();
 		now.setTime(date);
@@ -73,6 +83,23 @@ public class Now
 	public int getDay()
 	{
 		return now.get(Calendar.DAY_OF_MONTH);
+	}
+
+	public int getDayOfWeek()
+	{
+		return LocalDate.ofInstant(now.toInstant(), ZoneId.systemDefault()).getDayOfWeek().getValue();
+	}
+
+	public String getDayOfWeekAsString()
+	{
+		return getDayOfWeekAsString(Locale.getDefault());
+	}
+
+	public String getDayOfWeekAsString(Locale locale)
+	{
+		assert locale != null : "locale != null";
+
+		return DayOfWeek.of(getDayOfWeek()).getDisplayName(TextStyle.FULL, locale);
 	}
 
 	public String getDayTwoDigit()

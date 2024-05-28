@@ -35,6 +35,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -71,22 +72,22 @@ public class Web
 
 	public Web(String url) throws MalformedURLException
 	{
-		assert url != null;
+		assert url != null : "url != null";
 
 		this.url = new URL(url);
 	}
 
 	public Web(URL url)
 	{
-		assert url != null;
+		assert url != null : "url != null";
 
 		this.url = url;
 	}
 
 	public Web(String url, Map<String, Object> parameters) throws MalformedURLException
 	{
-		assert parameters != null;
-		assert url != null;
+		assert parameters != null : "parameters != null";
+		assert url != null : "url != null";
 
 		this.url = new URL(url);
 		this.parameters.putAll(parameters);
@@ -94,8 +95,8 @@ public class Web
 
 	public Web(URL url, Map<String, Object> parameters)
 	{
-		assert parameters != null;
-		assert url != null;
+		assert parameters != null : "parameters != null";
+		assert url != null : "url != null";
 
 		this.url = url;
 		this.parameters.putAll(parameters);
@@ -114,6 +115,8 @@ public class Web
 
 	protected WebResult postJSON() throws ProtocolException, IOException
 	{
+		assert url != null : "url != null";
+
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
 		conn.setDoOutput(true);
@@ -134,15 +137,18 @@ public class Web
 
 		conn.setRequestProperty("Content-Length", String.valueOf(dataToSend.length));
 
-		OutputStream out = conn.getOutputStream();
-		out.write(dataToSend);
-		out.flush();
+		try (OutputStream out = conn.getOutputStream()) {
+			out.write(dataToSend);
+			out.flush();
+		}
 
 		return getRepsonse(conn);
 	}
 
 	protected WebResult postMultiPart() throws ProtocolException, IOException
 	{
+		assert url != null : "url != null";
+
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
 		String boundary = UUID.randomUUID().toString();
@@ -168,7 +174,7 @@ public class Web
 			if (entry.getValue() instanceof byte[] bs) {
 				os.write(bs);
 			} else {
-				os.write(entry.getValue().toString().getBytes("UTF-8"));
+				os.write(entry.getValue().toString().getBytes(StandardCharsets.UTF_8));
 			}
 		}
 
@@ -180,16 +186,19 @@ public class Web
 
 		conn.setRequestProperty("Content-Length", String.valueOf(dataToSend.length));
 
-		OutputStream out = conn.getOutputStream();
-		out.write(dataToSend);
-		out.flush();
+		try (OutputStream out = conn.getOutputStream()) {
+			out.write(dataToSend);
+			out.flush();
+		}
 
 		return getRepsonse(conn);
 	}
 
 	protected WebResult read() throws ProtocolException, IOException
 	{
-		assert method != null;
+		assert method != null : "method != null";
+		assert url != null : "url != null";
+		assert method != null : "method != null";
 
 		URL getUrl;
 
@@ -230,7 +239,7 @@ public class Web
 
 	protected WebResult getRepsonse(HttpURLConnection conn) throws IOException
 	{
-		assert conn != null;
+		assert conn != null : "conn != null";
 
 		int statusCode = conn.getResponseCode();
 
@@ -243,14 +252,17 @@ public class Web
 			in = conn.getErrorStream();
 		}
 
-		ByteArrayOutputStream result = new ByteArrayOutputStream();
-		byte[] buffer = new byte[1024];
-		for (int length; (length = in.read(buffer)) != -1;) {
-			result.write(buffer, 0, length);
+		if (in != null) {
+			ByteArrayOutputStream result = new ByteArrayOutputStream();
+			byte[] buffer = new byte[1024];
+			for (int length; (length = in.read(buffer)) != -1;) {
+				result.write(buffer, 0, length);
+			}
+			callResult = result.toString(StandardCharsets.UTF_8);
+			in.close();
+		} else {
+			callResult = "";
 		}
-		callResult = result.toString("UTF-8");
-
-		in.close();
 
 		conn.disconnect();
 
@@ -258,10 +270,10 @@ public class Web
 		if (callResult == null || callResult.isBlank()) {
 			return new WebResult(statusCode, new JSONObject());
 		}
-		
+
 		// Check if it is an JSON array
-		if (callResult.trim().startsWith("[")) {			
-			return new WebResult(statusCode, new JSONArray(callResult));			
+		if (callResult.trim().startsWith("[")) {
+			return new WebResult(statusCode, new JSONArray(callResult));
 		}
 
 		// Return a JSON object
@@ -297,14 +309,14 @@ public class Web
 			return;
 		}
 
-		assert key != null;
+		assert key != null : "key != null";
 
 		parameters.put(key, value);
 	}
 
 	public void removeParameter(String key)
 	{
-		assert key != null;
+		assert key != null : "key != null";
 
 		parameters.remove(key);
 	}
@@ -316,14 +328,14 @@ public class Web
 			return;
 		}
 
-		assert key != null;
+		assert key != null : "key != null";
 
 		headers.put(key, value);
 	}
 
 	public void removeHeader(String key)
 	{
-		assert key != null;
+		assert key != null : "key != null";
 
 		headers.remove(key);
 	}
@@ -335,7 +347,7 @@ public class Web
 
 	public void setUrl(URL url)
 	{
-		assert url != null;
+		assert url != null : "url != null";
 
 		this.url = url;
 	}
@@ -347,7 +359,7 @@ public class Web
 
 	public void setMethod(WebMethod method)
 	{
-		assert method != null;
+		assert method != null : "method != null";
 
 		this.method = method;
 	}
@@ -359,7 +371,7 @@ public class Web
 
 	public void setPostType(WebPostType postType)
 	{
-		assert postType != null;
+		assert postType != null : "postType != null";
 
 		this.postType = postType;
 	}

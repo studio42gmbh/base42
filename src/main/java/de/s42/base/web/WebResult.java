@@ -26,6 +26,7 @@
 package de.s42.base.web;
 
 import de.s42.base.strings.StringHelper;
+import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,8 +47,8 @@ public class WebResult
 
 	public WebResult(int statusCode, Object response)
 	{
-		assert response != null;
-		assert statusCode >= 100;
+		assert response != null : "response != null";
+		assert statusCode >= 100 : "statusCode >= 100";
 
 		this.statusCode = statusCode;
 		this.response = response;
@@ -60,6 +61,8 @@ public class WebResult
 
 	public void setStatusCode(int statusCode)
 	{
+		assert statusCode >= 100 : "statusCode >= 100";
+
 		this.statusCode = statusCode;
 	}
 
@@ -80,6 +83,8 @@ public class WebResult
 
 	public void setResponse(Object response)
 	{
+		assert response != null : "response != null";
+
 		this.response = response;
 	}
 
@@ -96,6 +101,6 @@ public class WebResult
 	@Override
 	public String toString()
 	{
-		return StringHelper.toString(this);
+		return StringHelper.toString(this, Set.of("responseAsObject", "responseAsArray"));
 	}
 }

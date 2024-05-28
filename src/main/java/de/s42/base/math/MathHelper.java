@@ -2,7 +2,7 @@
 /*
  * The MIT License
  * 
- * Copyright 2022 Studio 42 GmbH ( https://www.s42m.de ).
+ * Copyright 2024 Studio 42 GmbH ( https://www.s42m.de ).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,47 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-module de.sft.base
-{
-	requires java.compiler;
-	requires java.desktop;
-	requires java.sql;
-	requires org.json;
-	requires jakarta.activation;
+package de.s42.base.math;
 
-	exports de.s42.base.arrays;
-	exports de.s42.base.beans;
-	exports de.s42.base.collections;
-	exports de.s42.base.compile;
-	exports de.s42.base.console;
-	exports de.s42.base.conversion;
-	exports de.s42.base.date;
-	exports de.s42.base.files;
-	exports de.s42.base.math;
-	exports de.s42.base.modules;
-	exports de.s42.base.resources;
-	exports de.s42.base.sql;
-	exports de.s42.base.strings;
-	exports de.s42.base.swing;
-	exports de.s42.base.system;
-	exports de.s42.base.testing;
-	exports de.s42.base.uuid;
-	exports de.s42.base.validation;
-	exports de.s42.base.web;
-	exports de.s42.base.zip;
+/**
+ *
+ * @author Benjamin.Schiller
+ */
+public final class MathHelper
+{
+
+	public final static double SQRT2 = Math.sqrt(2.0);
+
+	public final static double SQRT3 = Math.sqrt(3.0);
+
+	private MathHelper()
+	{
+		// do nothing
+	}
+
+	public static final double saturate(double value)
+	{
+		return clamp(value, 0.0, 1.0);
+	}
+
+	public static final double saturate(Number value)
+	{
+		assert value != null : "value != null";
+
+		return clamp(value.doubleValue(), 0.0, 1.0);
+	}
+
+	public static final double clamp(double value, double min, double max)
+	{
+		return Math.max(Math.min(value, max), min);
+	}
+
+	public static final double clamp(Number value, Number min, Number max)
+	{
+		assert value != null : "value != null";
+		assert min != null : "min != null";
+		assert max != null : "max != null";
+
+		return Math.max(Math.min(value.doubleValue(), max.doubleValue()), min.doubleValue());
+	}
 }

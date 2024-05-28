@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.s42</groupId>
 	<artifactId>base42</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.6-DEV</version>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -13,22 +13,28 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<!-- JSON Lib -->
+			<!-- https://www.json.org/json-en.html -->
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20240303</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>7.9.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
+			<!-- Emailing lib -->
+			<!-- https://jakarta.ee/specifications/mail/2.0/jakarta-mail-spec-2.0 -->
 			<groupId>com.sun.mail</groupId>
 			<artifactId>jakarta.mail</artifactId>
 			<version>2.0.1</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<!-- Testing Framework -->
+			<!-- https://testng.org/ -->
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.10.2</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<distributionManagement>
@@ -41,6 +47,7 @@
 	<build>
 		<plugins>
 			<plugin>
+				<!-- Generate version file inside of JAR -->
 				<!-- https://maven.apache.org/plugins/maven-antrun-plugin/ -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -85,7 +92,7 @@
 				<!-- https://maven.apache.org/plugins/maven-compiler-plugin/ -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.12.1</version>
+				<version>3.13.0</version>
 				<configuration>
 					<compilerArgs>
 						<arg>-deprecation</arg>
@@ -118,7 +125,7 @@
 				<!-- https://maven.apache.org/plugins/maven-jar-plugin/ -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.4.1</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -147,7 +154,7 @@
 				<!-- https://maven.apache.org/plugins/maven-install-plugin/ -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>3.1.2</version>
 			</plugin>
 		</plugins>
 	</build>

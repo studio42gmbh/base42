@@ -48,31 +48,52 @@ public final class ResourceHelper
 		// never instantiated
 	}
 
+	protected static ClassLoader getDefaultClassLoader()
+	{
+		return Thread.currentThread().getContextClassLoader();
+	}
+
 	public static boolean hasResource(Class refClass, String relativeResourceName)
 	{
-		assert refClass != null;
-		assert relativeResourceName != null;
+		assert refClass != null : "refClass != null";
+		assert relativeResourceName != null : "relativeResourceName != null";
 
 		return (refClass.getResource(relativeResourceName) != null);
 	}
 
 	public static boolean hasResource(String resourceName)
 	{
-		assert resourceName != null;
+		assert resourceName != null : "resourceName != null";
 
-		return (Thread.currentThread().getContextClassLoader().getResource(resourceName) != null);
+		return hasResource(resourceName, getDefaultClassLoader());
+	}
+
+	public static boolean hasResource(String resourceName, ClassLoader classLoader)
+	{
+		assert resourceName != null : "resourceName != null";
+		assert classLoader != null : "classLoader != null";
+
+		return (classLoader.getResource(resourceName) != null);
 	}
 
 	public static Optional<String> getResourceAsString(String resourceName) throws IOException
 	{
-		assert resourceName != null;
+		assert resourceName != null : "resourceName != null";
 
-		if (!hasResource(resourceName)) {
+		return getResourceAsString(resourceName, getDefaultClassLoader());
+	}
+
+	public static Optional<String> getResourceAsString(String resourceName, ClassLoader classLoader) throws IOException
+	{
+		assert resourceName != null : "resourceName != null";
+		assert classLoader != null : "classLoader != null";
+
+		if (!hasResource(resourceName, classLoader)) {
 			return Optional.empty();
 		}
 
 		ByteArrayOutputStream result;
-		try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName)) {
+		try (InputStream inputStream = classLoader.getResourceAsStream(resourceName)) {
 			result = new ByteArrayOutputStream();
 			byte[] buffer = new byte[1024];
 			int length;
@@ -85,8 +106,8 @@ public final class ResourceHelper
 
 	public static Optional<String> getResourceAsString(Class refClass, String relativeResourceName) throws IOException
 	{
-		assert refClass != null;
-		assert relativeResourceName != null;
+		assert refClass != null : "refClass != null";
+		assert relativeResourceName != null : "relativeResourceName";
 
 		if (!hasResource(refClass, relativeResourceName)) {
 			return Optional.empty();
@@ -104,19 +125,35 @@ public final class ResourceHelper
 		return Optional.of(result.toString(StandardCharsets.UTF_8.name()));
 	}
 
-	public final static String getZippedSingleFileResourceAsString(String resourceName) throws IOException
+	public static String getZippedSingleFileResourceAsString(String resourceName) throws IOException
 	{
-		assert resourceName != null;
+		assert resourceName != null : "resourceName != null";
 
-		return new String(getZippedSingleFileResourceAsByteArray(resourceName), "UTF-8");
+		return getZippedSingleFileResourceAsString(resourceName, getDefaultClassLoader());
 	}
 
-	public final static byte[] getZippedSingleFileResourceAsByteArray(String resourceName) throws IOException
+	public static String getZippedSingleFileResourceAsString(String resourceName, ClassLoader classLoader) throws IOException
 	{
-		assert resourceName != null;
+		assert resourceName != null : "resourceName != null";
+		assert classLoader != null : "classLoader != null";
+
+		return new String(getZippedSingleFileResourceAsByteArray(resourceName, classLoader), "UTF-8");
+	}
+
+	public static byte[] getZippedSingleFileResourceAsByteArray(String resourceName) throws IOException
+	{
+		assert resourceName != null : "resourceName != null";
+
+		return getZippedSingleFileResourceAsByteArray(resourceName, getDefaultClassLoader());
+	}
+
+	public static byte[] getZippedSingleFileResourceAsByteArray(String resourceName, ClassLoader classLoader) throws IOException
+	{
+		assert resourceName != null : "resourceName != null";
+		assert classLoader != null : "classLoader != null";
 
 		ByteArrayOutputStream baos;
-		try (ZipInputStream zipStream = new ZipInputStream(ResourceHelper.class.getClassLoader().getResourceAsStream(resourceName))) {
+		try (ZipInputStream zipStream = new ZipInputStream(classLoader.getResourceAsStream(resourceName))) {
 			zipStream.getNextEntry();
 			baos = new ByteArrayOutputStream();
 			byte[] buffer = new byte[1024];
@@ -128,10 +165,10 @@ public final class ResourceHelper
 		return baos.toByteArray();
 	}
 
-	public final static InputStream getResourceAsStream(Class moduleClass, String relativeResourceName)
+	public static InputStream getResourceAsStream(Class moduleClass, String relativeResourceName)
 	{
-		assert moduleClass != null;
-		assert relativeResourceName != null;
+		assert moduleClass != null : "moduleClass != null";
+		assert relativeResourceName != null : "relativeResourceName != null";
 
 		InputStream in = moduleClass.getResourceAsStream(relativeResourceName);
 
@@ -142,11 +179,17 @@ public final class ResourceHelper
 		return in;
 	}
 
-	public final static InputStream getResourceAsStream(final String resourceName)
+	public static InputStream getResourceAsStream(String resourceName)
 	{
-		assert resourceName != null;
+		return getResourceAsStream(resourceName, getDefaultClassLoader());
+	}
 
-		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
+	public static InputStream getResourceAsStream(String resourceName, ClassLoader classLoader)
+	{
+		assert resourceName != null : "resourceName != null";
+		assert classLoader != null : "classLoader != null";
+
+		InputStream in = classLoader.getResourceAsStream(resourceName);
 
 		if (in == null) {
 			throw new RuntimeException("Mssing resource '" + resourceName + "'");
@@ -155,29 +198,35 @@ public final class ResourceHelper
 		return in;
 	}
 
-	public final static Icon getResourceAsIcon(Class moduleClass, String relativeResourceName, int width, int height)
+	public static Icon getResourceAsIcon(Class moduleClass, String relativeResourceName, int width, int height)
 	{
-		assert moduleClass != null;
-		assert relativeResourceName != null;
-		assert width > 0;
-		assert height > 0;
+		assert moduleClass != null : "moduleClass != null";
+		assert relativeResourceName != null : "relativeResourceName != null";
+		assert width > 0 : "width > 0";
+		assert height > 0 : "height > 0";
 
 		return new ImageIcon(getResourceAsImage(moduleClass, relativeResourceName).getScaledInstance(width, height, BufferedImage.SCALE_AREA_AVERAGING));
 	}
 
-	public final static Icon getResourceAsIcon(String absoluteResourceName, int width, int height)
+	public static Icon getResourceAsIcon(String absoluteResourceName, int width, int height)
 	{
-		assert absoluteResourceName != null;
-		assert width > 0;
-		assert height > 0;
-
-		return new ImageIcon(getResourceAsImage(absoluteResourceName).getScaledInstance(width, height, BufferedImage.SCALE_AREA_AVERAGING));
+		return getResourceAsIcon(absoluteResourceName, width, height, getDefaultClassLoader());
 	}
 
-	public final static BufferedImage getResourceAsImage(Class moduleClass, String relativeResourceName)
+	public static Icon getResourceAsIcon(String absoluteResourceName, int width, int height, ClassLoader classLoader)
 	{
-		assert moduleClass != null;
-		assert relativeResourceName != null;
+		assert absoluteResourceName != null : "absoluteResourceName != null";
+		assert width > 0 : "width > 0";
+		assert height > 0 : "height > 0";
+		assert classLoader != null : "classLoader != null";
+
+		return new ImageIcon(getResourceAsImage(absoluteResourceName, classLoader).getScaledInstance(width, height, BufferedImage.SCALE_AREA_AVERAGING));
+	}
+
+	public static BufferedImage getResourceAsImage(Class moduleClass, String relativeResourceName)
+	{
+		assert moduleClass != null : "moduleClass != null";
+		assert relativeResourceName != null : "relativeResourceName != null";
 
 		try {
 			BufferedImage image;
@@ -190,13 +239,19 @@ public final class ResourceHelper
 		}
 	}
 
-	public final static BufferedImage getResourceAsImage(String absoluteResourceName)
+	public static BufferedImage getResourceAsImage(String absoluteResourceName)
 	{
-		assert absoluteResourceName != null;
+		return getResourceAsImage(absoluteResourceName, getDefaultClassLoader());
+	}
+
+	public static BufferedImage getResourceAsImage(String absoluteResourceName, ClassLoader classLoader)
+	{
+		assert absoluteResourceName != null : "absoluteResourceName != null";
+		assert classLoader != null : "classLoader != null";
 
 		try {
 			BufferedImage image;
-			try (InputStream in = getResourceAsStream(absoluteResourceName)) {
+			try (InputStream in = getResourceAsStream(absoluteResourceName, classLoader)) {
 				image = ImageIO.read(in);
 			}
 			return image;
