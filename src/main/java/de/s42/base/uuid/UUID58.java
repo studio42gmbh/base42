@@ -49,25 +49,26 @@ public final class UUID58
 	public static final char[] SYMBOLS_CHARS = SYMBOLS.toCharArray();
 
 	/**
-	 * The radix 58 as BidInteger
+	 * The radix 58 as BigInteger
 	 */
 	public static final BigInteger RADIX = BigInteger.valueOf(58L);
 
 	private UUID58()
 	{
-		// nevre instantiated
+		// Never instantiated
 	}
 
 	/**
 	 * Converts a uuid base58 string into a UUID.
 	 *
-	 * ATTENTION: the string is often 22 signs, BUT can be as short as 18 chars if the uuid (i.e. v4) has many leading 0
+	 * ATTENTION: A uuid base58 string is often 22 signs, BUT can be as short as 18 chars if the uuid (i.e. v4) has many
+	 * leading 0
 	 *
-	 * @param uuid58 a valid uuid base58 string
-	 * @return restored UUID from uuid58 string
-	 * @throws IllegalArgumentException if the string is too long
-	 * @throws IndexOutOfBoundsException if a character is contained which is not part of the Symbols
-	 * @throws NullPointerException if the parameter uuid58 is null
+	 * @param uuid58 A valid uuid base58 string
+	 * @return Restored UUID from uuid58 string
+	 * @throws IllegalArgumentException If the string is too long
+	 * @throws IndexOutOfBoundsException If a character is contained which is not part of the Symbols
+	 * @throws NullPointerException If the parameter uuid58 is null
 	 */
 	public static UUID fromString(String uuid58) throws IndexOutOfBoundsException, IllegalArgumentException, NullPointerException
 	{
@@ -106,9 +107,9 @@ public final class UUID58
 	/**
 	 * Converts a UUID into a uuid base58 string.
 	 *
-	 * @param uuid the UUID to be converted
-	 * @return the uuid base58 string
-	 * @throws NullPointerException if the parameter uuid58 is null
+	 * @param uuid The UUID to be converted
+	 * @return The uuid base58 string
+	 * @throws NullPointerException If the parameter uuid58 is null
 	 */
 	public static String toString(UUID uuid) throws NullPointerException
 	{
@@ -122,7 +123,7 @@ public final class UUID58
 		// Is always positive
 		BigInteger current = new BigInteger(buf.array());
 
-		// Will contain [Quot, Remainder] from divideAndRemainder
+		// Will contain [Quot, Remainder] from BigInteger.divideAndRemainder
 		BigInteger qr[];
 		StringBuilder builder = new StringBuilder();
 
@@ -132,7 +133,7 @@ public final class UUID58
 
 			qr = current.divideAndRemainder(RADIX);
 
-			// Append the lookedup char at index remainder
+			// Append the looked up symbol at index remainder
 			builder.append(SYMBOLS_CHARS[qr[1].intValue()]);
 
 			// Make current to be the quotient
