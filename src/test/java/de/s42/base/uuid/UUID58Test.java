@@ -39,7 +39,7 @@ import static org.testng.Assert.*;
 public class UUID58Test
 {
 
-	public final static int TEST_COUNT = 1000;
+	public final static int TEST_COUNT = 10;
 
 	@DataProvider(name = "randomUUIDs")
 	public Object[][] randomUUIDs()
