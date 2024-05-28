@@ -23,7 +23,7 @@
  */
 package de.s42.base.testing;
 
-import org.testng.Assert;
+import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
 /**
@@ -40,9 +40,9 @@ public class AssertHelperTest
 		AssertHelper.assertEpsilonEquals(1.1111111115, 1.111111111);
 		AssertHelper.assertEpsilonEquals(1.00, 1.0 + AssertHelper.DOUBLE_EPSILON * 0.5);
 
-		Assert.assertEquals(AssertHelper.epsilonEquals(1.0, 1.0), true);
-		Assert.assertEquals(AssertHelper.epsilonEquals(1.1111111115, 1.111111111), true);
-		Assert.assertEquals(AssertHelper.epsilonEquals(1.00, 1.0 + AssertHelper.DOUBLE_EPSILON * 0.5), true);
+		assertEquals(AssertHelper.epsilonEquals(1.0, 1.0), true);
+		assertEquals(AssertHelper.epsilonEquals(1.1111111115, 1.111111111), true);
+		assertEquals(AssertHelper.epsilonEquals(1.00, 1.0 + AssertHelper.DOUBLE_EPSILON * 0.5), true);
 	}
 
 	@Test(expectedExceptions = AssertionError.class)
@@ -50,7 +50,7 @@ public class AssertHelperTest
 	{
 		AssertHelper.assertEpsilonEquals(2.0, 1.0);
 	}
-	
+
 	@Test
 	public void validFloatEquals()
 	{
@@ -58,9 +58,9 @@ public class AssertHelperTest
 		AssertHelper.assertEpsilonEquals(1.11111115f, 1.111111f);
 		AssertHelper.assertEpsilonEquals(1.00f, 1.0f + AssertHelper.FLOAT_EPSILON * 0.5f);
 
-		Assert.assertEquals(AssertHelper.epsilonEquals(1.0f, 1.0f), true);
-		Assert.assertEquals(AssertHelper.epsilonEquals(1.11111115f, 1.111111f), true);
-		Assert.assertEquals(AssertHelper.epsilonEquals(1.00f, 1.0f + AssertHelper.FLOAT_EPSILON * 0.5f), true);
+		assertEquals(AssertHelper.epsilonEquals(1.0f, 1.0f), true);
+		assertEquals(AssertHelper.epsilonEquals(1.11111115f, 1.111111f), true);
+		assertEquals(AssertHelper.epsilonEquals(1.00f, 1.0f + AssertHelper.FLOAT_EPSILON * 0.5f), true);
 	}
 
 	@Test(expectedExceptions = AssertionError.class)
