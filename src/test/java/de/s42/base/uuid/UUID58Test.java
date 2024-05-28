@@ -34,7 +34,7 @@ import static org.testng.Assert.*;
 
 /**
  *
- * @author Benjamin.Schiller
+ * @author Benjamin Schiller
  */
 public class UUID58Test
 {

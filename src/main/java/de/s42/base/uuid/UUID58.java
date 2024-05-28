@@ -36,7 +36,7 @@ import java.util.UUID;
  *
  * uuid58 strings look like: hxAGoWGvFPR35qxCG5fYuX, ouyeFFWJLjnNeJfjs9DcvY, cyAp8zexLqUQRGFxRVcBCF, ...
  *
- * @author Benjamin.Schiller
+ * @author Benjamin Schiller
  */
 public final class UUID58
 {
