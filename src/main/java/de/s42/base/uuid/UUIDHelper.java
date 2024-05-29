@@ -27,6 +27,7 @@ package de.s42.base.uuid;
 
 import java.nio.ByteBuffer;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -35,28 +36,63 @@ import java.util.UUID;
 public final class UUIDHelper
 {
 
+	/**
+	 * Validates a string to be a valid uuid pattern
+	 */
+	public final static Pattern UUID_PATTERN = Pattern.compile("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}");
+
 	private UUIDHelper()
 	{
 		// never instantiated
 	}
 
+	public static boolean isUUID(String string)
+	{
+		if (string == null) {
+			return false;
+		}
+
+		return UUID_PATTERN.matcher(string).matches();
+	}
+
 	public static byte[] toBytes(UUID uuid)
 	{
-		assert uuid != null;
+		assert uuid != null : "uuid != null";
 
 		ByteBuffer result = ByteBuffer.wrap(new byte[16]);
 		result.putLong(uuid.getMostSignificantBits());
 		result.putLong(uuid.getLeastSignificantBits());
+
 		return result.array();
 	}
 
 	public static UUID toUuid(byte[] data)
 	{
-		assert data != null;
+		assert data != null : "data != null";
 
 		ByteBuffer buf = ByteBuffer.wrap(data);
 		long firstLong = buf.getLong();
 		long secondLong = buf.getLong();
+
 		return new UUID(firstLong, secondLong);
+	}
+
+	/**
+	 * Support converting UUID base16 and base58 Strings
+	 *
+	 * @param uuidLike
+	 * @return
+	 */
+	public static UUID toUUID(String uuidLike)
+	{
+		assert uuidLike != null : "data != null";
+
+		// Simple base16 UUID
+		if (uuidLike.length() == 36) {
+			return UUID.fromString(uuidLike);
+		}
+
+		// Alternative try base58 UUID
+		return UUID58.fromString(uuidLike);
 	}
 }

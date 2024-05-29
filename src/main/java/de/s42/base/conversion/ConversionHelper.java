@@ -158,7 +158,7 @@ public final class ConversionHelper
 
 		//String -> UUID
 		addConverter(String.class, UUID.class, (String value) -> {
-			return UUID.fromString(value);
+			return UUIDHelper.toUUID(value);
 		});
 
 		//String -> JSONObject

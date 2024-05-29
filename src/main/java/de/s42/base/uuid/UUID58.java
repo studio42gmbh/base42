@@ -29,6 +29,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * UUID58 provides uuid base58 string encoding and decoding for UUIDs to shorten, improve readability and c&p support in
@@ -49,6 +50,11 @@ public final class UUID58
 	public static final char[] SYMBOLS_CHARS = SYMBOLS.toCharArray();
 
 	/**
+	 * This pattern allows you to validate a uuid58 string pattern
+	 */
+	public final static Pattern UUID58_PATTERN = Pattern.compile("[" + SYMBOLS + "]{1,22}");
+
+	/**
 	 * The radix 58 as BigInteger
 	 */
 	public static final BigInteger RADIX = BigInteger.valueOf(58L);
@@ -59,10 +65,24 @@ public final class UUID58
 	}
 
 	/**
+	 * Checks if the given string could be a valid uuid58 string.
+	 * @param string
+	 * @return 
+	 */
+	public static boolean isUUID58Like(String string)
+	{
+		if (string == null) {
+			return false;
+		}
+
+		return UUID58_PATTERN.matcher(string).matches();
+	}
+
+	/**
 	 * Converts a uuid base58 string into a UUID.
 	 *
 	 * ATTENTION: A uuid base58 string is often 22 signs, BUT can be as short as 18 chars if the uuid (i.e. v4) has many
-	 * leading 0
+	 * leading 0-
 	 *
 	 * @param uuid58 A valid uuid base58 string
 	 * @return Restored UUID from uuid58 string
@@ -86,21 +106,21 @@ public final class UUID58
 			current = current.add(BigInteger.valueOf(SYMBOLS.indexOf(ch)));
 		}
 
-		byte[] decodedArray = current.toByteArray();
+		byte[] decodedBytes = current.toByteArray();
 
 		// Optionally add or remove bytes to bring it to 16
-		if (decodedArray.length < 16) {
+		if (decodedBytes.length < 16) {
 			byte[] tmp = new byte[16];
-			System.arraycopy(decodedArray, 0, tmp, 16 - decodedArray.length, decodedArray.length);
-			decodedArray = tmp;
-		} else if (decodedArray.length > 16) {
+			System.arraycopy(decodedBytes, 0, tmp, 16 - decodedBytes.length, decodedBytes.length);
+			decodedBytes = tmp;
+		} else if (decodedBytes.length > 16) {
 			byte[] tmp = new byte[16];
-			System.arraycopy(decodedArray, decodedArray.length - 16, tmp, 0, 16);
-			decodedArray = tmp;
+			System.arraycopy(decodedBytes, decodedBytes.length - 16, tmp, 0, 16);
+			decodedBytes = tmp;
 		}
 
 		// Wrap and build UUID
-		ByteBuffer buf = ByteBuffer.wrap(decodedArray);
+		ByteBuffer buf = ByteBuffer.wrap(decodedBytes);
 		return new UUID(buf.getLong(), buf.getLong());
 	}
 
