@@ -70,6 +70,8 @@ public class EitherTest
 		assertThrows(NullPointerException.class, () -> {
 			either.secondOrThrow();
 		});
+
+		assertEquals(either.firstOrSecond(), "Test");
 	}
 
 	@Test
@@ -107,6 +109,8 @@ public class EitherTest
 		assertThrows(NullPointerException.class, () -> {
 			either.firstOrThrow();
 		});
+
+		assertEquals(either.firstOrSecond(), 42.0);
 	}
 
 	@Test

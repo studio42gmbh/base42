@@ -263,6 +263,20 @@ public final class Either<FirstType, SecondType>
 	}
 
 	/**
+	 * Returns either the first or the second value. Allows to unwrap easily.
+	 *
+	 * @return The first if not null or second
+	 */
+	public Object firstOrSecond()
+	{
+		if (isFirst()) {
+			return first;
+		}
+
+		return second;
+	}
+
+	/**
 	 * The combined hashcode of first and second.
 	 *
 	 * @return Combined hashcode of first and second
