@@ -27,6 +27,9 @@ package de.s42.base.validation;
 
 import de.s42.base.uuid.UUID58;
 import de.s42.base.uuid.UUIDHelper;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -147,6 +150,28 @@ public final class ValidationHelper
 
 		if (uuid instanceof String string) {
 			return UUIDHelper.isUUID(string) || UUID58.isUUID58Like(string);
+		}
+
+		return false;
+	}
+
+	public static boolean isURL(Object url)
+	{
+		if (url == null) {
+			return false;
+		}
+
+		if (url instanceof URL) {
+			return true;
+		}
+
+		if (url instanceof String string) {
+			try {
+				new URL(string).toURI();
+				return true;
+			} catch (MalformedURLException | URISyntaxException ex) {
+				return false;
+			}
 		}
 
 		return false;
