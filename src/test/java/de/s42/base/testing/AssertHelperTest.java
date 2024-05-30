@@ -1,3 +1,4 @@
+// <editor-fold desc="The MIT License" defaultstate="collapsed">
 /*
  * The MIT License
  * 
@@ -21,6 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+//</editor-fold>
 package de.s42.base.testing;
 
 import static org.testng.Assert.*;

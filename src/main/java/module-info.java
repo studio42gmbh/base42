@@ -39,6 +39,7 @@ module de.sft.base
 	exports de.s42.base.conversion;
 	exports de.s42.base.date;
 	exports de.s42.base.files;
+	exports de.s42.base.functional;
 	exports de.s42.base.math;
 	exports de.s42.base.modules;
 	exports de.s42.base.resources;
