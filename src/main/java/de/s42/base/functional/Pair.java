@@ -2,7 +2,7 @@
 /*
  * The MIT License
  * 
- * Copyright 2024 Studio 42 GmbH ( https://www.s42m.de ).
+ * Copyright 2023 Studio 42 GmbH ( https://www.s42m.de ).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,71 +25,96 @@
 //</editor-fold>
 package de.s42.base.functional;
 
-import de.s42.base.validation.ValidationHelper;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * Either is an implementation of the either monad. You can encode either 1 of 2 values (first, second) to be contained.
- * It provides many powerful ways to interact with it.
+ * A pair of 2 values. Both types can be null. It provides handy access.
  *
- * @param <FirstType> Type of the first value
- * @param <SecondType> Type of the second value
+ * @param <FirstType>
+ * @param <SecondType>
  *
  * @author Benjamin Schiller
  */
-public final class Either<FirstType, SecondType>
+public final class Pair<FirstType, SecondType>
 {
 
 	/**
-	 * Create an Either with one of the given values being non null.
+	 * Create an empty Pair with both of the given values being null.
+	 *
+	 * @param <FirstType> Type of the first value
+	 * @param <SecondType> Type of the second value
+	 * @return An empty Pair
+	 */
+	public static <FirstType, SecondType> Pair<FirstType, SecondType> empty()
+	{
+		return new Pair<>(null, null);
+	}
+
+	/**
+	 * Create a Pair with both of the given values being non null.
+	 *
+	 * @param <FirstType> Type of the first value
+	 * @param <SecondType> Type of the second value
+	 * @param first First value
+	 * @param second Second value
+	 * @return Pair of type &lt;FirstType, SecondType&gt;
+	 * @throws NullPointerException if either of first or second is null
+	 */
+	public static <FirstType, SecondType> Pair<FirstType, SecondType> of(FirstType first, SecondType second) throws NullPointerException
+	{
+		Objects.requireNonNull(first, "first may not be null");
+		Objects.requireNonNull(second, "second may not be null");
+
+		return new Pair<>(first, second);
+	}
+
+	/**
+	 * Create a Pair with first set and second being null
+	 *
+	 * @param <FirstType> Type of the first value
+	 * @param <SecondType> Type of the second value
+	 * @param first First value
+	 * @return Pair of type &lt;FirstType, SecondType&gt;
+	 * @throws NullPointerException if first is null
+	 */
+	public static <FirstType, SecondType> Pair<FirstType, SecondType> ofFirst(FirstType first) throws NullPointerException
+	{
+		Objects.requireNonNull(first, "first may not be null");
+
+		return new Pair<>(first, null);
+	}
+
+	/**
+	 * Create a Pair with second set and first being null
+	 *
+	 * @param <FirstType> Type of the first value
+	 * @param <SecondType> Type of the second value
+	 * @param second Second value
+	 * @return Pair of type &lt;FirstType, SecondType&gt;
+	 * @throws NullPointerException if second is null
+	 */
+	public static <FirstType, SecondType> Pair<FirstType, SecondType> ofSecond(SecondType second) throws NullPointerException
+	{
+		Objects.requireNonNull(second, "second may not be null");
+
+		return new Pair<>(null, second);
+	}
+
+	/**
+	 * Create a Pair with both of the given values being null or non null.
 	 *
 	 * @param <FirstType> Type of the first value
 	 * @param <SecondType> Type of the second value
 	 * @param first First value
 	 * @param second Second value
 	 * @return Either of type &lt;FirstType, SecondType&gt;
-	 * @throws IllegalArgumentException if both or none is null (first != null ^ second != null)
 	 */
-	public static <FirstType, SecondType> Either<FirstType, SecondType> ofEither(FirstType first, SecondType second) throws IllegalArgumentException
+	public static <FirstType, SecondType> Pair<FirstType, SecondType> ofNullable(FirstType first, SecondType second)
 	{
-		ValidationHelper.isValid(first != null ^ second != null, "Either first or(exclusive) second has to be non null");
-
-		return new Either<>(first, second);
-	}
-
-	/**
-	 * Create an Either with first.
-	 *
-	 * @param <FirstType> Type of the first value
-	 * @param <SecondType> Type of the second value
-	 * @param first First value
-	 * @return An Either of first value
-	 * @throws NullPointerException if first is null
-	 */
-	public static <FirstType, SecondType> Either<FirstType, SecondType> ofFirst(FirstType first) throws NullPointerException
-	{
-		Objects.requireNonNull(first, "first may not be null");
-
-		return new Either<>(first, null);
-	}
-
-	/**
-	 * Create an Either with second.
-	 *
-	 * @param <FirstType> Type of the first value
-	 * @param <SecondType> Type of the second value
-	 * @param second Second value
-	 * @return An Either of second value
-	 * @throws NullPointerException if second is null
-	 */
-	public static <FirstType, SecondType> Either<FirstType, SecondType> ofSecond(SecondType second) throws NullPointerException
-	{
-		Objects.requireNonNull(second, "second may not be null");
-
-		return new Either<>(null, second);
+		return new Pair<>(first, second);
 	}
 
 	/**
@@ -103,17 +128,35 @@ public final class Either<FirstType, SecondType>
 	private final SecondType second;
 
 	/**
-	 * Internal constructor for an Either.
+	 * Constructs a pair of first and second. Both values may be null
 	 *
 	 * @param first First value
 	 * @param second Second value
 	 */
-	private Either(FirstType first, SecondType second)
+	private Pair(FirstType first, SecondType second)
 	{
-		assert first != null ^ second != null : "first != null ^ second != null";
-
 		this.first = first;
 		this.second = second;
+	}
+
+	/**
+	 * Calls the action if first is not null with first as parameter.
+	 *
+	 * @param actionFirst Called if first is not null
+	 * @param actionSecond Called if second is not null
+	 */
+	public void each(Consumer<FirstType> actionFirst, Consumer<SecondType> actionSecond)
+	{
+		assert actionFirst != null : "actionFirst != null";
+		assert actionSecond != null : "actionSecond != null";
+
+		if (isFirst()) {
+			actionFirst.accept(first);
+		}
+
+		if (isSecond()) {
+			actionSecond.accept(second);
+		}
 	}
 
 	/**
@@ -145,25 +188,6 @@ public final class Either<FirstType, SecondType>
 	}
 
 	/**
-	 * Calls on of the actions. Either actionFirst with first as parameter if first is not null or actionSecond with
-	 * second as parameter.
-	 *
-	 * @param actionFirst Called if first is not null
-	 * @param actionSecond Called if second is not null
-	 */
-	public void either(Consumer<FirstType> actionFirst, Consumer<SecondType> actionSecond)
-	{
-		assert actionFirst != null : "actionFirst != null";
-		assert actionSecond != null : "actionSecond != null";
-
-		if (isFirst()) {
-			actionFirst.accept(first);
-		} else {
-			actionSecond.accept(second);
-		}
-	}
-
-	/**
 	 * Returns true if first is not null.
 	 *
 	 * @return True if first is not null
@@ -184,9 +208,9 @@ public final class Either<FirstType, SecondType>
 	}
 
 	/**
-	 * Returns a nullable Optional of first.
+	 * Returns the optional of first value
 	 *
-	 * @return A nullable Optional of first
+	 * @return Optional of first value
 	 */
 	public Optional<FirstType> first()
 	{
@@ -224,9 +248,9 @@ public final class Either<FirstType, SecondType>
 	}
 
 	/**
-	 * Returns a nullable Optional of second.
+	 * Returns the optional of second value
 	 *
-	 * @return A nullable Optional of second
+	 * @return Optional of second value
 	 */
 	public Optional<SecondType> second()
 	{
@@ -264,46 +288,36 @@ public final class Either<FirstType, SecondType>
 	}
 
 	/**
-	 * Returns either the first or the second value. Allows to unwrap easily.
+	 * Allows to get a stream to streaming first then second (only contains them if non null)
 	 *
-	 * @return The first if not null or second
-	 */
-	public Object firstOrSecond()
-	{
-		if (isFirst()) {
-			return first;
-		}
-
-		return second;
-	}
-
-	/**
-	 * Allows to get a stream either streaming first or second
-	 *
-	 * @return A stream that either streams first or second
+	 * @return A stream that streams first then second
 	 */
 	public Stream<?> stream()
 	{
-		if (isFirst()) {
+		if (first != null && second != null) {
+			return Stream.of(first, second);
+		}
+
+		if (first != null) {
 			return Stream.of(first);
 		}
 
-		return Stream.of(second);
+		if (second != null) {
+			return Stream.of(second);
+		}
+
+		return Stream.empty();
 	}
 
 	/**
-	 * Returns the first.toString() if first not null otherwise second.toString().
+	 * Returns a string in the form '[first, second]'
 	 *
-	 * @return String Of either first of second
+	 * @return String of first then second
 	 */
 	@Override
 	public String toString()
 	{
-		if (isFirst()) {
-			return first.toString();
-		}
-
-		return second.toString();
+		return "[" + first + ", " + second + "]";
 	}
 
 	/**
@@ -314,9 +328,9 @@ public final class Either<FirstType, SecondType>
 	@Override
 	public int hashCode()
 	{
-		int hash = 5;
-		hash = 79 * hash + Objects.hashCode(this.first);
-		hash = 79 * hash + Objects.hashCode(this.second);
+		int hash = 7;
+		hash = 97 * hash + Objects.hashCode(this.first);
+		hash = 97 * hash + Objects.hashCode(this.second);
 		return hash;
 	}
 
@@ -338,7 +352,7 @@ public final class Either<FirstType, SecondType>
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final Either<?, ?> other = (Either<?, ?>) obj;
+		final Pair<?, ?> other = (Pair<?, ?>) obj;
 		if (!Objects.equals(this.first, other.first)) {
 			return false;
 		}

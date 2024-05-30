@@ -72,6 +72,10 @@ public class EitherTest
 		});
 
 		assertEquals(either.firstOrSecond(), "Test");
+
+		either.stream().forEach((element) -> {
+			assertEquals(element, "Test");
+		});
 	}
 
 	@Test
@@ -111,6 +115,10 @@ public class EitherTest
 		});
 
 		assertEquals(either.firstOrSecond(), 42.0);
+
+		either.stream().forEach((element) -> {
+			assertEquals(element, 42.0);
+		});
 	}
 
 	@Test
