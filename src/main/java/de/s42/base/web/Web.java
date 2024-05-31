@@ -25,6 +25,7 @@
 //</editor-fold>
 package de.s42.base.web;
 
+import de.s42.base.strings.StringHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +37,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -100,6 +102,17 @@ public class Web
 
 		this.url = url;
 		this.parameters.putAll(parameters);
+	}
+
+	public static void activateGlobalCookieManager()
+	{
+		CookieManager cookieManager = new CookieManager();
+		CookieHandler.setDefault(cookieManager);
+	}
+
+	public static void deactivateGlobalCookieManager()
+	{
+		CookieHandler.setDefault(null);
 	}
 
 	protected WebResult post() throws ProtocolException, IOException
@@ -277,7 +290,11 @@ public class Web
 		}
 
 		// Return a JSON object
-		return new WebResult(statusCode, new JSONObject(callResult));
+		if (callResult.trim().startsWith("{")) {
+			return new WebResult(statusCode, new JSONObject(callResult));
+		}
+
+		return new WebResult(statusCode, callResult);
 	}
 
 	public WebResult perform() throws IOException
@@ -374,5 +391,21 @@ public class Web
 		assert postType != null : "postType != null";
 
 		this.postType = postType;
+	}
+
+	@Override
+	public String toString()
+	{
+		return StringHelper.toString(this);
+	}
+
+	public Map<String, Object> getParameters()
+	{
+		return Collections.unmodifiableMap(parameters);
+	}
+
+	public Map<String, String> getHeaders()
+	{
+		return Collections.unmodifiableMap(headers);
 	}
 }
