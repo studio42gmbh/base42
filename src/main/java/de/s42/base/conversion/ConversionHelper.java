@@ -1,19 +1,19 @@
 // <editor-fold desc="The MIT License" defaultstate="collapsed">
 /*
  * The MIT License
- * 
+ *
  * Copyright 2022 Studio 42 GmbH (https://www.s42m.de).
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,6 +39,7 @@ import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -72,6 +73,36 @@ public final class ConversionHelper
 	public final static DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
 
 	static {
+
+		//String -> Instant
+		addConverter(String.class, Instant.class, (String value) -> {
+			return Instant.ofEpochMilli(Long.parseLong(value));
+		});
+
+		//Long -> Instant
+		addConverter(Long.class, Instant.class, (Long value) -> {
+			return Instant.ofEpochMilli(value);
+		});
+
+		//long -> Instant
+		addConverter(long.class, Instant.class, (Long value) -> {
+			return Instant.ofEpochMilli(value);
+		});
+
+		//Instant -> String
+		addConverter(Instant.class, String.class, (Instant value) -> {
+			return Long.toString(value.toEpochMilli());
+		});
+
+		//Instant -> Long
+		addConverter(Instant.class, Long.class, (Instant value) -> {
+			return value.toEpochMilli();
+		});
+
+		//Instant -> long
+		addConverter(Instant.class, long.class, (Instant value) -> {
+			return value.toEpochMilli();
+		});
 
 		//byte[] -> UUID
 		addConverter(byte[].class, UUID.class, (byte[] value) -> {
@@ -718,7 +749,7 @@ public final class ConversionHelper
 
 	public static Class<?> wrapPrimitives(Class<?> clazz)
 	{
-		assert clazz != null;
+		assert clazz != null : "clazz != null";
 
 		if (!clazz.isPrimitive()) {
 			return clazz;
@@ -757,7 +788,7 @@ public final class ConversionHelper
 
 	public static Class<?> unwrapPrimitives(Class<?> clazz)
 	{
-		assert clazz != null;
+		assert clazz != null : "clazz != null";
 
 		if (clazz.isPrimitive()) {
 			return clazz;
@@ -796,7 +827,7 @@ public final class ConversionHelper
 
 	public static String bytesToHex(byte[] bytes)
 	{
-		assert bytes != null;
+		assert bytes != null : "bytes != null";
 
 		char[] hexChars = new char[bytes.length * 2];
 		for (int j = 0; j < bytes.length; j++) {
@@ -809,8 +840,8 @@ public final class ConversionHelper
 
 	public synchronized static void addConverter(Class sourceClass, Class targetClass, Function<?, ?> converter) throws RuntimeException
 	{
-		assert targetClass != null;
-		assert converter != null;
+		assert targetClass != null : "targetClass != null";
+		assert converter != null : "converter != null";
 
 		Map<Class, Function<?, ?>> targetMappings = converters.get(sourceClass);
 
@@ -826,7 +857,7 @@ public final class ConversionHelper
 
 	public static <ReturnType> ReturnType convert(Object value, Class<? extends ReturnType> targetClass, ReturnType defaultValue) throws RuntimeException
 	{
-		assert targetClass != null;
+		assert targetClass != null : "targetClass != null";
 
 		if (value == null) {
 
@@ -853,7 +884,7 @@ public final class ConversionHelper
 
 	public static <ReturnType> ReturnType convert(Object value, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
-		assert targetClass != null;
+		assert targetClass != null : "targetClass != null";
 
 		//null remains null
 		if (value == null) {
@@ -978,7 +1009,7 @@ public final class ConversionHelper
 
 	public static <ReturnType> ReturnType[] convertArray(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
-		assert targetClass != null;
+		assert targetClass != null : "targetClass != null";
 
 		if (values == null) {
 			return null;
@@ -995,7 +1026,7 @@ public final class ConversionHelper
 
 	public static <ReturnType> List<ReturnType> convertList(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
-		assert targetClass != null;
+		assert targetClass != null : "targetClass != null";
 
 		if (values == null) {
 			return null;
@@ -1012,7 +1043,7 @@ public final class ConversionHelper
 
 	public static <ReturnType> List<ReturnType> convertList(List values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
-		assert targetClass != null;
+		assert targetClass != null : "targetClass != null";
 
 		if (values == null) {
 			return null;
@@ -1029,7 +1060,7 @@ public final class ConversionHelper
 
 	public static <ReturnType> Set<ReturnType> convertSet(Object[] values, Class<? extends ReturnType> targetClass) throws RuntimeException
 	{
-		assert targetClass != null;
+		assert targetClass != null : "targetClass != null";
 
 		if (values == null) {
 			return null;
@@ -1049,7 +1080,7 @@ public final class ConversionHelper
 	@SuppressWarnings("null")
 	public static <ReturnType> ReturnType[] convertArray(ReturnType[] values, Class<? extends ReturnType>[] targetClasses) throws RuntimeException
 	{
-		assert targetClasses != null;
+		assert targetClasses != null : "targetClasses != null";
 
 		if (values == null && targetClasses == null) {
 			return null;
@@ -1079,8 +1110,8 @@ public final class ConversionHelper
 
 	public static boolean canConvert(Class sourceClass, Class targetClass)
 	{
-		assert sourceClass != null;
-		assert targetClass != null;
+		assert sourceClass != null : "sourceClass != null";
+		assert targetClass != null : "targetClass != null";
 
 		Map<Class, Function<?, ?>> targetMappings = converters.get(sourceClass);
 
