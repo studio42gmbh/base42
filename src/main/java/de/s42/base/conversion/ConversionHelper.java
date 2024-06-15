@@ -451,6 +451,26 @@ public final class ConversionHelper
 			return value.intValue();
 		});
 
+		//Double -> long
+		addConverter(Double.class, long.class, (Double value) -> {
+			return value.longValue();
+		});
+
+		//Double -> Long
+		addConverter(Double.class, Long.class, (Double value) -> {
+			return value.longValue();
+		});
+
+		//double -> long
+		addConverter(double.class, long.class, (Double value) -> {
+			return value.longValue();
+		});
+
+		//double -> Long
+		addConverter(double.class, Long.class, (Double value) -> {
+			return value.longValue();
+		});
+
 		//double -> String
 		addConverter(double.class, String.class, (Double value) -> {
 			return value.toString();
