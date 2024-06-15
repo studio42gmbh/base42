@@ -1,19 +1,19 @@
 // <editor-fold desc="The MIT License" defaultstate="collapsed">
 /*
  * The MIT License
- * 
+ *
  * Copyright 2022 Studio 42 GmbH ( https://www.s42m.de ).
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,7 +34,6 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,7 +44,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageTypeSpecifier;
@@ -74,7 +75,7 @@ public final class FilesHelper
 
 	public final static String getMimeType(Path file) throws IOException
 	{
-		assert file != null;
+		assert file != null : "file != null";
 
 		String extension = FilesHelper.getExtension(file);
 
@@ -95,14 +96,14 @@ public final class FilesHelper
 
 	public final static String createMavenNetbeansFileConsoleLink(Path file)
 	{
-		assert file != null;
+		assert file != null : "file != null";
 
 		return createMavenNetbeansFileConsoleLink("", file.getFileName().toString(), file.toAbsolutePath().toString(), 1, 1, false);
 	}
 
 	public final static String createMavenNetbeansFileConsoleLink(String message, Path file)
 	{
-		assert file != null;
+		assert file != null : "file != null";
 
 		return createMavenNetbeansFileConsoleLink(message, file.getFileName().toString(), file.toAbsolutePath().toString(), 1, 1, false);
 	}
@@ -128,9 +129,9 @@ public final class FilesHelper
 	 */
 	public final static String createMavenNetbeansFileConsoleLink(String message, String fileShort, String file, int line, int column, boolean sanitize)
 	{
-		assert message != null;
-		assert fileShort != null;
-		assert file != null;
+		assert message != null : "message != null";
+		assert fileShort != null : "fileShort != null";
+		assert file != null : "file != null";
 
 		line = Math.max(1, line);
 		column = Math.max(1, column);
@@ -162,14 +163,14 @@ public final class FilesHelper
 
 	public final static String getExtension(Path path)
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return getExtension(path.getFileName().toString());
 	}
 
 	public final static String getExtension(String path)
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		int index = path.lastIndexOf('.');
 
@@ -183,7 +184,7 @@ public final class FilesHelper
 
 	public final static String sanitizeFileName(String name)
 	{
-		assert name != null;
+		assert name != null : "name != null";
 
 		// @todo What could be a general sinitization for filenames?
 		return name;
@@ -191,42 +192,42 @@ public final class FilesHelper
 
 	public final static boolean fileExists(String path)
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return fileExists(Path.of(path));
 	}
 
 	public final static boolean fileExists(Path path)
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return Files.isRegularFile(path);
 	}
 
 	public final static boolean directoryExists(String path)
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return directoryExists(Path.of(path));
 	}
 
 	public final static boolean directoryExists(Path path)
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return Files.isDirectory(path);
 	}
 
 	public static String getFileMD5(String path) throws IOException, NoSuchAlgorithmException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return getFileMD5(Path.of(path));
 	}
 
 	public static String getFileMD5(Path path) throws IOException, NoSuchAlgorithmException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		MessageDigest digest = MessageDigest.getInstance("MD5");
 		InputStream fileInputStream = Files.newInputStream(path);
@@ -242,14 +243,14 @@ public final class FilesHelper
 
 	public static String getFileSHA256(String path) throws IOException, NoSuchAlgorithmException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return getFileSHA256(Path.of(path));
 	}
 
 	public static String getFileSHA256(Path path) throws IOException, NoSuchAlgorithmException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		MessageDigest digest = MessageDigest.getInstance("SHA-256");
 		InputStream fileInputStream = Files.newInputStream(path);
@@ -265,28 +266,28 @@ public final class FilesHelper
 
 	public final static JSONObject getFileAsJSON(String path) throws IOException, JSONException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return getFileAsJSON(Path.of(path));
 	}
 
 	public final static JSONObject getFileAsJSON(Path path) throws IOException, JSONException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return new JSONObject(getFileAsString(path));
 	}
 
 	public final static String getFileAsString(String path) throws IOException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		return getFileAsString(Path.of(path));
 	}
 
 	public final static String getFileAsString(Path path) throws IOException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		byte[] encoded = Files.readAllBytes(path);
 		return StandardCharsets.UTF_8.decode(ByteBuffer.wrap(encoded)).toString();
@@ -294,35 +295,64 @@ public final class FilesHelper
 
 	public final static void writeStringToFile(String path, String content) throws IOException
 	{
-		assert path != null;
+		assert path != null : "path != null";
+		assert content != null : "content != null";
 
 		writeStringToFile(Path.of(path), content);
 	}
 
 	public final static void writeStringToFile(Path path, String content) throws IOException
 	{
-		assert path != null;
-		assert content != null;
+		assert path != null : "path != null";
+		assert content != null : "content != null";
 
 		if (!Files.exists(path)) {
 			Files.createDirectories(path.getParent());
 		}
 
-		Files.writeString(path, content, Charset.forName("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+		Files.writeString(path, content, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+	}
+
+	public final static void writeStringToZippedSingleFile(String path, String content, String entryName) throws IOException
+	{
+		assert path != null : "path != null";
+		assert content != null : "content != null";
+		assert entryName != null : "entryName != null";
+
+		writeStringToZippedSingleFile(Path.of(path), content, entryName);
+	}
+
+	public final static void writeStringToZippedSingleFile(Path path, String content, String entryName) throws IOException
+	{
+		assert path != null : "path != null";
+		assert content != null : "content != null";
+		assert entryName != null : "entryName != null";
+
+		if (!Files.exists(path)) {
+			Files.createDirectories(path.getParent());
+		}
+
+		try (OutputStream out = new ZipOutputStream(new BufferedOutputStream(Files.newOutputStream(path)))) {
+
+			((ZipOutputStream) out).putNextEntry(new ZipEntry(entryName));
+
+			out.write(content.getBytes(StandardCharsets.UTF_8));
+			out.flush();
+		}
 	}
 
 	public final static void writeByteArrayToFile(String path, byte[] content) throws IOException
 	{
-		assert path != null;
-		assert content != null;
+		assert path != null : "path != null";
+		assert content != null : "content != null";
 
 		writeByteArrayToFile(Path.of(path), content);
 	}
 
 	public final static void writeByteArrayToFile(Path path, byte[] content) throws IOException
 	{
-		assert path != null;
-		assert content != null;
+		assert path != null : "path != null";
+		assert content != null : "content != null";
 
 		if (!Files.exists(path)) {
 			Files.createDirectories(path.getParent());
@@ -333,16 +363,16 @@ public final class FilesHelper
 
 	public final static void moveFile(String sourcePath, String targetPath, boolean createDirectories, boolean overwrite) throws IOException
 	{
-		assert sourcePath != null;
-		assert targetPath != null;
+		assert sourcePath != null : "sourcePath != null";
+		assert targetPath != null : "targetPath != null";
 
 		moveFile(Path.of(sourcePath), Path.of(targetPath), createDirectories, overwrite);
 	}
 
 	public final static void moveFile(Path sourcePath, Path targetPath, boolean createDirectories, boolean overwrite) throws IOException
 	{
-		assert sourcePath != null;
-		assert targetPath != null;
+		assert sourcePath != null : "sourcePath != null";
+		assert targetPath != null : "targetPath != null";
 
 		if (createDirectories) {
 			if (!Files.exists(targetPath)) {
@@ -359,16 +389,16 @@ public final class FilesHelper
 
 	public final static void copyFile(String sourcePath, String targetPath, boolean createDirectories, boolean overwrite) throws IOException
 	{
-		assert sourcePath != null;
-		assert targetPath != null;
+		assert sourcePath != null : "sourcePath != null";
+		assert targetPath != null : "targetPath != null";
 
 		copyFile(Path.of(sourcePath), Path.of(targetPath), createDirectories, overwrite);
 	}
 
 	public final static void copyFile(Path sourcePath, Path targetPath, boolean createDirectories, boolean overwrite) throws IOException
 	{
-		assert sourcePath != null;
-		assert targetPath != null;
+		assert sourcePath != null : "sourcePath != null";
+		assert targetPath != null : "targetPath != null";
 
 		if (createDirectories) {
 			if (!Files.exists(targetPath)) {
@@ -385,14 +415,14 @@ public final class FilesHelper
 
 	public final static void emptyDirectory(String path) throws IOException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		emptyDirectory(Path.of(path));
 	}
 
 	public final static void emptyDirectory(Path path) throws IOException
 	{
-		assert path != null;
+		assert path != null : "path != null";
 
 		try (Stream<Path> walk = Files.walk(path)) {
 			walk.sorted(Comparator.reverseOrder())
@@ -424,14 +454,14 @@ public final class FilesHelper
 
 	public static ByteBuffer getFileAsByteBuffer(String fileName) throws IOException
 	{
-		assert fileName != null;
+		assert fileName != null : "fileName != null";
 
 		return getFileAsByteBuffer(Path.of(fileName));
 	}
 
 	public static ByteBuffer getFileAsByteBuffer(Path filePath) throws IOException
 	{
-		assert filePath != null;
+		assert filePath != null : "filePath != null";
 		assert Files.isRegularFile(filePath) : "Is not a readable file " + FilesHelper.createMavenNetbeansFileConsoleLink(filePath);
 
 		return ByteBuffer.wrap(Files.readAllBytes(filePath));
@@ -439,14 +469,14 @@ public final class FilesHelper
 
 	public static MappedByteBuffer getFileAsMappedByteBuffer(String fileName) throws IOException
 	{
-		assert fileName != null;
+		assert fileName != null : "fileName != null";
 
 		return getFileAsMappedByteBuffer(Path.of(fileName));
 	}
 
 	public static MappedByteBuffer getFileAsMappedByteBuffer(Path filePath) throws IOException
 	{
-		assert filePath != null;
+		assert filePath != null : "filePath != null";
 		assert Files.isRegularFile(filePath) : "Is not a readable file " + FilesHelper.createMavenNetbeansFileConsoleLink(filePath);
 
 		MappedByteBuffer buffer;
@@ -464,29 +494,29 @@ public final class FilesHelper
 
 	public final static String getZippedSingleFileAsString(String fileName) throws IOException
 	{
-		assert fileName != null;
+		assert fileName != null : "fileName != null";
 
-		return new String(getZippedSingleFileAsByteArray(fileName), "UTF-8");
+		return new String(getZippedSingleFileAsByteArray(fileName), StandardCharsets.UTF_8);
 	}
 
 	public final static String getZippedSingleFileAsString(Path filePath) throws IOException
 	{
-		assert filePath != null;
+		assert filePath != null : "filePath != null";
 
-		return new String(getZippedSingleFileAsByteArray(filePath), "UTF-8");
+		return new String(getZippedSingleFileAsByteArray(filePath), StandardCharsets.UTF_8);
 	}
 
 	public final static byte[] getZippedSingleFileAsByteArray(String fileName) throws IOException
 	{
-		assert fileName != null;
+		assert fileName != null : "fileName != null";
 
 		return getZippedSingleFileAsByteArray(Path.of(fileName));
 	}
 
 	public final static byte[] getZippedSingleFileAsByteArray(Path filePath) throws IOException
 	{
-		assert filePath != null;
-		assert Files.isRegularFile(filePath);
+		assert filePath != null : "filePath != null";
+		assert Files.isRegularFile(filePath) : "Files.isRegularFile(filePath)";
 
 		File file = filePath.toFile();
 		if (!file.isFile()) {
@@ -508,16 +538,16 @@ public final class FilesHelper
 
 	public static void saveImageAsFilePng(BufferedImage image, String outputFile) throws IOException
 	{
-		assert image != null;
-		assert outputFile != null;
+		assert image != null : "image != null";
+		assert outputFile != null : "outputFile != null";
 
 		saveImageAsFilePng(image, Path.of(outputFile));
 	}
 
 	public static void saveImageAsFilePng(BufferedImage image, Path outputFile) throws IOException
 	{
-		assert image != null;
-		assert outputFile != null;
+		assert image != null : "image != null";
+		assert outputFile != null : "outputFile != null";
 
 		ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(image);
 		ImageWriter writer = ImageIO.getImageWriters(type, "png").next();
@@ -535,14 +565,17 @@ public final class FilesHelper
 
 	public static void saveImageAsFileJpg(BufferedImage image, String outputFile, float quality) throws IOException
 	{
+		assert image != null : "image != null";
+		assert outputFile != null : "outputFile != null";
+
 		saveImageAsFileJpg(image, Path.of(outputFile), quality);
 	}
 
 	public static void saveImageAsFileJpg(BufferedImage image, Path outputFile, float quality) throws IOException
 	{
-		assert image != null;
-		assert outputFile != null;
-		assert quality >= 0.0f && quality <= 1.0f;
+		assert image != null : "image != null";
+		assert outputFile != null : "outputFile != null";
+		assert quality >= 0.0f && quality <= 1.0f : "quality >= 0.0f && quality <= 1.0f";
 
 		// @todo might want to check if the colormodel is able to be written into a jpg -> give proper error then (default error is rather weird)
 		ImageTypeSpecifier type = ImageTypeSpecifier.createFromRenderedImage(image);
@@ -561,9 +594,9 @@ public final class FilesHelper
 
 	public static BufferedImage getFileAsScaledImage(Path file, int width, int height)
 	{
-		assert file != null;
-		assert width > 0;
-		assert height > 0;
+		assert file != null : "file != null";
+		assert width > 0 : "width > 0";
+		assert height > 0 : "height > 0";
 
 		BufferedImage original = getFileAsImage(file);
 		Image scaled = original.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
@@ -578,7 +611,7 @@ public final class FilesHelper
 
 	public static BufferedImage getFileAsImage(Path file)
 	{
-		assert file != null;
+		assert file != null : "file != null";
 
 		try {
 			BufferedImage image;
