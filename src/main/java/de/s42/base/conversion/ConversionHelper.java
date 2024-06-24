@@ -281,6 +281,16 @@ public final class ConversionHelper
 			return (int) value;
 		});
 
+		//Integer -> long
+		addConverter(Integer.class, long.class, (Integer value) -> {
+			return value.longValue();
+		});
+
+		//Integer -> Long
+		addConverter(Integer.class, Long.class, (Integer value) -> {
+			return value.longValue();
+		});
+
 		//Integer -> float
 		addConverter(Integer.class, float.class, (Integer value) -> {
 			return (float) value;
