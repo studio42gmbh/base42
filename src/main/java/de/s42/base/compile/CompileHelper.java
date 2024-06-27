@@ -1,19 +1,19 @@
 // <editor-fold desc="The MIT License" defaultstate="collapsed">
 /*
  * The MIT License
- * 
+ *
  * Copyright 2022 Studio 42 GmbH ( https://www.s42m.de ).
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -188,7 +188,7 @@ public final class CompileHelper
 		}
 	}
 
-	private static ClassFileManager compileInternal(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
+	private static ClassFileManager compileInternal(String javaClassCode, String className, ClassLoader classLoader, String classPath, String modulePath) throws InvalidCompilation
 	{
 		assert classLoader != null;
 		assert className != null;
@@ -200,7 +200,7 @@ public final class CompileHelper
 			// @improvement ugly fallback - do we really want to do this? actually solving ant task usage
 			if (compiler == null) {
 
-				compiler = (JavaCompiler) Class.forName("com.sun.tools.javac.api.JavacTool").getConstructor().newInstance();
+				compiler = (JavaCompiler) Class.forName("com.sun.tools.javac.api.JavacTool", true, classLoader).getConstructor().newInstance();
 
 				if (compiler == null) {
 					throw new RuntimeException("Could not get ToolProvider.getSystemJavaCompiler()");
@@ -243,13 +243,19 @@ public final class CompileHelper
 
 				//log.trace("classPath", classpath.toString());
 				options.addAll(Arrays.asList("-classpath", classpath.toString()));
+				//options.addAll(Arrays.asList("--module-path", classpath.toString()));
 			} else {
 
 				//log.trace("classPath", classPath);
 				options.addAll(Arrays.asList("-classpath", classPath));
 			}
 
+			if (modulePath != null) {
+				options.addAll(Arrays.asList("--module-path", modulePath));
+			}
+
 			JavaCompiler.CompilationTask task = compiler.getTask(out, fileManager, null, options, null, files);
+			task.addModules(List.of("ALL-MODULE-PATH"));
 
 			boolean runSuccess = task.call();
 
@@ -263,7 +269,7 @@ public final class CompileHelper
 		}
 	}
 
-	public static byte[] getCompiledClassData(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
+	public static byte[] getCompiledClassData(String javaClassCode, String className, ClassLoader classLoader, String classPath, String modulePath) throws InvalidCompilation
 	{
 		assert javaClassCode != null;
 		assert className != null;
@@ -272,7 +278,7 @@ public final class CompileHelper
 			classLoader = CompileHelper.class.getClassLoader();
 		}
 
-		ClassFileManager fileManager = compileInternal(javaClassCode, className, classLoader, classPath);
+		ClassFileManager fileManager = compileInternal(javaClassCode, className, classLoader, classPath, modulePath);
 
 		className = (String) fileManager.getClasses().keySet().toArray()[0];
 
@@ -284,10 +290,10 @@ public final class CompileHelper
 		assert javaClassCode != null;
 		assert className != null;
 
-		return getCompiledClass(javaClassCode, className, null, null);
+		return getCompiledClass(javaClassCode, className, null, null, null);
 	}
 
-	public static Class getCompiledClass(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
+	public static Class getCompiledClass(String javaClassCode, String className, ClassLoader classLoader, String classPath, String modulePath) throws InvalidCompilation
 	{
 		assert javaClassCode != null;
 		assert className != null;
@@ -296,7 +302,7 @@ public final class CompileHelper
 			classLoader = CompileHelper.class.getClassLoader();
 		}
 
-		ClassFileManager fileManager = compileInternal(javaClassCode, className, classLoader, classPath);
+		ClassFileManager fileManager = compileInternal(javaClassCode, className, classLoader, classPath, modulePath);
 
 		className = (String) fileManager.getClasses().keySet().toArray()[0];
 
@@ -311,10 +317,10 @@ public final class CompileHelper
 	{
 		assert javaClassFile != null;
 
-		return getCompiledClass(javaClassFile, null, null);
+		return getCompiledClass(javaClassFile, null, null, null);
 	}
 
-	public static Class getCompiledClass(Path javaClassFile, ClassLoader classLoader, String classPath) throws IOException, InvalidCompilation
+	public static Class getCompiledClass(Path javaClassFile, ClassLoader classLoader, String classPath, String modulePath) throws IOException, InvalidCompilation
 	{
 		assert javaClassFile != null;
 
@@ -326,7 +332,7 @@ public final class CompileHelper
 		int index = className.indexOf('.');
 		className = className.substring(0, index);
 
-		return getCompiledClass(javaClassCode, className, classLoader, classPath);
+		return getCompiledClass(javaClassCode, className, classLoader, classPath, modulePath);
 	}
 
 	public static <InstanceType> InstanceType getCompiledInstance(String javaClassCode, String className) throws InvalidCompilation
@@ -334,16 +340,16 @@ public final class CompileHelper
 		assert javaClassCode != null;
 		assert className != null;
 
-		return getCompiledInstance(javaClassCode, className, null, null);
+		return getCompiledInstance(javaClassCode, className, null, null, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <InstanceType> InstanceType getCompiledInstance(String javaClassCode, String className, ClassLoader classLoader, String classPath) throws InvalidCompilation
+	public static <InstanceType> InstanceType getCompiledInstance(String javaClassCode, String className, ClassLoader classLoader, String classPath, String modulePath) throws InvalidCompilation
 	{
 		assert javaClassCode != null;
 		assert className != null;
 
-		Class compiledClass = getCompiledClass(javaClassCode, className, classLoader, classPath);
+		Class compiledClass = getCompiledClass(javaClassCode, className, classLoader, classPath, modulePath);
 
 		try {
 			return (InstanceType) compiledClass.getConstructor().newInstance();
