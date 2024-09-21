@@ -149,6 +149,29 @@ public final class ValidationHelper
 		}
 
 		if (uuid instanceof String string) {
+			return UUIDHelper.isUUID(string);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Tests if the given object is either a UUID or a string of form UUID or UUID58
+	 *
+	 * @param uuid
+	 * @return
+	 */
+	public static boolean isUUIDLike(Object uuid)
+	{
+		if (uuid == null) {
+			return false;
+		}
+
+		if (uuid instanceof UUID) {
+			return true;
+		}
+
+		if (uuid instanceof String string) {
 			return UUIDHelper.isUUID(string) || UUID58.isUUID58Like(string);
 		}
 
