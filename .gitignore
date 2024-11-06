@@ -22,3 +22,4 @@ hs_err_pid*
 *.version
 *local.dl
 *local.xml
+/nbproject/

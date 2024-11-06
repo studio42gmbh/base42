@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
@@ -425,4 +426,60 @@ public final class StringHelper
 		return builder.toString();
 	}
 
+	/**
+	 * Inserts a string at the given index into another
+	 *
+	 * @param string
+	 * @param insert
+	 * @param index
+	 * @return
+	 */
+	public static String insert(String string, String insert, int index)
+	{
+		Objects.requireNonNull(string, "string != null");
+		Objects.requireNonNull(insert, "insert != null");
+		Objects.checkIndex(index, string.length() + 1);
+
+		if (string.isEmpty()) {
+			return insert;
+		}
+
+		if (insert.isEmpty()) {
+			return string;
+		}
+
+		StringBuilder combined = new StringBuilder(string);
+		combined.insert(index, insert);
+		return combined.toString();
+	}
+
+	/**
+	 * Removes length characters beginning at index from string
+	 *
+	 * @param string
+	 * @param index
+	 * @param length
+	 * @return
+	 */
+	public static String remove(String string, int index, int length)
+	{
+		Objects.requireNonNull(string, "string != null");
+		Objects.checkIndex(index, string.length() + 1);
+
+		if (string.isEmpty() || index == string.length()) {
+			return string;
+		}
+
+		int end = index + length;
+
+		// Just return first part as the end is equal or behind end segment
+		if (end >= string.length()) {
+			return string.substring(0, index);
+		}
+
+		StringBuilder combined = new StringBuilder(string.substring(0, index));
+		combined.append(string.substring(end, string.length()));
+
+		return combined.toString();
+	}
 }

@@ -140,4 +140,14 @@ public final class MathHelper
 
 		return Math.max(Math.min(value.doubleValue(), max.doubleValue()), min.doubleValue());
 	}
+
+	public static final double fract(double value)
+	{
+		return value - Math.floor(value);
+	}
+
+	public static final float fract(float value)
+	{
+		return value - (float) Math.floor(value);
+	}
 }

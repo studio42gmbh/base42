@@ -64,9 +64,9 @@
 									<arg value="--abbrev=11"/>
 									<arg value="HEAD"/>
 								</exec>
-								<property name="versionFile" value="${project.basedir}/src/main/resources/de/s42/base/${project.artifactId}.version"/>	
-								<property name="fullVersion" value="${project.version} #${git.revision} ${maven.build.timestamp}"/>								
-								<echo file="${versionFile}">${fullVersion}</echo>													
+								<property name="versionFile" value="${project.basedir}/src/main/resources/de/s42/base/${project.artifactId}.version"/>
+								<property name="fullVersion" value="${project.version} #${git.revision} ${maven.build.timestamp}"/>
+								<echo file="${versionFile}">${fullVersion}</echo>
 								<echo>New version is ${fullVersion}</echo>
 							</target>
 						</configuration>
@@ -75,7 +75,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>						
+			</plugin>
 			<plugin>
 				<!-- https://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -83,14 +83,14 @@
 				<version>3.3.0</version>
 				<configuration>
 					<!-- https://stackoverflow.com/questions/64688896/how-to-make-testng-print-detail-message-about-the-failure -->
-					<trimStackTrace>false</trimStackTrace> 
+					<trimStackTrace>false</trimStackTrace>
 					<argLine>--add-modules de.sft.base -Dfile.encoding=UTF-8</argLine>
 					<workingDirectory>${project.basedir}/data/</workingDirectory>
 					<!--parallel>methods</parallel>
 					<threadCount>8</threadCount>
 					<dataproviderthreadcount>8</dataproviderthreadcount -->
 				</configuration>
-			</plugin>		
+			</plugin>
 			<plugin>
 				<!-- https://maven.apache.org/plugins/maven-compiler-plugin/ -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -123,7 +123,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<!-- https://maven.apache.org/plugins/maven-jar-plugin/ -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -133,14 +133,14 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<classpathPrefix>libs/</classpathPrefix>						
+							<classpathPrefix>libs/</classpathPrefix>
 						</manifest>
 						<manifestEntries>
 							<Automatic-Module-Name>de.sft.base</Automatic-Module-Name>
 						</manifestEntries>
 					</archive>
 				</configuration>
-			</plugin>		
+			</plugin>
 			<plugin>
 				<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/aggregate-mojo.html -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -151,8 +151,8 @@
 					<reportOutputDirectory>${project.basedir}/docs</reportOutputDirectory>
 					<destDir>javadoc</destDir>
 					<show>private</show>
-				</configuration>				
-			</plugin>			
+				</configuration>
+			</plugin>
 			<plugin>
 				<!-- https://maven.apache.org/plugins/maven-install-plugin/ -->
 				<groupId>org.apache.maven.plugins</groupId>
