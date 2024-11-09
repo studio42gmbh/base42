@@ -29,6 +29,8 @@ import de.s42.base.beans.BeanHelper;
 import de.s42.base.beans.BeanInfo;
 import de.s42.base.beans.BeanProperty;
 import de.s42.base.beans.InvalidBean;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -481,5 +483,24 @@ public final class StringHelper
 		combined.append(string.substring(end, string.length()));
 
 		return combined.toString();
+	}
+
+	public static String formatNumber(float number, int numberPrecision)
+	{
+		return formatNumber((double) number, numberPrecision);
+	}
+
+	public static String formatNumber(double number, int numberPrecision)
+	{
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+		symbols.setGroupingSeparator('.');
+		symbols.setDecimalSeparator(',');
+
+		DecimalFormat format = new DecimalFormat(
+			"#,##0" + ((numberPrecision > 0) ? "." : "") + "0".repeat(numberPrecision),
+			symbols
+		);
+
+		return format.format(number);
 	}
 }
