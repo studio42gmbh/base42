@@ -1,0 +1,29 @@
+--no-fonts
+--class-path
+'C:/Users/Benjamin.Schiller/.m2/repository/com/sun/mail/jakarta.mail/2.0.2/jakarta.mail-2.0.2.jar'
+--module-path
+'C:/Users/Benjamin.Schiller/.m2/repository/org/json/json/20250517/json-20250517.jar;C:/Users/Benjamin.Schiller/.m2/repository/com/sun/activation/jakarta.activation/2.0.1/jakarta.activation-2.0.1.jar;C:/home/s42/development/base42/target/classes'
+--patch-module
+de.sft.base='C:/home/s42/development/base42/src/main/java;C:/home/s42/development/base42/target/generated-sources/annotations'
+-encoding
+'UTF-8'
+-private
+--release
+17
+--module-source-path
+'C:/home/s42/development/base42/docs/apidocs/src'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/home/s42/development/base42/docs/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Base 42 1.0.7-DEV API'
+-use
+-version
+-windowtitle
+'Base 42 1.0.7-DEV API'
