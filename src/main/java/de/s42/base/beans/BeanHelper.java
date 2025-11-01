@@ -1,19 +1,19 @@
 // <editor-fold desc="The MIT License" defaultstate="collapsed">
 /*
  * The MIT License
- * 
+ *
  * Copyright 2022 Studio 42 GmbH ( https://www.s42m.de ).
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,7 +45,7 @@ public final class BeanHelper
 	@SuppressWarnings("unchecked")
 	public static <BeanType> BeanInfo<BeanType> getBeanInfo(Class<? extends BeanType> beanClass) throws InvalidBean
 	{
-		assert beanClass != null;
+		assert beanClass != null : "beanClass != null";
 
 		BeanInfo<BeanType> info = infos.get(beanClass);
 
@@ -60,9 +60,34 @@ public final class BeanHelper
 		return info;
 	}
 
+	public static boolean hasProperty(Object bean, String property) throws InvalidBean
+	{
+		assert bean != null : "bean != null";
+		assert property != null : "property != null";
+
+		BeanInfo info = getBeanInfo(bean.getClass());
+
+		return info.hasProperty(property);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <ReturnType> ReturnType readProperty(Object bean, String property, ReturnType defaultValue) throws InvalidBean
+	{
+		assert bean != null : "bean != null";
+		assert property != null : "property != null";
+
+		BeanInfo info = getBeanInfo(bean.getClass());
+
+		if (!info.hasProperty(property)) {
+			return defaultValue;
+		}
+
+		return (ReturnType) info.read(bean, property);
+	}
+
 	public static String toJSON(Object bean)
 	{
-		assert bean != null;
+		assert bean != null : "bean != null";
 
 		JSONObject obj = new JSONObject(bean);
 
