@@ -266,7 +266,41 @@ public final class StringHelper
 	@SuppressWarnings("unchecked")
 	public static String toString(Object object)
 	{
+		if (object == null) {
+			return "null";
+		}
+
+		if (object instanceof String) {
+			return "\"" + (String) object + "\"";
+		} else if (object.getClass().isPrimitive()) {
+			return object.toString();
+		} else if (object.getClass().isArray()) {
+			return toString((Object[]) object);
+		}
+
 		return toString(object, Collections.EMPTY_SET);
+	}
+
+	public static String toString(Object[] array)
+	{
+		assert array != null : "array != null";
+
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("[");
+
+		for (int i = 0; i < array.length; ++i) {
+
+			Object object = array[i];
+			builder.append(toString(object));
+			if (i < array.length - 1) {
+				builder.append(",");
+			}
+		}
+
+		builder.append("]");
+
+		return builder.toString();
 	}
 
 	@SuppressWarnings("unchecked")
