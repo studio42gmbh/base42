@@ -270,8 +270,8 @@ public final class StringHelper
 			return "null";
 		}
 
-		if (object instanceof String) {
-			return "\"" + (String) object + "\"";
+		if (object instanceof String string) {
+			return "\"" + string + "\"";
 		} else if (object.getClass().isPrimitive()) {
 			return object.toString();
 		} else if (object.getClass().isArray()) {
@@ -415,34 +415,23 @@ public final class StringHelper
 
 				// Progress
 				switch (nextChar) {
-					case '\\':
+					case '\\' ->
 						ch = '\\';
-						break;
-					case 'b':
+					case 'b' ->
 						ch = '\b';
-						break;
-					case 'f':
+					case 'f' ->
 						ch = '\f';
-						break;
-					case 'n':
+					case 'n' ->
 						ch = '\n';
-						break;
-					case 'r':
+					case 'r' ->
 						ch = '\r';
-						break;
-					case 't':
+					case 't' ->
 						ch = '\t';
-						break;
-					case '\"':
+					case '\"' ->
 						ch = '\"';
-						break;
-					case '\'':
+					case '\'' ->
 						ch = '\'';
-						break;
-
-					// Hex Unicode: u????
-					case 'u':
-
+					case 'u' -> {
 						if (i >= content.length() - 5) {
 							ch = 'u';
 							break;
@@ -454,7 +443,9 @@ public final class StringHelper
 						builder.append(Character.toChars(code));
 						i += 5;
 						continue;
+					}
 				}
+				// Hex Unicode: u????
 				i++;
 			}
 			builder.append(ch);
