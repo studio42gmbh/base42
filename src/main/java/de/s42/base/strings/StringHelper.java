@@ -272,6 +272,8 @@ public final class StringHelper
 
 		if (object instanceof String string) {
 			return "\"" + string + "\"";
+		} else if (object instanceof Number number) {
+			return number.toString();
 		} else if (object.getClass().isPrimitive()) {
 			return object.toString();
 		} else if (object.getClass().isArray()) {
