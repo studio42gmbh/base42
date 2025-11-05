@@ -193,6 +193,15 @@ public final class StringHelper
 		}
 	}
 
+	public static String fromCamelCaseToWords(String camelCase)
+	{
+		assert camelCase != null : "camelCase != null";
+
+		String human = camelCase.replaceAll("([A-Z])", " $0").trim();
+
+		return StringHelper.upperCaseFirst(human);
+	}
+
 	public static boolean isLowerCaseFirst(String compare)
 	{
 		assert compare != null;
