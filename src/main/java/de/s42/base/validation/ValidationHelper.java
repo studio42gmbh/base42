@@ -215,6 +215,16 @@ public final class ValidationHelper
 		return (value instanceof Boolean);
 	}
 
+	public static boolean isBooleanTrue(Object value)
+	{
+		return (value instanceof Boolean bool && bool == true);
+	}
+
+	public static boolean isBooleanFalse(Object value)
+	{
+		return (value instanceof Boolean bool && bool == false);
+	}
+
 	public static boolean isArray(Object value)
 	{
 		return (value != null) && value.getClass().isArray();
