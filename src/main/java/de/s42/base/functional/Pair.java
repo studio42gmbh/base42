@@ -1,19 +1,19 @@
 // <editor-fold desc="The MIT License" defaultstate="collapsed">
 /*
  * The MIT License
- * 
+ *
  * Copyright 2023 Studio 42 GmbH ( https://www.s42m.de ).
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +28,7 @@ package de.s42.base.functional;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -233,6 +234,23 @@ public final class Pair<FirstType, SecondType>
 	}
 
 	/**
+	 * Returns a Optional of first or throws a customized exception if first is null.
+	 *
+	 * @param <ExceptionType>
+	 * @param supplier
+	 * @return Optional of first or throws a exception if first is null
+	 * @throws ExceptionType generated if first is null
+	 */
+	public <ExceptionType extends Throwable> FirstType firstOrThrow(Supplier<ExceptionType> supplier) throws ExceptionType
+	{
+		if (!isFirst()) {
+			throw supplier.get();
+		}
+
+		return first;
+	}
+
+	/**
 	 * Returns first if first is not null or other if first is null.
 	 *
 	 * @param other Value that will be returned if first is null
@@ -267,6 +285,23 @@ public final class Pair<FirstType, SecondType>
 	{
 		if (!isSecond()) {
 			throw new NullPointerException("second is null");
+		}
+
+		return second;
+	}
+
+	/**
+	 * Returns a Optional of second or throws a customized exception if first is null.
+	 *
+	 * @param <ExceptionType>
+	 * @param supplier
+	 * @return Optional of second or throws a exception if second is null
+	 * @throws ExceptionType generated if second is null
+	 */
+	public <ExceptionType extends Throwable> SecondType secondOrThrow(Supplier<ExceptionType> supplier) throws ExceptionType
+	{
+		if (!isSecond()) {
+			throw supplier.get();
 		}
 
 		return second;
