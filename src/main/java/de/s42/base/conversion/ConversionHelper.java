@@ -674,22 +674,22 @@ public final class ConversionHelper
 		});
 
 		//Byte -> Short
-		addConverter(Byte.class, Short.class, (Integer value) -> {
+		addConverter(Byte.class, Short.class, (Byte value) -> {
 			return value.shortValue();
 		});
 
 		//Byte -> short
-		addConverter(Byte.class, short.class, (Integer value) -> {
+		addConverter(Byte.class, short.class, (Byte value) -> {
 			return value.shortValue();
 		});
 
 		//byte -> Short
-		addConverter(byte.class, Short.class, (Integer value) -> {
+		addConverter(byte.class, Short.class, (Byte value) -> {
 			return value.shortValue();
 		});
 
 		//byte -> short
-		addConverter(byte.class, short.class, (Integer value) -> {
+		addConverter(byte.class, short.class, (Byte value) -> {
 			return value.shortValue();
 		});
 
@@ -868,7 +868,7 @@ public final class ConversionHelper
 		return new String(hexChars);
 	}
 
-	public synchronized static void addConverter(Class sourceClass, Class targetClass, Function<?, ?> converter) throws RuntimeException
+	public synchronized static <SourceType, TargetType> void addConverter(Class<SourceType> sourceClass, Class<TargetType> targetClass, Function<SourceType, TargetType> converter) throws RuntimeException
 	{
 		assert targetClass != null : "targetClass != null";
 		assert converter != null : "converter != null";
