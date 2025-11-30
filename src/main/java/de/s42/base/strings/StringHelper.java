@@ -29,6 +29,7 @@ import de.s42.base.beans.BeanHelper;
 import de.s42.base.beans.BeanInfo;
 import de.s42.base.beans.BeanProperty;
 import de.s42.base.beans.InvalidBean;
+import de.s42.base.conversion.ConversionHelper;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -286,6 +287,8 @@ public final class StringHelper
 			return number.toString();
 		} else if (object instanceof Path path) {
 			return path.toString();
+		} else if (object instanceof Map map) {
+			return ConversionHelper.convert(map, String.class);
 		} else if (object.getClass().isPrimitive()) {
 			return object.toString();
 		} else if (object.getClass().isArray()) {
