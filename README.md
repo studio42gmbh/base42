@@ -33,6 +33,10 @@ Helpers for:
 * Validation
 * Zip
 
+## Changelist
+
+- 2025-12-04 Added SingleFileWatcher for tracking changes of a file easily
+
 
 ## Future Plans
 
@@ -40,7 +44,17 @@ Helpers for:
 
 ## Usage
 
+Either just use the pom:
+```
+<dependency>
+  <groupId>de.s42</groupId>
+  <artifactId>base42</artifactId>
+  <version>1.0.6</version>
+</dependency> 
+```
+Or if you want the latest trunk from code:
 * Download project
+* Compile (project files used with Netbeans best)
 * Add as maven dependency to your project locally
 * Use the helpers you need
 
