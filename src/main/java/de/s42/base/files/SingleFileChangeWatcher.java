@@ -33,12 +33,29 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
+ * Allows to watch changes on a given single normal file.
+ *
+ * The easiest way to use it is:
+ * <pre>
+ * {@code
+ * Pair<SingleFileChangeWatcher, Thread> watcher = SingleFileChangeWatcher.startWatching(file, (file) -> {
+ *   // ... do something with changed file ...
+ * });
+ * }
+ * </pre>
  *
  * @author Benjamin Schiller
  */
 public class SingleFileChangeWatcher
 {
 
+	/**
+	 * Creates and starts the watcher. The thread is a virtual thread.
+	 *
+	 * @param file
+	 * @param handler
+	 * @return
+	 */
 	public static Pair<SingleFileChangeWatcher, Thread> startWatching(Path file, Consumer<Path> handler)
 	{
 		assert file != null : "file != null";
@@ -50,17 +67,33 @@ public class SingleFileChangeWatcher
 		return Pair.of(watcher, thread);
 	}
 
-	@SuppressWarnings("unchecked")
-	protected static <EventType> WatchEvent<EventType> cast(WatchEvent<?> event)
-	{
-		return (WatchEvent<EventType>) event;
-	}
-
+	/**
+	 * File to watch changes on.
+	 */
 	protected final Path file;
+
+	/**
+	 * handler that will be called back on changes of file.
+	 */
 	protected final Consumer<Path> handler;
+
+	/**
+	 * FS integration for watching changes
+	 */
 	protected WatchService watcher;
+
+	/**
+	 * will be set to true on cancel().
+	 */
 	protected boolean terminated;
 
+	/**
+	 * Create a watcher for the given file and given a callback that will be called whenever the file has changed in the
+	 * filesystem
+	 *
+	 * @param file
+	 * @param handler
+	 */
 	public SingleFileChangeWatcher(Path file, Consumer<Path> handler)
 	{
 		assert file != null : "file != null";
@@ -70,6 +103,11 @@ public class SingleFileChangeWatcher
 		this.handler = handler;
 	}
 
+	/**
+	 * Allows to cancel the running watcher
+	 *
+	 * @throws IOException
+	 */
 	public void cancel() throws IOException
 	{
 		if (watcher != null) {
@@ -79,6 +117,12 @@ public class SingleFileChangeWatcher
 		terminated = true;
 	}
 
+	/**
+	 * Starts this watcher creating a virtual thread.
+	 *
+	 * @return
+	 * @throws RuntimeException
+	 */
 	public Thread startWatching() throws RuntimeException
 	{
 		return Thread.startVirtualThread(() -> {
@@ -90,13 +134,20 @@ public class SingleFileChangeWatcher
 		});
 	}
 
+	/**
+	 * Can be called by a worker directly. ATTENTION this method will block until the watcher is cancellde or
+	 * invalidated! It is intended to be used if you want to control the execution (own runners, thread, etc.).
+	 *
+	 * @throws Exception
+	 */
 	public void watchImmediate() throws Exception
 	{
 		if (watcher != null) {
-			throw new RuntimeException("watcher != null");
+			watcher.close();
 		}
 
 		watcher = FileSystems.getDefault().newWatchService();
+		terminated = false;
 
 		while (!terminated) {
 
@@ -106,7 +157,7 @@ public class SingleFileChangeWatcher
 				//ENTRY_DELETE,
 				ENTRY_MODIFY);
 
-			// Wait for key to be signaled
+			// Wait for key to be signaled - poll all 100 ms
 			WatchKey key;
 			try {
 				key = watcher.poll(100, TimeUnit.MILLISECONDS);
@@ -127,7 +178,8 @@ public class SingleFileChangeWatcher
 					// There might be OVERFLOW events which we ignore
 					if (kind == ENTRY_MODIFY) {
 
-						WatchEvent<Path> ev = cast(event);
+						@SuppressWarnings("unchecked")
+						WatchEvent<Path> ev = (WatchEvent<Path>) event;
 						Path changedEntryPathName = ev.context();
 						Path changedEntryPath = file.getParent().resolve(changedEntryPathName);
 
