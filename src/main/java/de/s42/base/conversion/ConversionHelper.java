@@ -34,6 +34,7 @@ import java.awt.Rectangle;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.text.DateFormat;
@@ -239,7 +240,7 @@ public final class ConversionHelper
 		//String -> URL
 		addConverter(String.class, URL.class, (String value) -> {
 			try {
-				return new URL(value);
+				return URI.create(value).toURL();
 			} catch (MalformedURLException ex) {
 				throw new IllegalArgumentException(ex.getMessage(), ex);
 			}

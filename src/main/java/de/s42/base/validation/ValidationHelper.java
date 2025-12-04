@@ -28,7 +28,7 @@ package de.s42.base.validation;
 import de.s42.base.uuid.UUID58;
 import de.s42.base.uuid.UUIDHelper;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 import java.util.UUID;
@@ -190,9 +190,9 @@ public final class ValidationHelper
 
 		if (url instanceof String string) {
 			try {
-				new URL(string).toURI();
+				URI.create(string).toURL();
 				return true;
-			} catch (MalformedURLException | URISyntaxException ex) {
+			} catch (MalformedURLException | IllegalArgumentException ex) {
 				return false;
 			}
 		}
