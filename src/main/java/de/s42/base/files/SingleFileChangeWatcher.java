@@ -27,8 +27,9 @@ package de.s42.base.files;
 
 import de.s42.base.functional.Pair;
 import java.io.IOException;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import java.nio.file.*;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -149,16 +150,12 @@ public class SingleFileChangeWatcher
 		watcher = FileSystems.getDefault().newWatchService();
 		terminated = false;
 
+		file.getParent().register(watcher, ENTRY_MODIFY);
+
+		WatchKey key;
 		while (!terminated) {
 
-			/* WatchKey regKey = */
-			file.getParent().register(watcher,
-				//ENTRY_CREATE,
-				//ENTRY_DELETE,
-				ENTRY_MODIFY);
-
 			// Wait for key to be signaled - poll all 100 ms
-			WatchKey key;
 			try {
 				key = watcher.poll(100, TimeUnit.MILLISECONDS);
 			} catch (ClosedWatchServiceException | InterruptedException ex) {
@@ -172,7 +169,9 @@ public class SingleFileChangeWatcher
 
 			if (key != null) {
 
-				for (WatchEvent<?> event : key.pollEvents()) {
+				List<WatchEvent<?>> pollEvents = key.pollEvents();
+				for (WatchEvent<?> event : pollEvents) {
+
 					WatchEvent.Kind<?> kind = event.kind();
 
 					// There might be OVERFLOW events which we ignore
@@ -185,13 +184,7 @@ public class SingleFileChangeWatcher
 
 						// Check if the change in the watched dir is about the given file
 						if (changedEntryPath.equals(file)) {
-
-							long fileLength = changedEntryPath.toFile().length();
-
-							// Just inform on changes that provide a file with content
-							if (fileLength > 0) {
-								handler.accept(file);
-							}
+							handler.accept(file);
 						}
 					}
 				}
