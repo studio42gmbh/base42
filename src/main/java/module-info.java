@@ -32,7 +32,6 @@ module de.sft.base
 	requires jakarta.activation;
 
 	exports de.s42.base.arrays;
-	exports de.s42.base.assertion;
 	exports de.s42.base.beans;
 	exports de.s42.base.collections;
 	exports de.s42.base.compile;

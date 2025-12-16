@@ -136,7 +136,7 @@ public class SingleFileChangeWatcher
 	}
 
 	/**
-	 * Can be called by a worker directly. ATTENTION this method will block until the watcher is cancellde or
+	 * Can be called by a worker directly. ATTENTION this method will block until the watcher is cancelled or
 	 * invalidated! It is intended to be used if you want to control the execution (own runners, thread, etc.).
 	 *
 	 * @throws Exception
