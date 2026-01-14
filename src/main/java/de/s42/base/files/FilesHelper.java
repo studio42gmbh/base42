@@ -341,6 +341,14 @@ public final class FilesHelper
 		}
 	}
 
+	public final static void writeInputStreamToFile(Path path, InputStream in) throws IOException
+	{
+		Files.copy(
+			in,
+			path,
+			StandardCopyOption.REPLACE_EXISTING);
+	}
+
 	public final static void writeByteArrayToFile(String path, byte[] content) throws IOException
 	{
 		assert path != null : "path != null";
